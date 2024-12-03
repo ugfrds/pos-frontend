@@ -4,7 +4,7 @@ import useAutoLogout from './hooks/useAutoLogout';
 
 
 // Pages
-import LoginPage from './pages/general/LoginPage';
+import LoginPage from './pages/general/loginPage';
 
 import AdminDashboard from './pages/superadmin/AdminDashboard';
 import BusinessDashboard from './pages/businessadmin/BusinessDashboard';
@@ -24,7 +24,7 @@ import UnauthorizedPage from './pages/general/UnauthorizedPage';
 // Components
 
 import PendingOrders from './pages/businessadmin/PendingOrders';
-import OrderHistori from './pages/businessadmin/OrderHistori';
+import OrderHistori from './pages/businessadmin/orderhistori';
 import MenuManagementPage from './pages/businessadmin/MenuManagementPage';
 import UserManagementPage from './pages/businessadmin/UserManagementPage';
 import AddStaff from './pages/businessadmin/AddStaff';
