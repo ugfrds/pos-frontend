@@ -20,7 +20,7 @@ const SuperAdminForm = () => {
 
     try {
       const response = await axios.post(
-        'https://pos-backend-m3rs.onrender.com:3000/api/superadmin/create-superadmin', // Updated endpoint
+        'https://pos-backend-m3rs.onrender.com/api/superadmin/create-superadmin', // Updated endpoint
       formData
       );
       setMessage(response.data.message);

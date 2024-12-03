@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'https://pos-backend-m3rs.onrender.com:3000/api', // Your backend API URL
+    baseURL: 'https://pos-backend-m3rs.onrender.com/api', // Your backend API URL
     headers: {
         'Content-Type': 'application/json',
     },
