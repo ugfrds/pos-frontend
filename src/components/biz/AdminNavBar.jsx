@@ -1,6 +1,6 @@
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 import { Link, useLocation } from 'react-router-dom';
-import '../styles/AdminNavBar.css';  // Import the CSS file for styling
+import '../styles/AdminNavbar.css';  // Import the CSS file for styling
 import logout from '../logout'; 
 
 const NavBar = () => {
