@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Header from '../../components/expenses/Header';
-import DateRangeFilter from '../../components/expenses/DateRangeFilter';
+import DateRangeFilter from '../../components/expenses/dateRangeFilter';
 //import SummarySection from '../../components/expenses/SummarySection';
 import ExpendituresTable from '../../components/expenses//ExpendituresTable';
 import AddExpenditureModal from '../../components/expenses/AddExpenditureModal';
