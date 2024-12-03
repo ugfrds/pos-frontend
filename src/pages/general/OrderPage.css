@@ -1,0 +1,39 @@
+.order-page-container {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    padding: 0;
+}
+
+.menu-col {
+    background-color: #f8f9fa; /* Light background for menu */
+    height: 100%;
+}
+
+.sidebar-col {
+    background-color: #e9ecef; /* Slightly darker background for sidebar */
+    height: 100%;
+}
+
+.floating-receipt-panel {
+    position: fixed;
+    right: 0;
+    top: 20%; /* Adjust this value to position the panel lower from the top */
+    width: 350px; /* Adjust width as needed */
+    height: 90%; 
+    overflow-y: auto; /* Adjust height as needed */
+   /* background-color: #fff;  Background color for receipt panel */
+   /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); Shadow for floating effect */
+    z-index: 1000; /* Ensures it stays on top */
+    border-radius: 0 0 10px 10px; /* Rounded corners on the bottom side */
+    margin-top: 20px; /* Adjust the margin to create space from the top */
+    align-self: flex-end; /* Positions it to the right in a flex container */
+}
+.order-page-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between; /* Ensures space between columns */
+}
+.floating-receipt-panel {
+    align-self: flex-end; /* Positions it to the right in a flex container */
+}
