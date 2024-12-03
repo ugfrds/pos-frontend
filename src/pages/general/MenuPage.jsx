@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
-import SearchBar from '../../components/Dashboard/SearchBar';
+import SearchBar from '../../components/Dashboard/Searchbar';
 import MenuCategory from '../../components/Dashboard/MenuCategory';
-import MenuItemList from '../../components/menumanager/MenuItemList';
+import MenuItemList from '../../components/menumanager/MenuitemList';
 import '../../components/styles/MenuPage.css';
 import { fetchMenuItems } from '../../api'; // Import the API call from the centralized API file
 import { getCachedData } from '../../utils/Cache';
