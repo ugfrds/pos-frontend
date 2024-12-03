@@ -30,7 +30,7 @@ import UserManagementPage from './pages/businessadmin/UserManagementPage';
 import AddStaff from './pages/businessadmin/AddStaff';
 import SettingPage from './components/Settings/SettingPage';
 //import ExpensesPage from './components/expenses/ExpensesPage';
-import ExpendituresPage from './pages/businessadmin/ExpendituresPage';
+import ExpendituresPage from './pages/businessadmin/expendituresPage';
 
 
 // Layouts
