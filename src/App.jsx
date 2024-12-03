@@ -4,7 +4,7 @@ import useAutoLogout from './hooks/useAutoLogout';
 
 
 // Pages
-import LoginPage from './pages/general/LoginPage';
+import LoginPage from './pages/general/loginPage';
 
 import AdminDashboard from './pages/superadmin/AdminDashboard';
 import BusinessDashboard from './pages/businessadmin/BusinessDashboard';
