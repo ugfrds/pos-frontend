@@ -20,6 +20,7 @@ import OrderPage from './pages/general/OrderPage';
 import MenuPage from './pages/general/MenuPage';
 import UserSetupForm from './pages/general/UserSetupForm';
 import UnauthorizedPage from './pages/general/UnauthorizedPage';
+import SuperAdminForm from './pages/superadmin/superadmin';
 
 // Components
 
@@ -126,6 +127,7 @@ const App = () => {
       
      
       {/* Public routes */}
+      <Route path='/su' element= {<SuperAdminForm />} />
       <Route path="/pending" element={<PendingOrders/>} />
       <Route path="*" element={<ErrorPage />} />
       <Route path="/unauthorized" element={<UnauthorizedPage />} />
