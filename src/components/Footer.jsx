@@ -9,7 +9,9 @@ const Footer = () => {
                 <Row>
                     <Col md="12" className="text-center">
                     <p className="mb-0">&copy; {new Date().getFullYear()} Wisecorp Technologies Ltd. All rights reserved.</p>
-                        <small>Designed By: <a href="https://ugfrds.github.io/portfolio">Justlikewiseman</a></small>
+                    <small>Developed By: <a 
+                     style={{  color: '#6c757d' }}
+                     href="https://ugfrds.github.io/portfolio" target="_blank">Justlikewiseman</a></small>
                     </Col>
                 </Row>
             </Container>

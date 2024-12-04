@@ -94,7 +94,9 @@ const LoginPage = () => {
         </form>
         <div className="text-center mt-4">
           <p className="mb-2">&copy; {new Date().getFullYear()} Wisecorp Technologies Ltd. All rights reserved.</p>
-          <small>Designed By: <Link href="https://ugfrds.github.io/portfolio">Justlikewiseman</Link></small>
+          <small>Developed By: <a 
+          style={{  color: '#6c757d' }}
+           href="https://ugfrds.github.io/portfolio" target="_blank">Justlikewiseman</a></small>
         </div>
       </div>
     </div>
