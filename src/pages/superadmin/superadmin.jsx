@@ -20,11 +20,15 @@ const SuperAdminForm = () => {
 
     try {
       const response = await axios.post(
-        'https://pos-backend-m3rs.onrender.com/api/create-superadmin', // Updated endpoint
+        //'http://localhost:3000/api/create-superadmin',
+         'https://pos-backend-m3rs.onrender.com/api/create-superadmin', // Updated endpoint
       formData
       );
       setMessage(response.data.message);
       setError('');
+      setFormData ({ ...FormData,
+        email: '',
+        password: '',});
     } catch (err) {
       setError(err.response?.data?.message || 'Error creating superadmin');
       setMessage('');
