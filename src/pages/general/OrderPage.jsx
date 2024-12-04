@@ -25,7 +25,7 @@ const OrderPage = () => {
          const editOrderData = localStorage.getItem('editOrderData');
          if (editOrderData) {
              const orderData = JSON.parse(editOrderData);
-             console.log(orderData)
+             //console.log(orderData)
              setTableNumber(orderData.tableNumber);
              const items = orderData.OrderItems.map((item) => ({
                 id: item.MenuItem.id,
@@ -36,7 +36,10 @@ const OrderPage = () => {
 
             setOrderItems(items);  // Set the pre-filled items from the pending order
              if (orderData.id) {
-              deleteOrder(orderData.id);
+                console.log (typeof deleteOrder);S
+              deleteOrder(orderData.id)
+             .then(() => console.log(`Order with ID ${orderData.id} deleted`))
+             .catch((err) => console.error(`Failed to delete order: ${err.message}`));
             }
              localStorage.removeItem('editOrderData'); // Clean up
           } else  if (!tableNumber && paramTableNumber) {
