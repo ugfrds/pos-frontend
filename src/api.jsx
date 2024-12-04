@@ -316,6 +316,16 @@ const updateOrderPrintStatus = async (orderId, isPrinted) => {
         handleApiError(error); 
     }
 };
+
+const deleteOrder = async (orderId) => {
+    try {
+      const response = await api.delete(`/orders/${orderId}`, setAuthHeader() );
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+    }
+  };
+  
     
     
 
@@ -473,6 +483,7 @@ export {
     getOrderById,
     updateOrderStatus,
     updateOrderPrintStatus,
+    deleteOrder,
     //superadmin
     createAdmin,
     getAllAdmins,

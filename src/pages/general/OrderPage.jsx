@@ -9,6 +9,7 @@ import NavBar from '../../components/Dashboard/Navbar';
 import OrderConfirmationModal from '../../components/Orders/OrderConfirmationModal';
 import {createOrder} from '../../api';
 import { UserBusinessContext } from '../../context/UserBusinessContext';
+import { deleteOrder } from '../../api';
 
 
 const OrderPage = () => {    
@@ -32,8 +33,13 @@ const OrderPage = () => {
                 price: item.price,
                 quantity: item.quantity
             }));
+
             setOrderItems(items);  // Set the pre-filled items from the pending order
-    
+             if (orderData.id) {
+              deleteOrder(orderData.id)
+             .then(() => console.log(`Order with ID ${orderData.id} deleted`))
+             .catch((err) => console.error(`Failed to delete order: ${err.message}`));
+            }
              localStorage.removeItem('editOrderData'); // Clean up
           } else  if (!tableNumber && paramTableNumber) {
             // Set the table number in the context if it's not already set
@@ -87,7 +93,7 @@ const OrderPage = () => {
              tableNumber, 
              orderType:'Dine-In', 
              items:orderItems, 
-             totalAmount:total ,
+             totalAmount:total , 
              receiptNumber,
              subtotal,
              tax

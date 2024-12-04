@@ -10,7 +10,7 @@ const TablesPage = () => {
     console.log('Active Orders from Context:', activeOrders);
 
 
-    // List of tables
+    // List of tables   
     const tables = Array.from({ length: 10 }, (_, index) => ({
         id: index + 1,
         name: `Table ${index + 1}`,
