@@ -35,12 +35,12 @@ const OrderPage = () => {
             }));
 
             setOrderItems(items);  // Set the pre-filled items from the pending order
-             if (orderData.id) {
-                console.log (typeof deleteOrder);
-            //   deleteOrder(orderData.id)
-            //  .then(() => console.log(`Order with ID ${orderData.id} deleted`))
-            //  .catch((err) => console.error(`Failed to delete order: ${err.message}`));
-            }
+            //  if (orderData.id) {
+            //     console.log (typeof deleteOrder);
+            // //   deleteOrder(orderData.id)
+            // //  .then(() => console.log(`Order with ID ${orderData.id} deleted`))
+            // //  .catch((err) => console.error(`Failed to delete order: ${err.message}`));
+            // }
              localStorage.removeItem('editOrderData'); // Clean up
           } else  if (!tableNumber && paramTableNumber) {
             // Set the table number in the context if it's not already set
