@@ -1,6 +1,6 @@
 // src/components/Footer.js
-import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
     return (
@@ -8,7 +8,8 @@ const Footer = () => {
             <Container>
                 <Row>
                     <Col md="12" className="text-center">
-                        &copy; Wisecorp Technologies. All Rights Reserved.
+                    <p className="mb-0">&copy; {new Date().getFullYear()} Wisecorp Technologies Ltd. All rights reserved.</p>
+                        <small>Designed By: <Link href="https://ugfrds.github.io/portfolio">Justlikewiseman</Link></small>
                     </Col>
                 </Row>
             </Container>

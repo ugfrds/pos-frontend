@@ -93,7 +93,8 @@ const LoginPage = () => {
           {error && <div className="alert alert-danger mt-3">{error}</div>}
         </form>
         <div className="text-center mt-4">
-          <p className="mb-0">&copy; {new Date().getFullYear()} Wisecorp Technologies Ltd. All rights reserved.</p>
+          <p className="mb-2">&copy; {new Date().getFullYear()} Wisecorp Technologies Ltd. All rights reserved.</p>
+          <small>Designed By: <Link href="https://ugfrds.github.io/portfolio">Justlikewiseman</Link></small>
         </div>
       </div>
     </div>
