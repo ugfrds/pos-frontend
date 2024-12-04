@@ -1,21 +1,22 @@
 import { useContext, useEffect, useState } from 'react';
-import { Container, Row, Col} from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router-dom';
 import ReceiptPanel from '../../components/Orders/ReceiptPanel';
 import MenuPage from './MenuPage';
 import { OrderContext} from '../../context/OrderContext';
-import './OrderPage.css'; 
+//import { ActiveOrdersContext } from '../../context/ActiveOrdersContext';
+import './OrderPage.css'; // Import your custom CSS file
 import NavBar from '../../components/Dashboard/Navbar';
 import OrderConfirmationModal from '../../components/Orders/OrderConfirmationModal';
-import {createOrder} from '../../api';
+import {createOrder} from '../../api'
 import { UserBusinessContext } from '../../context/UserBusinessContext';
 import { deleteOrder } from '../../api';
-
 
 const OrderPage = () => {    
     
     const { tableNumber: paramTableNumber } = useParams();
-    const {orderItems, addOrderItem, tableNumber, setTableNumber, resetOrder, setOrderItems, orderType,updateOrderStatus } = useContext(OrderContext);
+    //const {  updateOrderStatus } = useContext(ActiveOrdersContext)
+    const {orderItems, addOrderItem, tableNumber, setTableNumber, resetOrder, setOrderItems, orderType } = useContext(OrderContext);
     const navigate = useNavigate(); 
     const [showModal, setShowModal] = useState(false); // State to control modal visibility
     const { user, business } = useContext(UserBusinessContext); 
@@ -25,7 +26,7 @@ const OrderPage = () => {
          const editOrderData = localStorage.getItem('editOrderData');
          if (editOrderData) {
              const orderData = JSON.parse(editOrderData);
-             //console.log(orderData)
+             console.log(orderData)
              setTableNumber(orderData.tableNumber);
              const items = orderData.OrderItems.map((item) => ({
                 id: item.MenuItem.id,
@@ -33,14 +34,11 @@ const OrderPage = () => {
                 price: item.price,
                 quantity: item.quantity
             }));
-
             setOrderItems(items);  // Set the pre-filled items from the pending order
-            //  if (orderData.id) {
-            //     console.log (typeof deleteOrder);
-            // //   deleteOrder(orderData.id)
-            // //  .then(() => console.log(`Order with ID ${orderData.id} deleted`))
-            // //  .catch((err) => console.error(`Failed to delete order: ${err.message}`));
-            // }
+            // deleteOrder(orderData.id)
+            // .then(()=>console.log(`deleting order on table: ${orderData.tableNumber}`))
+
+    
              localStorage.removeItem('editOrderData'); // Clean up
           } else  if (!tableNumber && paramTableNumber) {
             // Set the table number in the context if it's not already set
@@ -94,15 +92,15 @@ const OrderPage = () => {
              tableNumber, 
              orderType:'Dine-In', 
              items:orderItems, 
-             totalAmount:total , 
-             receiptNumber,
-             subtotal,
-             tax
+             totalAmount:total ,
+            receiptNumber,
+            subtotal,
+            tax
         }
         console.log (total);
         createOrder(orderData);
     // Update the order status in the context
-    updateOrderStatus(tableNumber, orderId, 'In Progress');
+   // updateOrderStatus(tableNumber, orderId, 'In Progress');
    
         // Reset the order after confirming
         window.location.href = '/pending';
