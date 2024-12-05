@@ -7,9 +7,7 @@ import { OrderContext } from '../../context/OrderContext';
 const TablesPage = () => {
     // Access the active orders from the context
     const { activeOrders } = useContext(OrderContext);
-    console.log('Active Orders from Context:', activeOrders);
-
-
+    
     // List of tables   
     const tables = Array.from({ length: 10 }, (_, index) => ({
         id: index + 1,
