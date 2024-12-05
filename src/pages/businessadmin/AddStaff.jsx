@@ -85,7 +85,6 @@ const AddStaff = () => {
             required
           >  
           <option value=""> select role</option>
-            <option value="Manager">Manager</option>
             <option value="Supervisor">Supervisor</option>
             <option value="Cashier">Cashier</option>
             <option value="Waiter">Waiter</option>

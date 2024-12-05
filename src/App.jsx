@@ -67,30 +67,64 @@ const App = () => {
 
       {/* Protected routes for admin */}
       <Route
-        path="/admin/*"
-        element={
-          <PrivateRoute  role={['BusinessAdmin']}>
-            <AdminLayout />
-          </PrivateRoute>
-        }
-      >
-        <Route path="dashboard" element={<BusinessDashboard />} />
-        <Route path="manage-menu" element={<MenuManagementPage />} />
-        <Route path="staff" element={<UserManagementPage />} />
-        <Route path="add-staff" element={<AddStaff />} />
-        <Route path="settings" element={<SettingPage />} />
-        <Route path="orderhistori" element={<OrderHistori /> }/>
-      </Route>
+  path="/admin/*"
+  element={<AdminLayout />} 
+>
+  {/* BusinessAdmin-only routes */}
+  <Route
+    path="dashboard"
+    element={
+      <PrivateRoute roles={['BusinessAdmin']}>
+        <BusinessDashboard />
+      </PrivateRoute>
+    }
+  />
+  <Route
+    path="settings"
+    element={
+      <PrivateRoute roles={['BusinessAdmin']}>
+        <SettingPage />
+      </PrivateRoute>
+    }
+  />
+  <Route
+    path="orderhistori"
+    element={
+      <PrivateRoute roles={['BusinessAdmin','Supervisor', 'Cashier']}>
+        <OrderHistori />
+      </PrivateRoute>
+    }
+  />
+
+  {/* Routes shared between BusinessAdmin and Supervisor */}
+  <Route
+    path="manage-menu"
+    element={
+      <PrivateRoute roles={['BusinessAdmin', 'Supervisor']}>
+        <MenuManagementPage />
+      </PrivateRoute>
+    }
+  />
+  <Route
+    path="staff"
+    element={
+      <PrivateRoute roles={['BusinessAdmin', 'Supervisor']}>
+        <UserManagementPage />
+      </PrivateRoute>
+    }
+  />
+  <Route
+    path="add-staff"
+    element={
+      <PrivateRoute roles={['BusinessAdmin', 'Supervisor']}>
+        <AddStaff />
+      </PrivateRoute>
+    }
+  />
+</Route>
 
       {/* Additional protected routes */}
-      <Route
-        path="/business-dashboard"
-        element={
-          <PrivateRoute>
-            <BusinessDashboard />
-          </PrivateRoute>
-        }
-      />
+      
       <Route
         path="/dashboard"
         element={

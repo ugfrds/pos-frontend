@@ -96,8 +96,7 @@ const OrderHistoryPage = () => {
               onChange={(e) => setStatusFilter(e.target.value)}
             >
               <option value="">All</option>
-              <option value="Pending">Pending</option>
-              <option value="In Progress">In Progress</option>
+              <option value="pending">Pending</option>
               <option value="Completed">Completed</option>
             </Form.Control>
           </Form.Group>

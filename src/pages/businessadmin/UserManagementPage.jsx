@@ -94,18 +94,18 @@ const UserManagementPage = () => {
           {users.map((user) => (
             <tr key={user.id}>
               <td>{user.username}</td>
-              <td>{user.email}</td>
+              <td>{userRole === 'BusinessAdmin' ? user.email : null}</td>
               <td>{user.role}</td>
               <td>
                 <button
-                  disabled={user.role === 'BusinessAdmin' || user.id ===userRole} // Disable for current user and business admin
+                  disabled={user.role === 'BusinessAdmin' || user.role ===userRole} // Disable for current user and business admin
                   className="btn btn-primary btn-sm me-2"
                   onClick={() => handleEditClick(user)}
                 >
                   Edit
                 </button>
                 <button
-                  disabled={user.role === 'BusinessAdmin' || user.id ===userRole}
+                  disabled={user.role === 'BusinessAdmin' || user.role ===userRole}
                   className="btn btn-danger btn-sm"
                   onClick={() => handleDelete(user.id)}
                 >

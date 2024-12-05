@@ -218,7 +218,7 @@ const PendingOrders = () => {
                     </td>
                     <td>
                       <Button 
-                      disabled={userRole !== 'BusinessAdmin'}
+                     disabled={!['BusinessAdmin', 'Supervisor', 'Cashier'].includes(userRole)}
                       variant="danger" onClick={() => handleCloseOrder(order)}
                       >
                         Close Order

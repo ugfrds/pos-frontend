@@ -137,7 +137,7 @@ const OrderPage = () => {
                     await deleteOrder(previousOrderId);
                     console.log(`Deleted previous order with ID: ${previousOrderId}`);
                 } catch (error) {
-                    console.error('Failed to delete previous order:', error);
+                    console.error('Failed to delete previous order:', error); 
                 }
             }
 
