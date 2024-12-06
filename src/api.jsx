@@ -400,15 +400,16 @@ const updateAdmin = async (id, updated) => {
     }
 };
 
-export const getDashboardData = async () => {
+export const getDashboardData = async (period) => {
     try {
-        const response = await api.get('/dashboard',setAuthHeader());
+        const response = await api.get(`/dashboard?period=${period}`, setAuthHeader());
         return response.data;
     } catch (error) {
         console.error('Error fetching dashboard data:', error);
-        throw error; 
+        throw error;
     }
 };
+
 
 
 const startShift = async( username)=> {
