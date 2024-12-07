@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import PrivateRoute from './components/PrivateRoute';
 import useAutoLogout from './hooks/useAutoLogout';
+import FirstVisitBanner from "./components/firstvisitBanner";
 
 
 // Pages
@@ -43,7 +44,8 @@ const App = () => {
   useAutoLogout();
 
   return (
-    
+    <div>
+    <FirstVisitBanner />
      <Routes>
       <Route path="/" element={<LoginPage />} />
       <Route path="/newuser" element={<UserSetupForm />} />
@@ -167,6 +169,7 @@ const App = () => {
       <Route path="/unauthorized" element={<UnauthorizedPage />} />
       <Route path="/expenses" element={<ExpendituresPage />} />
      </Routes>
+     </div>
     
   );
 };
