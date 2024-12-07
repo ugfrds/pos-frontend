@@ -19,7 +19,7 @@ const OrderHistoryPage = () => {
   const currency = business.settings.currency;
   const ordersPerPage = 10;
 
-  useEffect(() => {
+  useEffect(() => {  
     const fetchOrders = async () => {
       try {
         const filters = {

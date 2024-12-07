@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useContext } from 'react';
+import  { useState, useEffect, useContext } from 'react';
 import { Container, Row, Col, Card, Button, Form, Spinner, Alert } from 'react-bootstrap';
 import { getDashboardData } from '../../api';
 import { Link } from 'react-router-dom';
 import { FormatCurrency } from '../../utils/index';
 import { UserBusinessContext } from '../../context/UserBusinessContext';
 import { FaChartBar, FaClipboardList, FaUtensils } from 'react-icons/fa';
+import SalesChart from '../../components/salesChart';
 
 const AdminDashboard = () => {
     const [period, setPeriod] = useState('daily');
@@ -137,18 +138,7 @@ const AdminDashboard = () => {
                             <Card className="mb-4 shadow">
                                 <Card.Body>
                                     <Card.Title>Sales Over Time</Card.Title>
-                                    <div
-                                        style={{
-                                            height: '300px',
-                                            background: '#f8f9fa',
-                                            textAlign: 'center',
-                                            paddingTop: '130px',
-                                            fontSize: '1.2rem',
-                                            color: '#6c757d',
-                                        }}
-                                    >
-                                        [Sales Chart Placeholder]
-                                    </div>
+                                    <SalesChart  />
                                 </Card.Body>
                             </Card>
                         </Col>

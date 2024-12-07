@@ -242,7 +242,7 @@ const createOrder = async( Order) => {
 
 // Fetch all orders with optional filters and pagination
 const getAllOrders = async (filters, page = 1, limit = 10) => {
-    try {
+    try {  
         const { status, startDate, endDate, tableNumber } = filters;
         const response = await api.get('/orders', {
             params: { status, startDate, endDate, tableNumber, page, limit },
@@ -409,6 +409,17 @@ export const getDashboardData = async (period) => {
         throw error;
     }
 };
+
+export const getSalesOverTime = async (period) => {
+    try {
+        const response = await api.get(`/sales-over-time?period=${period}`, setAuthHeader());
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching sales data:', error);
+        throw error;
+    }
+};
+
 
 
 
