@@ -241,7 +241,7 @@ const createOrder = async( Order) => {
 
 
 // Fetch all orders with optional filters and pagination
-const getAllOrders = async (filters, page = 1, limit = 10) => {
+const getAllOrders = async (filters, page = 1, limit = 15) => {
   try {  
     const { status, startDate, endDate, tableNumber, item } = filters; // Include 'item' in destructuring
     const response = await api.get('/orders', {

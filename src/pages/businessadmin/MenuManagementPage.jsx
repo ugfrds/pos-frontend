@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Form, Container, Row, Col, Button } from 'react-bootstrap';
+import { Form, Container, Row, Col} from 'react-bootstrap';
 import MenuItemForm from '../../components/menumanager/MenuItemForm';
 import MenuItemManager from '../../components/menumanager/MenuItemManager';
 import { fetchMenuItems, updateMenuItem, createMenuItem, deleteMenuItem } from '../../api';
@@ -56,6 +56,7 @@ const MenuManagementPage = () => {
                 
                 .catch(error => {
                     console.error('Error adding item:', error);
+                    setError(`Failed to create menuitem. error: ${error.message}`);
                 });
                
         }

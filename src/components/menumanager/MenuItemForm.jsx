@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import { createMenuItem, updateMenuItem } from '../../api';
+
 
 const MenuItemForm = ({ currentItem, onAddOrUpdateItem, menuItems = [] }) => { // Default value for menuItems
     const [name, setName] = useState('');
@@ -38,9 +38,7 @@ const MenuItemForm = ({ currentItem, onAddOrUpdateItem, menuItems = [] }) => { /
         };
     
         try {
-            onAddOrUpdateItem(newItem);
-            alert('Item saved successfully');
-            
+            await onAddOrUpdateItem(newItem);
             // Clear form fields
             setName('');
             setPrice('');
@@ -48,7 +46,6 @@ const MenuItemForm = ({ currentItem, onAddOrUpdateItem, menuItems = [] }) => { /
             setNewCategory('');
         } catch (error) {
             console.error('Failed to save the item:', error);
-            alert('Failed to save the item');
         }
     };
     

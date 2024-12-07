@@ -44,9 +44,10 @@ const OrderHistoryPage = () => {
 
   const handleSearch = async () => {
     try {
-      const results = await searchOrdersByItem(searchTerm);
-      const sortedOrders = results.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // put this in a utility function
-      setOrders(sortedOrders);
+      const res = await searchOrdersByItem(searchTerm);
+       console.log(res);
+       const sortedOrders = res.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        setOrders(sortedOrders);
     } catch (error) {
       console.error('Failed to search orders:', error);
     }
@@ -69,22 +70,34 @@ const OrderHistoryPage = () => {
       <h1 className="mb-4">Order History</h1>
 
       <Row className="mb-3">
-        <Col md={6}>
-          <Form.Group className="mb-3">
-            <Form.Control
-              type="text"
-              placeholder="Search by item"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </Form.Group>
-        </Col>
-        <Col md={3}>
-          <Button variant="primary" onClick={handleSearch} className="w-100">
-            Search
-          </Button>
-        </Col>
-      </Row>
+  <Col md={6}>
+    <Form.Group className="mb-3">
+      <Form.Control
+        type="text"
+        placeholder="Search by item"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+    </Form.Group>
+  </Col>
+  <Col md={3}>
+    <Button variant="primary" onClick={handleSearch} className="w-100">
+      Search
+    </Button>
+  </Col>
+  <Col md={3}>
+    <Button 
+      variant="secondary" 
+      onClick={() => { 
+        setSearchTerm(""); // Reset search term
+        window.location.reload();
+      }} 
+      className="w-100">
+      Reset All
+    </Button>
+  </Col>
+</Row>
+
 
       <Row className="mb-3">
         <Col md={3}>
