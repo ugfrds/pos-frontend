@@ -56,9 +56,9 @@ const MenuManagementPage = () => {
                 
                 .catch(error => {
                     console.error('Error adding item:', error);
-                    setError(`Failed to create menuitem. error: ${error.message}`);
-                });
-               
+                    setError(`Failed to create menuitem.`);
+                    setNotification({ message: `${Object.values(error)} `, variant: 'danger' });
+                });               
         }
     };
     
