@@ -45,8 +45,8 @@ const OrderHistoryPage = () => {
   const handleSearch = async () => {
     try {
       const results = await searchOrdersByItem(searchTerm);
-      console.log(results);
-      setOrders(results);
+      const sortedOrders = results.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // put this in a utility function
+      setOrders(sortedOrders);
     } catch (error) {
       console.error('Failed to search orders:', error);
     }

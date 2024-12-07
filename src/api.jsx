@@ -242,16 +242,18 @@ const createOrder = async( Order) => {
 
 // Fetch all orders with optional filters and pagination
 const getAllOrders = async (filters, page = 1, limit = 10) => {
-    try {  
-        const { status, startDate, endDate, tableNumber } = filters;
-        const response = await api.get('/orders', {
-            params: { status, startDate, endDate, tableNumber, page, limit },
-            ...setAuthHeader(),
-        });
-        return response.data;
-    } catch (error) {
-        handleApiError(error);
-    }
+  try {  
+    const { status, startDate, endDate, tableNumber, item } = filters; // Include 'item' in destructuring
+    const response = await api.get('/orders', {
+      params: { status, startDate, endDate, tableNumber, item, page, limit }, // Add 'item' to params
+      ...setAuthHeader(),
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching orders:', error.message);
+    handleApiError(error);
+    throw error; // Ensure the error propagates to the caller
+  }
 };
 
 const getActiveOrders = async( ) => {
