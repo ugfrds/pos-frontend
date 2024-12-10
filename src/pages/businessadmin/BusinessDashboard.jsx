@@ -52,9 +52,9 @@ const AdminDashboard = () => {
                     value={period}
                     onChange={(e) => setPeriod(e.target.value)}
                 >
-                    <option value="daily">Daily</option>
-                    <option value="weekly">Weekly</option>
-                    <option value="monthly">Monthly</option>
+                    <option value="daily">Today</option>
+                    <option value="weekly">This Week</option>
+                    <option value="monthly">This Month</option>
                     <option value="all">All Time</option>
                 </Form.Control>
             </Form.Group>

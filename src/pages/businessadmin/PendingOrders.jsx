@@ -1,64 +1,15 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { getAllOrders, updateOrderStatus, updateOrderPrintStatus } from '../../api';
 import { FormatCurrency } from '../../utils/index';
-import { Container, Row, Form, Button, Table, Pagination, Modal } from 'react-bootstrap';
+import { Container, Row, Form, Button, Tabs, Tab,Table, Pagination, Modal } from 'react-bootstrap';
 import { UserBusinessContext } from '../../context/UserBusinessContext';
 import Notification from '../../components/Notification';
 import { useNavigate } from 'react-router-dom';
 import NavBar from '../../components/Dashboard/Navbar';
+import SplitBill from '../../components/SplitBill';
+import { ReceiptContent } from "../../components/ReceiptContent";
 import { useReactToPrint } from 'react-to-print';
-import PropTypes from 'prop-types'; 
 import './pendingOrders.css';
-
-// Separate component for the receipt content to be printed
-const ReceiptContent = React.forwardRef(({ businessName, selectedOrder, currency , receiptNotes, contact}, ref) => (
-  <div ref={ref} className="receipt-modal-details">
-    <div className="receipt-header text-center">
-      <h4>{businessName}</h4> {/* Business name */}
-      <p>Phone: {contact}</p>
-      <p>Date: {new Date(selectedOrder.createdAt).toLocaleDateString()}</p>
-      <p>Time: {new Date(selectedOrder.createdAt).toLocaleTimeString()}</p>
-      <p><strong>Receipt Number:</strong> {selectedOrder.receiptNumber}</p>
-      {/*<p><strong>Table Number:</strong> {selectedOrder.tableNumber}</p> */}
-      <p>{receiptNotes}</p>
-    </div>
-    <ul className="receipt-items list-unstyled">
-      {selectedOrder.OrderItems.map((item, index) => (
-        <li key={index} className="receipt-item">
-          <div className="item-details">
-            <span className="item-name">{item.MenuItem.name}</span>
-            <span className="quantity">{item.quantity}</span>
-            <span className="item-total">{FormatCurrency(item.price, currency)}</span>
-          </div>
-        </li>
-      ))}
-    </ul>
-    <div className="receipt-footer">
-      <div className="item-details">
-        <span className="item-name"><strong>Subtotal:</strong></span>
-        <span className="item-total">{FormatCurrency(selectedOrder.subtotal, currency)}</span>
-      </div>
-      <div className="item-details">
-        <span className="item-name"><strong>Tax:</strong></span>
-        <span className="item-total">{FormatCurrency(selectedOrder.tax, currency)}</span>
-      </div>
-      <div className="item-details">
-        <span className="item-name"><strong>Service Charge:</strong></span>
-        <span className="item-total">{FormatCurrency(selectedOrder.serviceCharge, currency)}</span>
-      </div>
-      <div className="item-details">
-        <span className="item-name"><strong>Total:</strong></span>
-        <span className="item-total"><strong>{FormatCurrency(selectedOrder.totalAmount, currency)}</strong></span>
-      </div>
-    </div>
-    <p className="served-by"><strong>Served By:</strong> {selectedOrder.username}</p>
-  </div>
-));
-// Add the displayName for better debugging and tooling support
-ReceiptContent.displayName = 'ReceiptContent';
-
-
-
 
 
 const PendingOrders = () => {
@@ -73,6 +24,11 @@ const PendingOrders = () => {
   const receiptRef = useRef();
   const userRole = sessionStorage.getItem('role');
   const ordersPerPage = 10;
+  const { business } = useContext(UserBusinessContext); 
+  const businessName = business.settings.name
+  const currency = business.settings.currency;
+  const receiptNotes = business.settings.receiptNotes;
+  const contact = business.settings.phoneNumber;
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -111,13 +67,6 @@ const PendingOrders = () => {
 
   const handleCloseModal = () => setShowModal(false);
 
-  const { business } = useContext(UserBusinessContext); 
-  const businessName = business.settings.name
-  const currency = business.settings.currency;
-  const receiptNotes = business.settings.receiptNotes;
-  const contact = business.settings.phoneNumber;
-  
-  
   // Assuming `receiptRef` is the ref pointing to the receipt content component
   const handlePrintReceipt = useReactToPrint({
     content: () => receiptRef.current,
@@ -161,6 +110,54 @@ const PendingOrders = () => {
       console.error('Failed to close order:', error);
     } 
   };
+
+  const handleSplitPayment = (splitType, numPersons, customSplits) => {
+    const totalAmount = selectedOrder.totalAmount;
+  
+    if (splitType === "equal") {
+      const splitAmount = (totalAmount / numPersons).toFixed(2);
+  
+      // Generate equal splits
+      const splits = Array.from({ length: numPersons }, () => ({
+        amount: parseFloat(splitAmount),
+        method: null, // Payment method to be selected
+      }));
+  
+      // Send splits for processing
+      processPayments(splits);
+    } else if (splitType === "custom") {
+      const totalSplitAmount = customSplits.reduce((sum, split) => sum + parseFloat(split.amount || 0), 0);
+  
+      // Validate custom splits
+      if (totalSplitAmount !== totalAmount) {
+        alert("The total split amount does not match the order total.");
+        return;
+      }
+  
+      // Send custom splits for processing
+      processPayments(customSplits);
+    }
+  };
+  
+  const processPayments = (splits) => {
+    // Example: Store payment details in a database or state
+    splits.forEach((split, index) => {
+      console.log(`Processing payment for Person ${index + 1}: ${split.amount}, Method: ${split.method || "Not selected yet"}`);
+      
+      // Add API call or state update logic here
+      // Example:
+      // savePayment({
+      //   orderId: selectedOrder.id,
+      //   amount: split.amount,
+      //   paymentMethod: split.method,
+      // });
+    });
+  
+    alert("Split payments processed successfully!");
+    // Optionally close modal after processing
+    handleCloseModal();
+  };
+  
 
   return (
     <>
@@ -254,24 +251,43 @@ const PendingOrders = () => {
         )}
 
         {selectedOrder && (
-          <Modal className="receipt-modal" show={showModal} onHide={handleCloseModal} centered>
-            <Modal.Header className="no-print" closeButton></Modal.Header>
+          
+          <Modal className="receipt-modal" show={showModal} onHide={handleCloseModal} size="md" centered>
+            <Modal.Header className="no-print" closeButton>
+              <Modal.Title>Order Review</Modal.Title>
+            </Modal.Header>
             <Modal.Body>
-              <ReceiptContent 
-                ref={receiptRef}
-                businessName={businessName} 
-                selectedOrder={selectedOrder} 
-                currency={currency}
-                contact ={contact}
-                receiptNotes={receiptNotes}
-              />
+              <Tabs defaultActiveKey="receipt" id="receipt-tabs" className="mb-3">
+                {/* Tab for Receipt Info */}
+                <Tab eventKey="receipt" title="Receipt Info">
+                  <ReceiptContent
+                    ref={receiptRef}
+                    businessName={businessName}
+                    selectedOrder={selectedOrder}
+                    currency={currency}
+                    contact={contact}
+                    receiptNotes={receiptNotes}
+                  />
+                </Tab>
+          
+                {/* Tab for Split Bill */}
+                <Tab eventKey="splitBill" title="Split Bill">
+                  <SplitBill
+                    selectedOrder={selectedOrder}
+                    handleSplitPayment={handleSplitPayment}
+                    currency={currency}
+                    receiptRef={receiptRef}
+                    handlePrintReceipt={handlePrintReceipt}
+                  />
+                </Tab>
+              </Tabs>
             </Modal.Body>
             <Modal.Footer className="no-print">
               {!selectedOrder.isPrinted && (
-               <Button variant="warning" onClick={() => handleEditOrder(selectedOrder)}>
-               Edit
-               </Button>
-               )}
+                <Button variant="warning" onClick={() => handleEditOrder(selectedOrder)}>
+                  Edit
+                </Button>
+              )}
               <Button variant="success" onClick={handlePrintReceipt}>
                 Print
               </Button>
@@ -282,47 +298,12 @@ const PendingOrders = () => {
                 Close
               </Button>
             </Modal.Footer>
-          
           </Modal>
-        )}
+          
+        )};
       </Container>
     </>
   );
-};
-
-
-// PropTypes validation
-ReceiptContent.propTypes = {
-  business: PropTypes.shape({
-    
-   // phone: PropTypes.string.isRequired,
-    settings: PropTypes.shape({
-      businessName: PropTypes.string.isRequired,
-      currency: PropTypes.string.isRequired,
-    }).isRequired,
-  }),
-  selectedOrder: PropTypes.shape({
-    createdAt: PropTypes.string.isRequired,
-    receiptNumber: PropTypes.string.isRequired,
-    tableNumber: PropTypes.number.isRequired,
-    username: PropTypes.string.isRequired,
-    subtotal: PropTypes.number.isRequired,
-    tax: PropTypes.number.isRequired,
-    serviceCharge: PropTypes.number.isRequired,
-    totalAmount: PropTypes.number.isRequired,
-    OrderItems: PropTypes.arrayOf(
-      PropTypes.shape({
-        MenuItem: PropTypes.shape({
-          name: PropTypes.string.isRequired,
-        }).isRequired,
-        quantity: PropTypes.number.isRequired,
-        price: PropTypes.number.isRequired,
-      })
-    ).isRequired,
-  }).isRequired,
-  currency: PropTypes.string.isRequired,
-  contact: PropTypes.string,
-  receiptNotes: PropTypes.string
 };
 
 export default PendingOrders;

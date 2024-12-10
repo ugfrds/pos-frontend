@@ -17,9 +17,9 @@ const OrderHistoryPage = () => {
   const [totalPages, setTotalPages] = useState(1);
   const { business } = useContext(UserBusinessContext);
   const currency = business.settings.currency;
-  const ordersPerPage = 10;
+  const ordersPerPage = 15;
 
-  useEffect(() => {  
+  useEffect(() => {
     const fetchOrders = async () => {
       try {
         const filters = {
@@ -28,8 +28,8 @@ const OrderHistoryPage = () => {
           endDate,
           tableNumber
         };
-        const response = await getAllOrders(filters, currentPage, ordersPerPage); 
-        
+        const response = await getAllOrders(filters, currentPage, ordersPerPage);
+
         // Sort orders by creation date in descending order
         const sortedOrders = response.orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         setOrders(sortedOrders);
@@ -45,9 +45,9 @@ const OrderHistoryPage = () => {
   const handleSearch = async () => {
     try {
       const res = await searchOrdersByItem(searchTerm);
-       console.log(res);
-       const sortedOrders = res.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        setOrders(sortedOrders);
+      console.log(res);
+      const sortedOrders = res.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      setOrders(sortedOrders);
     } catch (error) {
       console.error('Failed to search orders:', error);
     }
@@ -70,33 +70,33 @@ const OrderHistoryPage = () => {
       <h1 className="mb-4">Order History</h1>
 
       <Row className="mb-3">
-  <Col md={6}>
-    <Form.Group className="mb-3">
-      <Form.Control
-        type="text"
-        placeholder="Search by item"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-    </Form.Group>
-  </Col>
-  <Col md={3}>
-    <Button variant="primary" onClick={handleSearch} className="w-100">
-      Search
-    </Button>
-  </Col>
-  <Col md={3}>
-    <Button 
-      variant="secondary" 
-      onClick={() => { 
-        setSearchTerm(""); // Reset search term
-        window.location.reload();
-      }} 
-      className="w-100">
-      Reset All
-    </Button>
-  </Col>
-</Row>
+        <Col md={6}>
+          <Form.Group className="mb-3">
+            <Form.Control
+              type="text"
+              placeholder="Search by item"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </Form.Group>
+        </Col>
+        <Col md={3}>
+          <Button variant="primary" onClick={handleSearch} className="w-100">
+            Search
+          </Button>
+        </Col>
+        <Col md={3}>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              setSearchTerm(""); // Reset search term
+              window.location.reload();
+            }}
+            className="w-100">
+            Reset All
+          </Button>
+        </Col>
+      </Row>
 
 
       <Row className="mb-3">
@@ -168,13 +168,19 @@ const OrderHistoryPage = () => {
               <td>{order.status}</td>
               <td>{FormatCurrency(order.totalAmount, currency)}</td>
               <td>
-              <table style={{ width: '100%' }}>
+                <table style={{ width: '100%' }}>
                   {Array.isArray(order.OrderItems) && order.OrderItems.length > 0 ? (
                     order.OrderItems.map(item => (
                       <tr key={item.id}>
-                          <td style={{ width: '60%' }}>{item.MenuItem.name}</td>
-                          <td style={{ width: '20%' }}>{item.quantity}</td>
-                          <td style={{ width: '20%' }}>{FormatCurrency(item.price, currency)}</td>
+                        <td style={{ width: '60%' }}>{item.MenuItem && item.MenuItem.name
+                          ? (
+                            item.MenuItem.name
+                          )
+                          : (
+                            "N/A"
+                          )}</td>
+                        <td style={{ width: '20%' }}>{item.quantity}</td>
+                        <td style={{ width: '20%' }}>{FormatCurrency(item.price, currency)}</td>
                       </tr>
                     ))
                   ) : (
