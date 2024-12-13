@@ -13,7 +13,7 @@ const NavBar = () => {
   const handleInventoryReportsClick = () => {
     const authToken = sessionStorage.getItem('token'); // Retrieve token from sessionStorage
     if (authToken) {
-      const inventoryUrl = `https://wisepos-inventory.vercel.app/inventory?authToken=${encodeURIComponent(
+      const inventoryUrl = `https://wisepos-inventory.vercel.app/inventory?P=${encodeURIComponent(
         authToken
       )}`;
       window.open(inventoryUrl, '_blank'); // Open in a new tab
