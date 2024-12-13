@@ -35,8 +35,8 @@ const FirstVisitBanner = () => {
         </p>
         <p>
           <strong>username:</strong> mkfoods <strong>Password</strong> mkfoods <br />
-          <strong>Note:create other users update their info on new userpage
-            using email you used when creating them </strong>  <br />
+          <strong>Note: </strong>create other users update their info on new userpage
+            using email you used when creating them  <br />
           After creating menu items or updating business settings,
           <strong> log out and back in</strong> to refresh cached data.
         </p>
