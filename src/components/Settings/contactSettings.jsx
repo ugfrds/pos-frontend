@@ -4,7 +4,7 @@ import { Form } from 'react-bootstrap';
 const ContactSetting = ({ phoneNumber, onPhone }) => {
     return (
         <Form.Group>
-            <Form.Label>Phone Number </Form.Label>
+            <Form.Label className='fw-bold'>Phone Number </Form.Label>
             <Form.Control 
                 type="number" 
                 value={phoneNumber} 

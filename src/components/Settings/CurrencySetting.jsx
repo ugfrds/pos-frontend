@@ -48,7 +48,7 @@ const CurrencySetting = ({ currency, onCurrencyChange }) => {
 
     return (
         <Form.Group>
-            <Form.Label>Currency</Form.Label>
+            <Form.Label className='fw-bold'>Currency</Form.Label>
             <Form.Control as="select" value={currency} onChange={(e) => onCurrencyChange(e.target.value)}>
                 {Object.keys(currencies).map((currencyCode) => (
                     <option key={currencyCode} value={currencyCode}>

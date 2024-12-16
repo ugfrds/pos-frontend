@@ -4,7 +4,7 @@ import { Form } from 'react-bootstrap';
 const ReceiptNotesSetting = ({ notes, onNotesChange }) => {
     return (
         <Form.Group>
-            <Form.Label>Receipt Notes</Form.Label>
+            <Form.Label className='fw-bold'>Receipt Notes</Form.Label>
             <Form.Control 
                 as="textarea" 
                 rows={3} 

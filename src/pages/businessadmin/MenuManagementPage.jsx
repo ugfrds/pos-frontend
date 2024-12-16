@@ -99,10 +99,10 @@ const MenuManagementPage = () => {
             {loading && <p>Loading menu items...</p>}
             {error && <p className="text-danger">{error}</p>}
             <Notification
-        message={notification.message}
-        variant={notification.variant}
-        onClose={() => setNotification({ message: '', variant: '' })}
-      />
+                message={notification.message}
+                variant={notification.variant}
+                onClose={() => setNotification({ message: '', variant: '' })}
+            />
             
             <Row>
                 <Col md={4}>

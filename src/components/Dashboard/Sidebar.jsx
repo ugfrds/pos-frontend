@@ -52,7 +52,7 @@ const Sidebar = () => {
                                 <FaUser className="me-2" />
                                 Staff Management
                             </Nav.Link>
-                            <Nav.Link as={Link} to="/admin/orderhistori" className="text-white d-flex align-items-center mb-2 nav-item">
+                            <Nav.Link as={Link} to="/admin/orderhistory" className="text-white d-flex align-items-center mb-2 nav-item">
                                 <FaTable className="me-2" />
                                 Order History
                             </Nav.Link>

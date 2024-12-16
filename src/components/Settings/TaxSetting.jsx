@@ -4,7 +4,7 @@ import { Form } from 'react-bootstrap';
 const TaxSetting = ({ taxPercentage, onTaxChange }) => {
     return (
         <Form.Group>
-            <Form.Label>Tax Percentage (%)</Form.Label>
+            <Form.Label className='fw-bold'>Tax Percentage (%)</Form.Label>
             <Form.Control 
                 type="number" 
                 value={taxPercentage} 

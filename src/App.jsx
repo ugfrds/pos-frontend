@@ -90,7 +90,7 @@ const App = () => {
     }
   />
   <Route
-    path="orderhistori"
+    path="orderhistory"
     element={
       <PrivateRoute roles={['BusinessAdmin','Supervisor', 'Cashier']}>
         <OrderHistori />

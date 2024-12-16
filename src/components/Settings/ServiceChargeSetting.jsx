@@ -10,6 +10,7 @@ const ServiceChargeSetting = ({ serviceCharge, serviceChargeEnabled, onServiceCh
                 label="Enable Service Charge" 
                 checked={serviceChargeEnabled} 
                 onChange={(e) => onToggleServiceCharge(e.target.checked)} 
+                className='fw-bold'
             />
             {serviceChargeEnabled && (
                 <Form.Control 

@@ -35,7 +35,7 @@ const NavBar = () => {
               Main Dashboard
             </Nav.Link>
             {!isActive('/admin/orderhistori') && (
-              <Nav.Link as={Link} to="/admin/orderhistori" className="fs-5">
+              <Nav.Link as={Link} to="/admin/orderhistory" className="fs-5">
                 Order History
               </Nav.Link>
             )}
