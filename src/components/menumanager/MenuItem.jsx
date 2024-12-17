@@ -54,7 +54,7 @@ const MenuItem = ({ item }) => {
     return (
         <Card className="mb-3 shadow-sm text-center">
             <Card.Body>
-               {/* <BusinessIcon type={type} />  */}
+                <BusinessIcon type={type} />  
                 <Card.Title>{item.name}</Card.Title>
                 <Card.Text>{FormatCurrency(item.price,currency)}</Card.Text>
                 <Button variant="success" onClick={handleAddToOrder}>Add to Order</Button>
