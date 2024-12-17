@@ -5,7 +5,7 @@ import RestaurantNameSetting from './RestaurantNameSetting';
 import TaxSetting from './TaxSetting';
 import ServiceChargeSetting from './ServiceChargeSetting';
 import ReceiptNotesSetting from './ReceiptNotesSetting';
-import ContactSetting from './ContactSettings';
+import ContactSetting from './ContactSettings'; //sorted
 import LocationSetting from './LocationSettings';
 import Notification from '../Notification';
 
