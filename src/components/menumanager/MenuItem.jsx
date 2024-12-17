@@ -23,7 +23,7 @@ const MenuItem = ({ item }) => {
     const handleAddToOrder = () => {
         if (type !== 'Bar' && type !== 'Restaurant') {
             // If business type is not bar or restaurant, use a default table number
-            const defaultTableNumber = '1'; // Adjust this value as needed
+            const defaultTableNumber = '1'; 
             setTableNumber(defaultTableNumber); // Set default table number in context
             addOrderItem(item); // Add the item to the order
             navigate(`/order/${defaultTableNumber}`); // Navigate to the order page
@@ -48,11 +48,13 @@ const MenuItem = ({ item }) => {
               return <FaBox size={50} className="mb-3 text-gray-500" />;
           }
         };
+        return <div>{getIcon()}</div>;
+    };
 
     return (
         <Card className="mb-3 shadow-sm text-center">
             <Card.Body>
-               <BusinessIcon type={type} /> 
+               {/* <BusinessIcon type={type} />  */}
                 <Card.Title>{item.name}</Card.Title>
                 <Card.Text>{FormatCurrency(item.price,currency)}</Card.Text>
                 <Button variant="success" onClick={handleAddToOrder}>Add to Order</Button>
