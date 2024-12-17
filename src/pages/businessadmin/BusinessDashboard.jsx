@@ -1,4 +1,4 @@
-import  { useState, useEffect, useContext } from 'react';
+import  { useState, useEffect, useContext, useCallback } from 'react';
 import { Container, Row, Col, Card, Button, Form, Spinner, Alert } from 'react-bootstrap';
 import { getDashboardData } from '../../api';
 import { Link } from 'react-router-dom';
@@ -21,8 +21,8 @@ const AdminDashboard = () => {
     const { business } = useContext(UserBusinessContext);
     const currency = business.settings.currency;
 
-    useEffect(() => {
-        const fetchDashboardData = async () => {
+   
+        const fetchDashboardData = useCallback(async () => {
             setLoading(true);
             setError('');
             try {
@@ -40,10 +40,18 @@ const AdminDashboard = () => {
             } finally {
                 setLoading(false);
             }
-        };
-    
-        if (period !== 'custom') fetchDashboardData();
+        
     }, [period, startDate, endDate]);
+
+    useEffect(() => {
+        if (period !== 'custom') fetchDashboardData();
+    }, [fetchDashboardData]);
+
+
+    const handleCustomRangeFetch = () => {
+        if (startDate && endDate) fetchDashboardData(); // Fetch only if both dates are selected
+        else setError('Please select both start and end dates.');
+    };
     
     return (
         <Container fluid className="mt-4">
@@ -82,6 +90,9 @@ const AdminDashboard = () => {
                             onChange={(e) => setEndDate(e.target.value)}
                         />
                     </Form.Group>
+                     <Button variant="primary" onClick={handleCustomRangeFetch} className="mt-2">
+                     Fetch Data
+                    </Button>
                 </div>
             )}
             {/* Loading and Error States */}
