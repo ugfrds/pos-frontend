@@ -1,16 +1,22 @@
-import { useState } from 'react';
+import { useState, useContext} from 'react';
 import { Nav, Navbar, Container } from 'react-bootstrap';
 import { Link, useLocation } from 'react-router-dom'; // For routing and getting the current location
+import { UserBusinessContext } from '../../context/UserBusinessContext';
 import '../styles/NavBar.css';
+
 
 const NavBar = () => {
     const [activeLink, setActiveLink] = useState(''); // Default active link
     const location = useLocation(); // Get the current location
+    const { business } = useContext(UserBusinessContext); 
+    const type = business.settings.businessType;
 
     const handleLinkClick = (path) => {
         setActiveLink(path);
     };
-
+    const shouldShowTablesLink = (type, pathname) => {
+        return (type === 'Bar' || type === 'Restaurant') && pathname !== '/tables';
+      };
     return (
         <Navbar className="custom-navbar" expand="lg" sticky="top">
             <Container>
@@ -37,16 +43,16 @@ const NavBar = () => {
                                 Orders
                             </Nav.Link>
                         )}
-                        {location.pathname !== '/tables' && (
-                            <Nav.Link 
-                                as={Link} 
-                                to="/tables" 
-                                onClick={() => handleLinkClick('/tables')} 
-                                className={activeLink === '/tables' ? 'active' : ''}
-                            >
-                                Tables
-                            </Nav.Link>
-                        )}
+                       {shouldShowTablesLink(type, location.pathname) && (
+                        <Nav.Link 
+                            as={Link} 
+                            to="/tables" 
+                            onClick={() => handleLinkClick('/tables')} 
+                            className={activeLink === '/tables' ? 'active' : ''}
+                        >
+                            Tables
+                        </Nav.Link>
+                    )}
                         {location.pathname !== '/menu' && (
                             <Nav.Link 
                                 as={Link} 
