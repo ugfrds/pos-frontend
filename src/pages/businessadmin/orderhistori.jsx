@@ -4,7 +4,8 @@ import { FormatCurrency } from '../../utils/index'; // Utility to format currenc
 import { Container, Row, Col, Form, Button, Table, Pagination } from 'react-bootstrap';
 import { useContext } from 'react';
 import { UserBusinessContext } from '../../context/UserBusinessContext';
-//import 'bootstrap/dist/css/bootstrap.min.css';
+import './OrderHistory.css';
+
 
 const OrderHistoryPage = () => {
   const [orders, setOrders] = useState([]);
@@ -145,55 +146,51 @@ const OrderHistoryPage = () => {
           </Form.Group>
         </Col>
       </Row>
+      <div className="table-responsive">
+ <Table striped bordered hover>
+    <thead>
+      <tr>
+        <th>Receipt Number</th>
+        <th>Table Number</th>
+        <th>Order Type</th>
+        <th>Status</th>
+        <th>Total Amount</th>
+        <th>Items</th>
+        <th>Served By</th>
+        <th>Order Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      {orders.map(order => (
+        <tr key={order.id}>
+          <td>{order.receiptNumber}</td>
+          <td>{order.tableNumber}</td>
+          <td>{order.orderType}</td>
+          <td>{order.status}</td>
+          <td>{FormatCurrency(order.totalAmount, currency)}</td>
+          <td>
+            <table style={{ width: '100%' }}>
+              {Array.isArray(order.OrderItems) && order.OrderItems.length > 0 ? (
+                order.OrderItems.map(item => (
+                  <tr key={item.id}>
+                    <td style={{ width: '60%' }}>{item.MenuItem && item.MenuItem.name ? item.MenuItem.name : "N/A"}</td>
+                    <td style={{ width: '20%' }}>{item.quantity}</td>
+                    <td style={{ width: '20%' }}>{FormatCurrency(item.price, currency)}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr><td>No items</td></tr>
+              )}
+            </table>
+          </td>
+          <td>{order.username}</td>
+          <td>{formatDateTime(order.createdAt)}</td>
+        </tr>
+      ))}
+    </tbody>
+  </Table>
+</div>
 
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Receipt Number</th>
-            <th>Table Number</th>
-            <th>Order Type</th>
-            <th>Status</th>
-            <th>Total Amount</th>
-            <th>Items</th>
-            <th>Served By</th>
-            <th>Order Time</th> {/* New column for order time */}
-          </tr>
-        </thead>
-        <tbody>
-          {orders.map(order => (
-            <tr key={order.id}>
-              <td>{order.receiptNumber}</td>
-              <td>{order.tableNumber}</td>
-              <td>{order.orderType}</td>
-              <td>{order.status}</td>
-              <td>{FormatCurrency(order.totalAmount, currency)}</td>
-              <td>
-                <table style={{ width: '100%' }}>
-                  {Array.isArray(order.OrderItems) && order.OrderItems.length > 0 ? (
-                    order.OrderItems.map(item => (
-                      <tr key={item.id}>
-                        <td style={{ width: '60%' }}>{item.MenuItem && item.MenuItem.name
-                          ? (
-                            item.MenuItem.name
-                          )
-                          : (
-                            "N/A"
-                          )}</td>
-                        <td style={{ width: '20%' }}>{item.quantity}</td>
-                        <td style={{ width: '20%' }}>{FormatCurrency(item.price, currency)}</td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>No items</tr>
-                  )}
-                </table>
-              </td>
-              <td>{order.username}</td> {/* Display username */}
-              <td>{formatDateTime(order.createdAt)}</td> {/* Display formatted order time */}
-            </tr>
-          ))}
-        </tbody>
-      </Table>
 
       <Pagination>
         <Pagination.Prev

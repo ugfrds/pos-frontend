@@ -382,7 +382,9 @@ const updateAdmin = async (id, updated) => {
  const getSettings = async () => {
     try {
         const response = await api.get('/', setAuthHeader() );
-        return response;
+        console.log (response);
+        return response.data;
+        
     } catch (error) {
         console.error('Failed to fetch settings:', error);
         return null;
@@ -402,9 +404,19 @@ const updateAdmin = async (id, updated) => {
     }
 };
 
-export const getDashboardData = async (period) => {
+
+export const getDashboardData = async (period, startDate = null, endDate = null) => {
     try {
-        const response = await api.get(`/dashboard?period=${period}`, setAuthHeader());
+        const params = new URLSearchParams();
+        params.append('period', period);
+
+        // Include startDate and endDate if the period is 'custom'
+        if (period === 'custom' && startDate && endDate) {
+            params.append('startDate', startDate);
+            params.append('endDate', endDate);
+        }
+
+        const response = await api.get(`/dashboard?${params.toString()}`, setAuthHeader());
         return response.data;
     } catch (error) {
         console.error('Error fetching dashboard data:', error);

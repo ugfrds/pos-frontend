@@ -9,22 +9,26 @@ import SalesChart from '../../components/salesChart';
 
 const AdminDashboard = () => {
     const [period, setPeriod] = useState('daily');
+    const [startDate, setStartDate] = useState(''); // Custom Start Date
+    const [endDate, setEndDate] = useState(''); // Custom End Date
     const [dashboardData, setDashboardData] = useState({
         totalSales: 0,
         totalOrders: 0,
         topMenuItem: '',
     });
-    const [loading, setLoading] = useState(true); // Loading state
-    const [error, setError] = useState(''); // Error state
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
     const { business } = useContext(UserBusinessContext);
     const currency = business.settings.currency;
 
     useEffect(() => {
         const fetchDashboardData = async () => {
-            setLoading(true); // Start loading
-            setError(''); // Clear any previous errors
+            setLoading(true);
+            setError('');
             try {
-                const data = await getDashboardData(period);
+                const params = period === 'custom' ? { startDate, endDate } : {};
+                const data = await getDashboardData(period, params.startDate, params.endDate);
+
                 setDashboardData({
                     totalSales: data.totalSales,
                     totalOrders: data.totalOrders,
@@ -34,13 +38,13 @@ const AdminDashboard = () => {
                 console.error('Failed to fetch dashboard data:', err);
                 setError('Unable to load dashboard data. Please try again later.');
             } finally {
-                setLoading(false); // Stop loading
+                setLoading(false);
             }
         };
-
-        fetchDashboardData();
-    }, [period]);
-
+    
+        if (period !== 'custom') fetchDashboardData();
+    }, [period, startDate, endDate]);
+    
     return (
         <Container fluid className="mt-4">
             <h2 className="mb-4 text-center">Admin Dashboard</h2>
@@ -56,9 +60,30 @@ const AdminDashboard = () => {
                     <option value="weekly">This Week</option>
                     <option value="monthly">This Month</option>
                     <option value="all">All Time</option>
+                    <option value="custom">Custom Range</option>
                 </Form.Control>
             </Form.Group>
 
+            {period === 'custom' && (
+                <div className="mb-4">
+                    <Form.Group>
+                        <Form.Label>Start Date</Form.Label>
+                        <Form.Control
+                            type="date"
+                            value={startDate}
+                            onChange={(e) => setStartDate(e.target.value)}
+                        />
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Label>End Date</Form.Label>
+                        <Form.Control
+                            type="date"
+                            value={endDate}
+                            onChange={(e) => setEndDate(e.target.value)}
+                        />
+                    </Form.Group>
+                </div>
+            )}
             {/* Loading and Error States */}
             {loading && (
                 <div className="text-center my-5">

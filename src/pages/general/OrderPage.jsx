@@ -9,6 +9,7 @@ import OrderConfirmationModal from '../../components/Orders/OrderConfirmationMod
 import { deleteOrder, createOrder } from '../../api';
 import { UserBusinessContext } from '../../context/UserBusinessContext';
 import { OrderContext } from '../../context/OrderContext';
+import useWindowSize from '../../hooks/useWindowSize';
 
 
 const OrderPage = () => {
@@ -26,6 +27,9 @@ const OrderPage = () => {
     const [showModal, setShowModal] = useState(false); // State to control modal visibility
     const { user, business } = useContext(UserBusinessContext);
     const [previousOrderId, setPreviousOrderId] = useState(null); 
+    const { width } = useWindowSize();
+    const isMobile = width <= 768; // Define mobile breakpoint
+    const [showReceipt, setShowReceipt] = useState(!isMobile);
 
    
     // Memoize resetOrder to avoid unnecessary re-renders
@@ -208,34 +212,74 @@ const OrderPage = () => {
 
     return (
         <Container fluid className="order-page-container">
-            <Row className="h-100">
-                <NavBar />
-                <Col md={10} className="menu-col">
-                    <MenuPage addItemToOrder={addOrderItem} />
+    <Row className="h-100">
+        {/* Navbar */}
+        <NavBar />
+
+        {/* Menu Items Section */}
+        <Col md={isMobile ? 12 : 10} className="menu-col">
+            <MenuPage addItemToOrder={addOrderItem} />
+        </Col>
+
+        {/* Receipt Panel Logic */}
+        {orderItems.length > 0 && (
+            isMobile ? (
+                <div className="mobile-receipt-container">
+                    {!showReceipt ? (
+                        <button 
+                            className="toggle-receipt-button" 
+                            onClick={() => setShowReceipt(true)}
+                        >
+                            Show Receipt
+                        </button>
+                    ) : (
+                        <div className="floating-receipt-panel">
+                            <button 
+                                className="toggle-receipt-button" 
+                                onClick={() => setShowReceipt(false)}
+                            >
+                                Hide Receipt
+                            </button>
+                            <ReceiptPanel
+                                receiptItems={orderItems}
+                                tableNumber={tableNumber}
+                                subtotal={subtotal}
+                                tax={tax}
+                                serviceCharge={serviceCharge}
+                                total={total}
+                                handlePlaceOrder={handlePlaceOrder}
+                                onCancelOrder={handleCancelOrder}
+                                onIncreaseQuantity={handleIncreaseQuantity}
+                                onDecreaseQuantity={handleDecreaseQuantity}
+                                onRemoveItem={handleRemoveItem}
+                                servedBy={user.username ? user.username : 'Guest'}
+                                restaurantName={businessName ? `${businessName} Restaurant` : 'Restaurant'}
+                            />
+                        </div>
+                    )}
+                </div>
+            ) : (
+                <Col md={2} className="floating-receipt-panel">
+                    <ReceiptPanel
+                        receiptItems={orderItems}
+                        tableNumber={tableNumber}
+                        subtotal={subtotal}
+                        tax={tax}
+                        serviceCharge={serviceCharge}
+                        total={total}
+                        handlePlaceOrder={handlePlaceOrder}
+                        onCancelOrder={handleCancelOrder}
+                        onIncreaseQuantity={handleIncreaseQuantity}
+                        onDecreaseQuantity={handleDecreaseQuantity}
+                        onRemoveItem={handleRemoveItem}
+                        servedBy={user.username ? user.username : 'Guest'}
+                        restaurantName={businessName ? `${businessName} Restaurant` : 'Restaurant'}
+                    />
                 </Col>
-                
-                {orderItems.length > 0 && (
-                    <div className="floating-receipt-panel">
-                        <ReceiptPanel 
-                            receiptItems={orderItems} 
-                            tableNumber={tableNumber}
-                            
-                            subtotal={subtotal}
-                            tax={tax}
-                            serviceCharge={serviceCharge}
-                            total={total}
-                            handlePlaceOrder={handlePlaceOrder} 
-                            onCancelOrder={handleCancelOrder}
-                            onIncreaseQuantity={handleIncreaseQuantity} 
-                            onDecreaseQuantity={handleDecreaseQuantity} 
-                            onRemoveItem={handleRemoveItem}  
-                            servedBy={user.username ? user.username : 'Guest'} // 
-                            restaurantName={businessName ? `${businessName} Restaurant` : 'Restaurant '} // 
-                        
-                        />
-                    </div>
-                )}
-            </Row>
+            )
+        )}
+    </Row>
+
 
             {/* Order Confirmation Modal */}
             <OrderConfirmationModal

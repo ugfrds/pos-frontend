@@ -1,29 +1,5 @@
-/* OrderHistoryPage.css */
-
-@media (max-width: 576px) {
-    .receipt-row {
-        flex-direction: column;
-        text-align: center;
-    }
-    .receipt-row > div {
-        margin-bottom: 10px;
-    }
-    .receipt-row > div:last-child {
-        margin-bottom: 0;
-    }
-}
-
-.receipt-modal .modal-dialog {
-    max-width: 100%;
-}
-
-.receipt-modal-details {
-    word-wrap: break-word;
-}
-
-.receipt-header,
-.receipt-footer {
-    text-align: left;
-}
-
-
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling for mobile devices */
+  }
+  

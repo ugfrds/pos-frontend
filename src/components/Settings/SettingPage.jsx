@@ -34,7 +34,7 @@ const SettingsPage = () => {
                 setReceiptNotes(settings.receiptNotes || 'Thank you for dining with us!');
                 setPhoneNumber(settings.phoneNumber || '');
                 setLocation(settings.location || '');
-                console.log(settings.settings);
+                
             }
         };
 
@@ -82,13 +82,14 @@ const SettingsPage = () => {
                         <RestaurantNameSetting name={name} onNameChange={setName} />
                     </Card>
                 </Col>
-            </Row>
-            <Row className="g-4 mt-2">
                 <Col md={4}>
                     <Card className="p-3 shadow-sm">
                         <TaxSetting taxPercentage={taxPercentage} onTaxChange={setTaxPercentage} />
                     </Card>
                 </Col>
+            </Row>
+            <Row className="g-4 mt-2">
+                
                 <Col md={4}>
                     <Card className="p-3 shadow-sm">
                         <ServiceChargeSetting

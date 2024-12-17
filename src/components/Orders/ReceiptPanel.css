@@ -1,8 +1,5 @@
 .receipt-panel {
-    position: fixed;
-    top:20%;
-    right: 0;
-    width: 320px; /* Adjust the width as needed */
+    
     max-height: 70vh; /* Maximum height for scrollable content */
     overflow-y: auto; /* Enables vertical scrolling */
     background-color: #f9f9f9; /* Light background for a clean look */
