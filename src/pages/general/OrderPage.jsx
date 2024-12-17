@@ -151,12 +151,17 @@ const OrderPage = () => {
             console.error('Failed to create order:', error);
         }
     };
-
-
+    //business type
+    const type = business.settings.businessType;
     const handleCancelOrder = () => {
         // Reset the order state
         resetOrder();
         // Redirect back to the TablesPage to start a new order
+        if (type !== 'Bar' && type !== 'Restaurant')
+        {
+           navigate('/dashboard'); 
+        }
+        else
         navigate('/tables');
     };
 
@@ -192,8 +197,9 @@ const OrderPage = () => {
     };
 
     // Calculate service charge (e.g., 5% of subtotal for sit-in orders)
+     const sC= business.settings.serviceCharge;
     const calculateServiceCharge = (subtotal) => {
-        return orderType === 'sit-in' ? subtotal * 0.05 : 0;
+        return subtotal * sC * 0.01;
     };
 
     // Calculate total
@@ -203,7 +209,7 @@ const OrderPage = () => {
 
     const subtotal = calculateSubtotal();
     const tax = calculateTax(subtotal);
-    const serviceCharge = calculateServiceCharge(subtotal, orderType);
+    const serviceCharge = calculateServiceCharge(subtotal);
     const total = calculateTotal(subtotal, tax, serviceCharge);
 
     ///BUsiness settings;

@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, Button } from 'react-bootstrap';
 import { OrderContext } from '../../context/OrderContext';
-import { FaUtensils } from 'react-icons/fa';
+import { FaUtensils , FaBeer, FaBox  } from 'react-icons/fa';
 import { FormatCurrency } from '../../utils/index'; 
 import { UserBusinessContext } from '../../context/UserBusinessContext';
 
@@ -14,25 +14,45 @@ import { UserBusinessContext } from '../../context/UserBusinessContext';
  */
 
 const MenuItem = ({ item }) => {
-    const { addOrderItem, tableNumber } = useContext(OrderContext);
+    const { addOrderItem, tableNumber, setTableNumber } = useContext(OrderContext);
     const navigate = useNavigate();
     const { business } = useContext(UserBusinessContext); 
     const currency = business.settings.currency;
+    const type = business.settings.businessType;
 
     const handleAddToOrder = () => {
-        if (!tableNumber) {
-            // Redirect to tables page if no table is selected   
+        if (type !== 'Bar' && type !== 'Restaurant') {
+            // If business type is not bar or restaurant, use a default table number
+            const defaultTableNumber = '1'; // Adjust this value as needed
+            setTableNumber(defaultTableNumber); // Set default table number in context
+            addOrderItem(item); // Add the item to the order
+            navigate(`/order/${defaultTableNumber}`); // Navigate to the order page
+        } else if (!tableNumber) {
+            // If no table is selected, navigate to tables page
             navigate('/tables');
         } else {
-            // Otherwise, add item to order
-            addOrderItem(item); 
+            // Otherwise, add item to the order
+            addOrderItem(item);
         }
     };
+
+    const BusinessIcon = ({ type }) => {
+        // Dynamically determine the icon based on business type
+        const getIcon = () => {
+          switch (type) {
+            case "Bar":
+              return <FaBeer size={50} className="mb-3 text-yellow-500" />;
+            case "Restaurant":
+              return <FaUtensils size={50} className="mb-3 " />;
+            default:
+              return <FaBox size={50} className="mb-3 text-gray-500" />;
+          }
+        };
 
     return (
         <Card className="mb-3 shadow-sm text-center">
             <Card.Body>
-                <FaUtensils size={50} className="mb-3" /> {/* Using the icon instead of an image */}
+               <BusinessIcon type={type} /> 
                 <Card.Title>{item.name}</Card.Title>
                 <Card.Text>{FormatCurrency(item.price,currency)}</Card.Text>
                 <Button variant="success" onClick={handleAddToOrder}>Add to Order</Button>

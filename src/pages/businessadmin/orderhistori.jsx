@@ -18,6 +18,7 @@ const OrderHistoryPage = () => {
   const [totalPages, setTotalPages] = useState(1);
   const { business } = useContext(UserBusinessContext);
   const currency = business.settings.currency;
+  const type =business.settings.businessType;
   const ordersPerPage = 15;
 
   useEffect(() => {
@@ -151,8 +152,10 @@ const OrderHistoryPage = () => {
     <thead>
       <tr>
         <th>Receipt Number</th>
-        <th>Table Number</th>
-        <th>Order Type</th>
+          {/* Conditionally render Table Number */}
+          {type === "Bar" || type === "Restaurant" ? <th>Table Number</th> : null}
+          {/* Conditionally render Order Type */}
+          {type === "Bar" || type === "Restaurant" ? <th>Order Type</th> : null}
         <th>Status</th>
         <th>Total Amount</th>
         <th>Items</th>
@@ -164,8 +167,8 @@ const OrderHistoryPage = () => {
       {orders.map(order => (
         <tr key={order.id}>
           <td>{order.receiptNumber}</td>
-          <td>{order.tableNumber}</td>
-          <td>{order.orderType}</td>
+        {type === "Bar" || type === "Restaurant" ? <td>{order.tableNumber}</td> : null}
+         {type === "Bar" || type === "Restaurant" ? <td>{order.orderType}</td> : null}
           <td>{order.status}</td>
           <td>{FormatCurrency(order.totalAmount, currency)}</td>
           <td>

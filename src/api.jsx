@@ -382,8 +382,7 @@ const updateAdmin = async (id, updated) => {
  const getSettings = async () => {
     try {
         const response = await api.get('/', setAuthHeader() );
-        console.log (response);
-        return response.data;
+        return response.data.settings;
         
     } catch (error) {
         console.error('Failed to fetch settings:', error);

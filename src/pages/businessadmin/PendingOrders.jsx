@@ -29,6 +29,8 @@ const PendingOrders = () => {
   const currency = business.settings.currency;
   const receiptNotes = business.settings.receiptNotes;
   const contact = business.settings.phoneNumber;
+  const type =business.settings.businessType;
+
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -169,16 +171,19 @@ const PendingOrders = () => {
           variant={notification.variant}
           onClose={() => setNotification({ message: '', variant: '' })}
         />
-        <Row className="mb-3">
-          <Form.Group className="mb-3">
-            <Form.Label>Table Number:</Form.Label>
-            <Form.Control
-              type="number"
-              value={tableNumber}
-              onChange={(e) => setTableNumber(e.target.value)}
-            />
-          </Form.Group>
-        </Row>
+         {type === "Bar" || type === "Restaurant" ? 
+           (<Row className="mb-3">
+            <Form.Group className="mb-3">
+              <Form.Label>Table Number:</Form.Label>
+              <Form.Control
+                type="number"
+                value={tableNumber}
+                onChange={(e) => setTableNumber(e.target.value)}
+              />
+            </Form.Group>
+          </Row>)
+          : null}
+       
 
         {orders.length > 0 ? (
           <>
@@ -186,7 +191,9 @@ const PendingOrders = () => {
               <thead>
                 <tr>
                   <th>Receipt Number</th>
-                  <th>Table Number</th>
+                   {/* Conditionally render Table Number */}
+                  {type === "Bar" || type === "Restaurant" ? <th>Table Number</th> : null}
+         
                   <th>Amount</th>
                   <th>Served By</th>
                   <th>Order Time</th>
@@ -199,7 +206,7 @@ const PendingOrders = () => {
                 {orders.map(order => (
                   <tr key={order.id}>
                     <td>{order.receiptNumber}</td>
-                    <td>{order.tableNumber}</td>
+                    {type === "Bar" || type === "Restaurant" ? <td>{order.tableNumber}</td> : null}
                     <td>{FormatCurrency(order.totalAmount, currency)}</td>
                     <td>{order.username}</td>
                     <td>{formatDateTime(order.createdAt)}</td>

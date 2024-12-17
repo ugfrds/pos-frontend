@@ -39,10 +39,6 @@ const Sidebar = () => {
                                 <FaTachometerAlt className="me-2" />
                                 Active Orders
                             </Nav.Link>
-                            <Nav.Link as={Link} to="/tables" className="text-white d-flex align-items-center mb-2 nav-item">
-                                <FaPlus className="me-2" />
-                                Add New Order
-                            </Nav.Link>
                             
                             <Nav.Link as={Link} to="/admin/manage-menu" className="text-white d-flex align-items-center mb-2 nav-item">
                                 <FaUtensils className="me-2" />
@@ -55,6 +51,11 @@ const Sidebar = () => {
                             <Nav.Link as={Link} to="/admin/orderhistory" className="text-white d-flex align-items-center mb-2 nav-item">
                                 <FaTable className="me-2" />
                                 Order History
+                            </Nav.Link>
+
+                            <Nav.Link as={Link} to="/admin/dashboard" className="text-white d-flex align-items-center mb-2 nav-item">
+                                <FaPlus className="me-2" />
+                                Admin Dashboard
                             </Nav.Link>
                             
                         </div>

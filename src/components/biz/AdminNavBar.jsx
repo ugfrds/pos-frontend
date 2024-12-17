@@ -31,10 +31,10 @@ const NavBar = () => {
         <Navbar.Toggle aria-controls="navbarNav" />
         <Navbar.Collapse id="navbarNav">
           <Nav className="me-auto">
-            <Nav.Link href="/dashboard" className="fs-5">
+            <Nav.Link as={Link} to="/dashboard" className="fs-5">
               Main Dashboard
             </Nav.Link>
-            {!isActive('/admin/orderhistori') && (
+            {!isActive('/admin/orderhistory') && (
               <Nav.Link as={Link} to="/admin/orderhistory" className="fs-5">
                 Order History
               </Nav.Link>
