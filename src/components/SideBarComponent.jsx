@@ -1,16 +1,14 @@
 import React, { useState } from "react";
-import "./styles/links.css";
 import {
+  Drawer,
   List,
   ListItem,
+  ListItemButton,
   ListItemIcon,
   ListItemText,
-  ListItemButton,
+  Collapse,
   IconButton,
   Box,
-  Snackbar,
-  Alert,
-  Button,
 } from "@mui/material";
 import {
   HomeOutlined,
@@ -21,124 +19,118 @@ import {
   CardTravelOutlined,
   TrendingUpOutlined,
   PeopleAltOutlined,
+  ExpandLess,
+  ExpandMore,
+  Menu,
 } from "@mui/icons-material";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
-export default function SideBarComponent() {
+export default function DrawerSidebar() {
   const navigate = useNavigate();
-  const navigateTo = (to) => {
-    navigate(to);
-  };
   const location = useLocation();
   const currentPage = location.pathname;
-  console.log(currentPage);
-  // const styles = theme => ({
-  //     listItemText:{
-  //         fontSize:'0.7em',//Insert your required size
-  //     }
-  //     });
-  const sideBarComponent = [
-    {
-      title: "Home",
-      component: <HomeOutlined fontSize="medium" color="primary" />,
-    },
-    {
-      title: "Inventory",
-      component: <Inventory2Outlined fontSize="medium" color="primary" />,
-    },
-    {
-      title: "Expenses",
-      component: <CardTravelOutlined fontSize="medium" color="primary" />,
-    },
-    {
-      title: "Customers",
-      component: <PeopleAltOutlined fontSize="medium" color="primary" />,
-    },
-    {
-      title: "Revenue",
-      component: <MonetizationOnOutlined fontSize="medium" color="primary" />,
-    },
-    {
-      title: "Growth",
-      component: <TrendingUpOutlined fontSize="medium" color="primary" />,
-    },
-    {
-      title: "Reports",
-      component: <DescriptionOutlined fontSize="medium" color="primary" />,
-    },
-    {
-      title: "Settings",
-      component: <SettingsOutlined fontSize="medium" color="primary" />,
-    },
+
+  const [drawerOpen, setDrawerOpen] = useState(false); // For toggling the Drawer
+  const [manageOpen, setManageOpen] = useState(true); // For toggling the "Manage" section
+
+  // Sidebar items
+  const sidebarItems = [
+    { title: "Home", icon: <HomeOutlined />, route: "/" },
+    { title: "Inventory", icon: <Inventory2Outlined />, route: "/inventory" },
+    { title: "Expenses", icon: <CardTravelOutlined />, route: "/expenses" },
+    { title: "Customers", icon: <PeopleAltOutlined />, route: "/customers" },
+    { title: "Revenue", icon: <MonetizationOnOutlined />, route: "/revenue" },
+    { title: "Growth", icon: <TrendingUpOutlined />, route: "/growth" },
+    { title: "Reports", icon: <DescriptionOutlined />, route: "/reports" },
+    { title: "Settings", icon: <SettingsOutlined />, route: "/settings" },
   ];
-  const [selected, setSelected] = useState(0);
-  const handlSelectedComponent = (event, index) => {
-    setSelected(index);
+
+  // Handle navigation
+  const handleNavigate = (route) => {
+    navigate(route);
   };
+
   return (
     <>
-      <List>
-        {sideBarComponent.map((comp, index) => (
-          <ListItem disablePadding dense={true} key={index}>
-            <Box width="100%">
-              <ListItemButton
-                onClick={(event) => {
-                  handlSelectedComponent(event, index);
-                  (comp.title.toLocaleLowerCase() === 'home')
-                  ? navigateTo('/')
-                  :navigateTo(comp.title.toLocaleLowerCase()); 
-                }}
-                
-                selected={
-                  index === selected &&
-                  currentPage === "/" + comp.title.toLowerCase()
-                }
-                sx={{
-                  mb: 3,
-                  borderLeft: 0,
-                  borderColor: "primary.main",
-                  ml: 1,
-                }}
-              >
-                <ListItemIcon>
-                  <IconButton>{comp.component}</IconButton>
-                </ListItemIcon>
-                {/* <Link
-                  to={"" + comp.title.toLocaleLowerCase()}
-                  className="router-link"
-                > */}
-                <ListItemText
-                  primary={comp.title}
-                  primaryTypographyProps={{
-                    fontSize: "medium",
-                    fontWeight: selected === index ? "bold" : "",
-                    color: selected === index ? "primary.main" : "inherit",
-                  }}
-                />
-                {/* </Link> */}
-              </ListItemButton>
-            </Box>
-          </ListItem>
-        ))}
-      </List>
-      {/* <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-          This is a success message!
-        </Alert>
-      </Snackbar> */}
+      {/* Toggle Button for Small Screens */}
+      <IconButton
+        color="primary"
+        onClick={() => setDrawerOpen(true)}
+        sx={{ display: { md: "none" }, position: "fixed", top: 16, left: 16, zIndex: 1300 }}
+      >
+        <Menu />
+      </IconButton>
+
+      {/* Drawer */}
+      <Drawer
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        variant="temporary"
+        sx={{
+          display: { xs: "block", md: "none" },
+          "& .MuiDrawer-paper": { width: 250 },
+        }}
+      >
+        <SidebarContent
+          items={sidebarItems}
+          currentPage={currentPage}
+          manageOpen={manageOpen}
+          setManageOpen={setManageOpen}
+          handleNavigate={handleNavigate}
+        />
+      </Drawer>
+
+      {/* Persistent Drawer for Larger Screens */}
+      <Drawer
+        open
+        variant="permanent"
+        sx={{
+          display: { xs: "none", md: "block" },
+          "& .MuiDrawer-paper": { width: 250, boxSizing: "border-box" },
+        }}
+      >
+        <SidebarContent
+          items={sidebarItems}
+          currentPage={currentPage}
+          manageOpen={manageOpen}
+          setManageOpen={setManageOpen}
+          handleNavigate={handleNavigate}
+        />
+      </Drawer>
     </>
   );
-  //   const [open, setOpen] = React.useState(false);
+}
 
-  //   const handleClick = () => {
-  //     setOpen(true);
-  //   };
-
-  //   const handleClose = (event, reason) => {
-  //     if (reason === 'clickaway') {
-  //       return;
-  //     }
-
-  //     setOpen(false);
-  //   };
+function SidebarContent({ items, currentPage, manageOpen, setManageOpen, handleNavigate }) {
+  return (
+    <Box sx={{ width: 250, bgcolor: "background.paper", height: "100%" }}>
+      <List>
+        {/* Manage Section with Collapse */}
+        <ListItemButton onClick={() => setManageOpen(!manageOpen)}>
+          <ListItemText primary="Manage" primaryTypographyProps={{ fontWeight: "bold" }} />
+          {manageOpen ? <ExpandLess /> : <ExpandMore />}
+        </ListItemButton>
+        <Collapse in={manageOpen} timeout="auto" unmountOnExit>
+          {items.map((item, index) => (
+            <ListItem key={index} disablePadding>
+              <ListItemButton
+                selected={currentPage === item.route}
+                onClick={() => handleNavigate(item.route)}
+                sx={{ pl: 4 }}
+              >
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText
+                  primary={item.title}
+                  primaryTypographyProps={{
+                    color: currentPage === item.route ? "primary" : "inherit",
+                    fontWeight: currentPage === item.route ? "bold" : "normal",
+                  }}
+                />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </Collapse>
+      </List>
+    </Box>
+  );
 }
