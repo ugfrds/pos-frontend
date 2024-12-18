@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/links.css";
+import "./styles/links.css";
 import {
   List,
   ListItem,
