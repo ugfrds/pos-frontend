@@ -1,5 +1,5 @@
 import React from "react";
-import NavBarComponent from "./NavBarComponent";
+import AdminNavBar from "./biz/AdminNavBar";
 import { Box, Grid } from "@mui/material";
 import SideBarComponent from "./SideBarComponent";
 import { Outlet } from "react-router-dom";
@@ -7,7 +7,7 @@ import { Outlet } from "react-router-dom";
 export default function RootComponent() {
   return (
     <>
-      <NavBarComponent />
+      <AdminNavBar/>
       <Box
         sx={
           {

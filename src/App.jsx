@@ -41,6 +41,7 @@ import AdminLayout from './layouts/AdminLayout';
 
 //
 import Inventory from './components/bodyComponents/inventory/Inventory';
+import RootComponent from './components/RootComponent';
 
 
 const App = () => {
@@ -172,11 +173,12 @@ const App = () => {
       <Route path="*" element={<ErrorPage />} />
       <Route path="/unauthorized" element={<UnauthorizedPage />} />
       <Route path="/expenses" element={<ExpendituresPage />} />
-      <Route path="/inventory" element={<Inventory />}></Route>
+    
      </Routes>
 
-     {/* <Route path="/" element={<RootComponent />}>
-        <Route index element={<Home />} /> */}
+     <Route  element={<RootComponent />}>
+        <Route path="/inventory" element={<Inventory />}></Route>
+        {/* <Route index element={<Home />} />  */}
         {/* <Route path="/home" element={<Home />}></Route> */}
         
         {/* <Route path="/orders" element={<Order />}></Route>
@@ -185,7 +187,7 @@ const App = () => {
         <Route path="/growth" element={<Growth />}></Route>
         <Route path="/reports" element={<Report />}></Route>
         <Route path="/settings" element={<Setting />}></Route> */}
-      {/* </Route> */}
+       </Route> 
      </div>
     
   );
