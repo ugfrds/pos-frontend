@@ -173,10 +173,8 @@ const App = () => {
       <Route path="*" element={<ErrorPage />} />
       <Route path="/unauthorized" element={<UnauthorizedPage />} />
       <Route path="/expenses" element={<ExpendituresPage />} />
-    
-     </Routes>
 
-     <Route  element={<RootComponent />}>
+      <Route  element={<RootComponent />}>
         <Route path="/inventory" element={<Inventory />}></Route>
         {/* <Route index element={<Home />} />  */}
         {/* <Route path="/home" element={<Home />}></Route> */}
@@ -188,6 +186,10 @@ const App = () => {
         <Route path="/reports" element={<Report />}></Route>
         <Route path="/settings" element={<Setting />}></Route> */}
        </Route> 
+    
+     </Routes>
+
+   
      </div>
     
   );
