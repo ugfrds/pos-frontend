@@ -40,6 +40,7 @@ import SuperadminLayout from './layouts/SuperadminLayout';
 import AdminLayout from './layouts/AdminLayout';
 
 //
+import Expenses from './components/bodyComponents/expenses/Expenses'
 import Inventory from './components/bodyComponents/inventory/Inventory';
 import RootComponent from './components/RootComponent';
 
@@ -172,10 +173,15 @@ const App = () => {
       <Route path="/pending" element={<PendingOrders/>} />
       <Route path="*" element={<ErrorPage />} />
       <Route path="/unauthorized" element={<UnauthorizedPage />} />
+<<<<<<< HEAD
       <Route path="/expenses" element={<ExpendituresPage />} />
+=======
+      {/* <Route path="/expenses" element={<ExpendituresPage />} /> */}
+>>>>>>> c7b7d9d98a8966439305f0ab96945a21201f36bb
 
       <Route  element={<RootComponent />}>
         <Route path="/inventory" element={<Inventory />}></Route>
+        <Route path="/expenses" element={<Expenses />}></Route>
         {/* <Route index element={<Home />} />  */}
         {/* <Route path="/home" element={<Home />}></Route> */}
         
@@ -189,7 +195,11 @@ const App = () => {
     
      </Routes>
 
+<<<<<<< HEAD
    
+=======
+    
+>>>>>>> c7b7d9d98a8966439305f0ab96945a21201f36bb
      </div>
     
   );
