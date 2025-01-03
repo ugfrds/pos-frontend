@@ -30,6 +30,7 @@ const PendingOrders = () => {
   const receiptNotes = business.settings.receiptNotes;
   const contact = business.settings.phoneNumber;
   const type =business.settings.businessType;
+  const location = business.settings.location;
 
 
   useEffect(() => {
@@ -274,6 +275,7 @@ const PendingOrders = () => {
                     currency={currency}
                     contact={contact}
                     receiptNotes={receiptNotes}
+                    location={location}
                   />
                 </Tab>
           

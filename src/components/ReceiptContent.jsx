@@ -1,77 +1,79 @@
 import { FormatCurrency } from '../utils/index';
 import React from 'react';
-import PropTypes from 'prop-types'; 
+import PropTypes from 'prop-types';
+import QRCode from 'qrcode.react'; // Ensure you have this package installed
 import "./Orders/ReceiptModal.css";
-  
 
 export const ReceiptContent = React.forwardRef(
-    ({ businessName, selectedOrder, currency, receiptNotes, contact, splits }, ref) => (
-      <div ref={ref} id="receipt" className="receipt-modal-details">
-        <div className="receipt-header text-center">
-          <h4>{businessName}</h4> {/* Business name */}
-          <p>Phone: {contact}</p>
-          <p>Date: {new Date(selectedOrder.createdAt).toLocaleDateString()}</p>
-          <p>Time: {new Date(selectedOrder.createdAt).toLocaleTimeString()}</p>
-          <p><strong>Receipt Number:</strong> {selectedOrder.receiptNumber}</p>
-          <p>{receiptNotes}</p>
+  ({ businessName, selectedOrder, currency, receiptNotes, contact, location, splits }, ref) => (
+    <div ref={ref} id="receipt" className="receipt-modal-details">
+      <div className="receipt-header text-center">
+        <h2 className="business-name">{businessName}</h2> {/* Larger and bold business name */}
+        <p>{location}</p> {/* Location details */}
+        <p>Phone: {contact}</p>
+        <p>Date: {new Date(selectedOrder.createdAt).toLocaleDateString()}</p>
+        <p>Time: {new Date(selectedOrder.createdAt).toLocaleTimeString()}</p>
+        <p><strong>Receipt Number:</strong> {selectedOrder.receiptNumber}</p>
+        <div className="qr-code-container">
+          <QRCode value={selectedOrder.receiptNumber} size={80} />
         </div>
-        <ul className="receipt-items list-unstyled">
-          {selectedOrder.OrderItems.map((item, index) => (
-            <li key={index} className="receipt-item">
-              <div className="item-details d-flex justify-between">
-                <span className="item-name">{item.MenuItem.name}</span>
-                <span className="quantity">{item.quantity}</span>
-                <span className="item-total">{FormatCurrency(item.price, currency)}</span>
-              </div>
-            </li>
-          ))}
-        </ul>
-        <div className="receipt-footer">
-          <div className="item-details">
-            <span className="item-name"><strong>Subtotal:</strong></span>
-            <span className="item-total">{FormatCurrency(selectedOrder.subtotal, currency)}</span>
-          </div>
-          <div className="item-details">
-            <span className="item-name"><strong>Tax:</strong></span>
-            <span className="item-total">{FormatCurrency(selectedOrder.tax, currency)}</span>
-          </div>
-          <div className="item-details">
-            <span className="item-name"><strong>Service Charge:</strong></span>
-            <span className="item-total">{FormatCurrency(selectedOrder.serviceCharge, currency)}</span>
-          </div>
-          <div className="item-details">
-            <span className="item-name"><strong>Total:</strong></span>
-            <span className="item-total"><strong>{FormatCurrency(selectedOrder.totalAmount, currency)}</strong></span>
-          </div>
-        </div>
-        <p className="served-by"><strong>Served By:</strong> {selectedOrder.username}</p>
-  
-        {splits && splits.length > 0 && ( 
-          <>
-            <div className="split-receipt-details">
-              <h5 className="text-center">Split Payment Details</h5>
-              <ul className="list-unstyled">
-                {splits.map((split, index) => (
-                  <li key={index} className="split-item">
-                    <div className="item-details">
-                      <span className="item-name"><strong>{split.person}</strong></span>
-                      <span className="item-total">{FormatCurrency(split.amount, currency)}</span>
-                      <span className="payment-method">({split.method})</span>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </>
-        )}
       </div>
-    )
-  );
-  
-  // Add displayName for debugging support
-  ReceiptContent.displayName = 'ReceiptContent';
+      <ul className="receipt-items list-unstyled">
+        {selectedOrder.OrderItems.map((item, index) => (
+          <li key={index} className="receipt-item">
+            <div className="item-details d-flex justify-between">
+              <span className="item-name">{item.MenuItem.name}</span>
+              <span className="quantity">{item.quantity}</span>
+              <span className="item-total">{FormatCurrency(item.price, currency)}</span>
+            </div>
+          </li>
+        ))}
+      </ul>
+      <div className="receipt-footer">
+        <div className="item-details">
+          <span className="item-name"><strong>Subtotal:</strong></span>
+          <span className="item-total">{FormatCurrency(selectedOrder.subtotal, currency)}</span>
+        </div>
+        <div className="item-details">
+          <span className="item-name"><strong>Tax:</strong></span>
+          <span className="item-total">{FormatCurrency(selectedOrder.tax, currency)}</span>
+        </div>
+        <div className="item-details">
+          <span className="item-name"><strong>Service Charge:</strong></span>
+          <span className="item-total">{FormatCurrency(selectedOrder.serviceCharge, currency)}</span>
+        </div>
+        <div className="item-details">
+          <span className="item-name"><strong>Total:</strong></span>
+          <span className="item-total"><strong>{FormatCurrency(selectedOrder.totalAmount, currency)}</strong></span>
+        </div>
+      </div>
+      <p className="served-by"><strong>Served By:</strong> {selectedOrder.username}</p>
+      {receiptNotes && <p className="receipt-notes">{receiptNotes}</p>}
 
-  
+      {splits && splits.length > 0 && (
+        <>
+          <div className="split-receipt-details">
+            <h5 className="text-center">Split Payment Details</h5>
+            <ul className="list-unstyled">
+              {splits.map((split, index) => (
+                <li key={index} className="split-item">
+                  <div className="item-details">
+                    <span className="item-name"><strong>{split.person}</strong></span>
+                    <span className="item-total">{FormatCurrency(split.amount, currency)}</span>
+                    <span className="payment-method">({split.method})</span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </>
+      )}
+    </div>
+  )
+);
+
+ReceiptContent.displayName = 'ReceiptContent';
+
 
 // PropTypes validation
 ReceiptContent.propTypes = {

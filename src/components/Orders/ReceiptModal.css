@@ -1,108 +1,53 @@
-.receipt-modal .modal-content {
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  background-color: #fff;
-  padding: 15px;
+.receipt-modal .business-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 5px;
 }
 
-.receipt-modal .receipt-modal-details {
+.receipt-modal .qr-code-container {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.receipt-modal .receipt-notes {
+  margin-top: 10px;
+  font-style: italic;
+  text-align: center;
   font-size: 0.9rem;
 }
 
-.receipt-modal .receipt-header {
-  text-align: center;
-  margin-bottom: 10px;
+.receipt-modal .receipt-items .item-details {
+  display: grid;
+  grid-template-columns: 60% 20% 20%;
+  gap: 5px;
 }
 
-.receipt-modal .receipt-items .receipt-item {
+.receipt-modal .receipt-items .quantity,
+.receipt-modal .receipt-items .item-total {
+  text-align: right;
+}
+
+.receipt-modal .receipt-footer .item-details {
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px dashed #ccc;
   padding: 5px 0;
 }
 
-.receipt-modal .receipt-items .receipt-item:last-child {
-  border-bottom: none;
-}
-
-.receipt-modal .receipt-items .item-details {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-}
-
-.receipt-modal .receipt-items .item-name {
-  width: 60%;
-  text-align: left;
-  font-size: 1.2rem;
-}
-
-.receipt-modal .receipt-items .quantity {
-  width: 10%;
-  text-align: left;
-  font-size: 1rem;
-}
-
-.receipt-modal .receipt-items .item-total {
-  width: 30%;
-  text-align: right;
-  font-size: 1.2rem;
-}
-
-.receipt-modal .receipt-footer {
-  margin-top: 10px;
-  font-size: 0.85rem;
-}
-
-.receipt-modal .receipt-footer p {
-  display: flex;
-  justify-content: space-between;
-}
-
-.receipt-modal .receipt-footer h5 {
-  font-size: 1rem;
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-}
-
-.receipt-modal .served-by {
-  text-align: center;
-  margin-top: 10px;
-  font-size: 0.85rem;
-}
-
-.receipt-modal .modal-footer {
-  justify-content: space-between;
-}
 @media print {
-    /* Hide everything except the modal content */
-    body * {
-      visibility: hidden;
-    }
-    
-    /* Show only the modal and its specific content */
-    .receipt-modal-details, .receipt-modal-details * {
-      visibility: visible;
-    }
-    
-    /* Ensure that modal is positioned at the top-left corner for printing */
-    /* .receipt-modal-details {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-    } */
-
-    #receipt {
-      width: 80mm; /* Adjust to 80mm or 58mm */
-      font-size: 12px; /* Adjust font size for readability */
-      line-height: 1.2; /* Adjust line spacing */
-    }
-  
-    /* Hide unwanted elements like modal buttons and header */
-    .modal-header, .modal-footer {
-      display: none;
-    } 
+  #receipt {
+    width: 80mm;
+    font-size: 12px;
+    line-height: 1.2;
+    padding: 10px;
+    margin: 0 auto;
   }
   
+  .qr-code-container {
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  .receipt-notes {
+    margin-top: 5px;
+  }
+}
