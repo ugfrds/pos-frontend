@@ -1,53 +1,32 @@
-.receipt-modal .business-name {
-  font-size: 1.5rem;
+.receipt-modal .receipt-title {
+  font-size: 1.8rem;
   font-weight: bold;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
-.receipt-modal .qr-code-container {
-  margin-top: 10px;
-  text-align: center;
-}
-
-.receipt-modal .receipt-notes {
-  margin-top: 10px;
-  font-style: italic;
-  text-align: center;
-  font-size: 0.9rem;
-}
-
-.receipt-modal .receipt-items .item-details {
+.receipt-modal .item-details {
   display: grid;
   grid-template-columns: 60% 20% 20%;
-  gap: 5px;
+  gap: 10px;
 }
 
-.receipt-modal .receipt-items .quantity,
-.receipt-modal .receipt-items .item-total {
-  text-align: right;
-}
-
-.receipt-modal .receipt-footer .item-details {
-  display: flex;
-  justify-content: space-between;
-  padding: 5px 0;
+.receipt-modal .barcode-container {
+  margin-top: 20px;
+  text-align: center;
 }
 
 @media print {
-  #receipt {
-    width: 80mm;
-    font-size: 12px;
-    line-height: 1.2;
-    padding: 10px;
-    margin: 0 auto;
-  }
-  
-  .qr-code-container {
-    margin-top: 10px;
-    text-align: center;
+  .barcode-container {
+    display: block;
   }
 
   .receipt-notes {
     margin-top: 5px;
+  }
+}
+
+@media screen {
+  .barcode-container {
+    display: none;
   }
 }
