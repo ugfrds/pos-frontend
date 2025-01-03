@@ -6,7 +6,7 @@ import "./Orders/ReceiptModal.css";
 
 export const ReceiptContent = React.forwardRef(
     ({ businessName, selectedOrder, currency, receiptNotes, contact, splits }, ref) => (
-      <div ref={ref} className="receipt-modal-details">
+      <div ref={ref} id="receipt" className="receipt-modal-details">
         <div className="receipt-header text-center">
           <h4>{businessName}</h4> {/* Business name */}
           <p>Phone: {contact}</p>
@@ -46,7 +46,7 @@ export const ReceiptContent = React.forwardRef(
         </div>
         <p className="served-by"><strong>Served By:</strong> {selectedOrder.username}</p>
   
-        {splits && splits.length > 0 && (
+        {splits && splits.length > 0 && ( 
           <>
             <div className="split-receipt-details">
               <h5 className="text-center">Split Payment Details</h5>

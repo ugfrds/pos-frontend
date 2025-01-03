@@ -87,16 +87,22 @@
     }
     
     /* Ensure that modal is positioned at the top-left corner for printing */
-    .receipt-modal-details {
+    /* .receipt-modal-details {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
+    } */
+
+    #receipt {
+      width: 80mm; /* Adjust to 80mm or 58mm */
+      font-size: 12px; /* Adjust font size for readability */
+      line-height: 1.2; /* Adjust line spacing */
     }
   
     /* Hide unwanted elements like modal buttons and header */
     .modal-header, .modal-footer {
       display: none;
-    }
+    } 
   }
   
