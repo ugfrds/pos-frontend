@@ -1,6 +1,8 @@
 import { FormatCurrency } from '../utils/index';
 import React from 'react';
 import PropTypes from 'prop-types'; 
+import "./Orders/ReceiptModal.css";
+
 
 export const ReceiptContent = React.forwardRef(
     ({ businessName, selectedOrder, currency, receiptNotes, contact, splits }, ref) => (
@@ -16,7 +18,7 @@ export const ReceiptContent = React.forwardRef(
         <ul className="receipt-items list-unstyled">
           {selectedOrder.OrderItems.map((item, index) => (
             <li key={index} className="receipt-item">
-              <div className="item-details">
+              <div className="item-details d-flex justify-between">
                 <span className="item-name">{item.MenuItem.name}</span>
                 <span className="quantity">{item.quantity}</span>
                 <span className="item-total">{FormatCurrency(item.price, currency)}</span>

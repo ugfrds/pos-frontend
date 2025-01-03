@@ -172,12 +172,12 @@ const App = () => {
       <Route path='/su' element= {<SuperAdminForm />} />
       <Route path="/pending" element={<PendingOrders/>} />
       <Route path="*" element={<ErrorPage />} />
-      <Route path="/unauthorized" element={<UnauthorizedPage />} />
-<<<<<<< HEAD
+      {/* <Route path="/unauthorized" element={<UnauthorizedPage />} /> */}
+{/* <<<<<<< HEAD */}
       <Route path="/expenses" element={<ExpendituresPage />} />
-=======
+{/* ======= */}
       {/* <Route path="/expenses" element={<ExpendituresPage />} /> */}
->>>>>>> c7b7d9d98a8966439305f0ab96945a21201f36bb
+{/* >>>>>>> c7b7d9d98a8966439305f0ab96945a21201f36bb */}
 
       <Route  element={<RootComponent />}>
         <Route path="/inventory" element={<Inventory />}></Route>
@@ -194,12 +194,12 @@ const App = () => {
        </Route> 
     
      </Routes>
-
+{/* ,.
 <<<<<<< HEAD
    
 =======
     
->>>>>>> c7b7d9d98a8966439305f0ab96945a21201f36bb
+>>>>>>> c7b7d9d98a8966439305f0ab96945a21201f36bb */}
      </div>
     
   );
