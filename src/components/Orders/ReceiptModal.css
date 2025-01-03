@@ -1,7 +1,12 @@
 .receipt-modal {
   font-family: Arial, sans-serif;
   color: #333;
-  padding: 10px;
+  padding: 15px;
+  max-width: 400px; /* Restrict width for readability */
+  margin: 0 auto; /* Center content */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
 }
 
 .receipt-modal .receipt-title {
@@ -31,19 +36,23 @@
 .receipt-modal .receipt-item {
   display: flex;
   justify-content: space-between;
-  padding: 5px 0;
+  padding: 8px 0;
   border-bottom: 1px dashed #ccc;
   font-size: 0.9rem;
 }
 
 .receipt-modal .receipt-item .item-name {
-  flex: 2;
+  flex: 2; /* Allocates more space to the name */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.receipt-modal .receipt-item .quantity,
+.receipt-modal .receipt-item .quantity {
+  flex: 1;
+  text-align: center;
+}
+
 .receipt-modal .receipt-item .item-total {
   flex: 1;
   text-align: right;
@@ -51,6 +60,8 @@
 
 .receipt-modal .receipt-footer {
   margin-top: 20px;
+  border-top: 1px solid #ccc;
+  padding-top: 10px;
 }
 
 .receipt-modal .receipt-footer .item-details {
@@ -86,7 +97,7 @@
 }
 
 .receipt-modal .barcode-container svg {
-  width: 80%; /* Makes the barcode thinner */
+  width: 75%; /* Makes the barcode thinner */
   height: auto;
 }
 
@@ -95,6 +106,7 @@
   .receipt-modal {
     font-size: 12px;
     line-height: 1.2;
+    border: none; /* Removes border for printing */
   }
 
   .receipt-modal .barcode-container {

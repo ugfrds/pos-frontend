@@ -6,9 +6,9 @@ import './Orders/ReceiptModal.css';
 
 export const ReceiptContent = React.forwardRef(
   ({ businessName, selectedOrder, currency, receiptNotes, contact, location, splits }, ref) => (
-    <div ref={ref} id="receipt" className="receipt-modal-details">
+    <div ref={ref} id="receipt" className="receipt-modal">
       <div className="receipt-header text-center">
-        <h3 className="receipt-title">Cash Receipt</h3> {/* Receipt header */}
+        <h3 className="receipt-title">Cash Receipt</h3>
         <h2 className="business-name">{businessName}</h2>
         <p>{location}</p>
         <p>Phone: {contact}</p>
@@ -16,48 +16,45 @@ export const ReceiptContent = React.forwardRef(
         <p>Time: {new Date(selectedOrder.createdAt).toLocaleTimeString()}</p>
         <p><strong>Receipt Number:</strong> {selectedOrder.receiptNumber}</p>
       </div>
-      <ul className="receipt-items list-unstyled">
-          <table className="receipt-table">
-            <thead>
-              <tr>
-                <th className="item-name-header">Item</th>
-                <th className="quantity-header">Qty</th>
-                <th className="item-total-header">Price</th>
-              </tr>
-            </thead>
-            <tbody>
-              {selectedOrder.OrderItems.map((item, index) => (
-                <tr key={index} className="receipt-item">
-                  <td className="item-name">{item.MenuItem.name}</td>
-                  <td className="quantity">{item.quantity}</td>
-                  <td className="item-total">{FormatCurrency(item.price, currency)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </ul>
 
+      {/* Item List */}
+      <div className="receipt-items">
+        {selectedOrder.OrderItems.map((item, index) => (
+          <div key={index} className="receipt-item">
+            <span className="item-name">{item.MenuItem.name}</span>
+            <span className="quantity">{item.quantity}</span>
+            <span className="item-total">{FormatCurrency(item.price, currency)}</span>
+          </div>
+        ))}
+      </div>
 
+      {/* Footer */}
       <div className="receipt-footer">
         <div className="item-details">
-          <span className="item-name"><strong>Subtotal:</strong></span>
+          <span className="item-name">Subtotal:</span>
           <span className="item-total">{FormatCurrency(selectedOrder.subtotal, currency)}</span>
         </div>
         <div className="item-details">
-          <span className="item-name"><strong>Tax:</strong></span>
+          <span className="item-name">Tax:</span>
           <span className="item-total">{FormatCurrency(selectedOrder.tax, currency)}</span>
         </div>
         <div className="item-details">
-          <span className="item-name"><strong>Service Charge:</strong></span>
+          <span className="item-name">Service Charge:</span>
           <span className="item-total">{FormatCurrency(selectedOrder.serviceCharge, currency)}</span>
         </div>
         <div className="item-details">
-          <span className="item-name"><strong>Total:</strong></span>
+          <span className="item-name">Total:</span>
           <span className="item-total"><strong>{FormatCurrency(selectedOrder.totalAmount, currency)}</strong></span>
         </div>
       </div>
+
+      {/* Served By */}
       <p className="served-by"><strong>Served By:</strong> {selectedOrder.username}</p>
+
+      {/* Notes */}
       {receiptNotes && <p className="receipt-notes">{receiptNotes}</p>}
+
+      {/* Split Payment Details */}
       {splits && splits.length > 0 && (
         <div className="split-receipt-details">
           <h5 className="text-center">Split Payment Details</h5>
@@ -74,12 +71,14 @@ export const ReceiptContent = React.forwardRef(
           </ul>
         </div>
       )}
+
+      {/* Barcode */}
       <div className="barcode-container">
         <Barcode
           value={selectedOrder.receiptNumber}
           format="CODE128"
-          width={2}
-          height={50}
+          width={1} /* Reduced thickness */
+          height={40} /* Adjusted height */
           displayValue={false}
         />
       </div>
@@ -88,7 +87,6 @@ export const ReceiptContent = React.forwardRef(
 );
 
 ReceiptContent.displayName = 'ReceiptContent';
-
 
 
 // PropTypes validation
