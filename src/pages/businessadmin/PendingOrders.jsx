@@ -257,7 +257,7 @@ const PendingOrders = () => {
           <p className="text-center">No Pending Orders</p>
         )}
 
-        {selectedOrder && (
+        {selectedOrder && ( 
           
           <Modal className="receipt-modal" show={showModal} onHide={handleCloseModal} size="md" centered>
             <Modal.Header className="no-print" closeButton>

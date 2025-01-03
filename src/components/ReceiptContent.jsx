@@ -1,8 +1,8 @@
 import { FormatCurrency } from '../utils/index';
 import React from 'react';
 import PropTypes from 'prop-types'; 
-//import "./Orders/ReceiptModal.css";
-
+import "./Orders/ReceiptModal.css";
+  
 
 export const ReceiptContent = React.forwardRef(
     ({ businessName, selectedOrder, currency, receiptNotes, contact, splits }, ref) => (
