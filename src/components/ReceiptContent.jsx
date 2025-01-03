@@ -17,25 +17,26 @@ export const ReceiptContent = React.forwardRef(
         <p><strong>Receipt Number:</strong> {selectedOrder.receiptNumber}</p>
       </div>
       <ul className="receipt-items list-unstyled">
-  <table className="receipt-table">
-    <thead>
-      <tr>
-        <th className="item-name-header">Item</th>
-        <th className="quantity-header">Qty</th>
-        <th className="item-total-header">Price</th>
-      </tr>
-    </thead>
-    <tbody>
-      {selectedOrder.OrderItems.map((item, index) => (
-        <tr key={index} className="receipt-item">
-          <td className="item-name">{item.MenuItem.name}</td>
-          <td className="quantity">{item.quantity}</td>
-          <td className="item-total">{FormatCurrency(item.price, currency)}</td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</ul>
+          <table className="receipt-table">
+            <thead>
+              <tr>
+                <th className="item-name-header">Item</th>
+                <th className="quantity-header">Qty</th>
+                <th className="item-total-header">Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              {selectedOrder.OrderItems.map((item, index) => (
+                <tr key={index} className="receipt-item">
+                  <td className="item-name">{item.MenuItem.name}</td>
+                  <td className="quantity">{item.quantity}</td>
+                  <td className="item-total">{FormatCurrency(item.price, currency)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </ul>
+
 
       <div className="receipt-footer">
         <div className="item-details">

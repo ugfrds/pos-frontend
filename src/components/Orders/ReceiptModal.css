@@ -1,13 +1,90 @@
+.receipt-modal {
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
 .receipt-modal .receipt-title {
   font-size: 1.8rem;
   font-weight: bold;
   margin-bottom: 10px;
+  text-align: center;
 }
 
-.receipt-modal .item-details {
-  display: grid;
-  grid-template-columns: 60% 20% 20%;
-  gap: 10px;
+.receipt-modal .business-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.receipt-modal .receipt-header p {
+  margin: 2px 0;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.receipt-modal .receipt-items {
+  margin-top: 10px;
+}
+
+.receipt-modal .receipt-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  margin-top: 10px;
+}
+
+.receipt-modal .receipt-table th,
+.receipt-modal .receipt-table td {
+  padding: 8px;
+  border-bottom: 1px dashed #ccc;
+}
+
+.receipt-modal .receipt-table th {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+.receipt-modal .receipt-table td {
+  font-size: 0.9rem;
+  white-space: nowrap; /* Prevents text from wrapping */
+}
+
+.receipt-modal .receipt-table td.quantity,
+.receipt-modal .receipt-table td.item-total {
+  text-align: right;
+}
+
+.receipt-modal .receipt-footer {
+  margin-top: 15px;
+}
+
+.receipt-modal .receipt-footer .item-details {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.receipt-modal .receipt-footer .item-name {
+  font-weight: bold;
+}
+
+.receipt-modal .receipt-footer .item-total {
+  text-align: right;
+}
+
+.receipt-modal .served-by {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.receipt-modal .receipt-notes {
+  margin-top: 10px;
+  font-style: italic;
+  text-align: center;
+  font-size: 0.9rem;
 }
 
 .receipt-modal .barcode-container {
@@ -15,50 +92,23 @@
   text-align: center;
 }
 
-.receipt-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9rem;
-}
-
-.receipt-table th, 
-.receipt-table td {
-  text-align: left;
-  padding: 5px 10px;
-  border-bottom: 1px dashed #ccc;
-}
-
-.receipt-table th {
-  font-weight: bold;
-  text-transform: uppercase;
-  font-size: 0.8rem;
-}
-
-.receipt-table td.quantity, 
-.receipt-table td.item-total {
-  text-align: right;
-}
-
-.receipt-table tr:last-child td {
-  border-bottom: none;
-}
-
-
 @media print {
-  .barcode-container {
-    display: block;
-  .receipt-table {
-      font-size: 12px;
-    }
+  .receipt-modal {
+    font-size: 12px;
+    line-height: 1.2;
   }
 
-  .receipt-notes {
+  .receipt-modal .barcode-container {
+    display: block;
+  }
+
+  .receipt-modal .receipt-notes {
     margin-top: 5px;
   }
 }
 
 @media screen {
-  .barcode-container {
+  .receipt-modal .barcode-container {
     display: none;
   }
 }
