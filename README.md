@@ -122,11 +122,7 @@ A modern Point-of-Sale (POS) system built with a **React** frontend, **Node.js**
 
 #### Backend:
 
-- `/api/auth`: Authentication routes.
-- `/api/products`: CRUD operations for products.
-- `/api/orders`: Manage orders and transactions.
-
----
+-  node js and postgres sql ... back end repo also available here (pos-backend)
 
 ## **Screenshots**
 
@@ -165,6 +161,16 @@ Example:
 - Implement real-time notifications.
 - Extend reporting functionality with advanced filters.
 - Integrate barcode scanner support.
+- Add employee performance
+- Add customer profiles
+- Add expenses tracking and analytics
+- Allow automatic accounts(business) creation
+- improve security on new user / update profile page
+- verify emails provided
+- make the whole item card clickable
+-  sales analytics
+-  etc ...
+-  many Enhancements can be got by interracting with clients .
 
 ---
 
@@ -190,8 +196,8 @@ This project is licensed under the MIT License. See the `LICENSE` file for detai
 
 For questions or feedback, feel free to reach out:
 
-- **Email**: justlikewiseman.com
-- **LinkedIn**: [Your Profile](https://www.linkedin.com/in/justlikewiseman)
-- **GitHub**: [Your Username](https://github.com/ugfrds)
+- **Email**: justlikewiseman@gmail.com
+- **LinkedIn**:justlikewiseman (https://www.linkedin.com/in/justlikewiseman)
+- **GitHub* : ugfrds (https://github.com/ugfrds)
 
 ---
