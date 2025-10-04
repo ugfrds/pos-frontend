@@ -1,0 +1,63 @@
+.receipt-modal-details {
+  font-family: 'Courier New', Courier, monospace; /* Use Courier New for the receipt */
+  font-size: 14px; /* Adjust the font size to match */
+  line-height: 1.5;
+  color: #333; /* Use a color similar to the modal's text color */
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px; /* Added extra padding for better spacing */
+}
+
+.receipt-header {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 20px; /* Increased margin for more spacing */
+  text-align: center; /* Center align the header content */
+}
+
+.receipt-header h4 {
+  margin: 0; /* Remove default margin for h4 */
+  font-size: 20px; /* Increased font size for better visibility */
+}
+
+.receipt-header p {
+  margin: 5px 0; /* Added margin for better spacing between paragraphs */
+  font-size: 14px; /* Ensures uniform font size */
+}
+
+.receipt-items .item-details,
+.receipt-footer .item-details {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px; /* Increased margin for better spacing */
+}
+
+.receipt-item .item-name,
+.receipt-footer .item-name {
+  text-align: left;
+  flex-grow: 1;
+}
+
+.quantity,
+.item-total {
+  text-align: right;
+  flex-basis: 25%;
+}
+
+.receipt-footer {
+  border-top: 1px solid #ddd;
+  padding-top: 15px; /* Added padding for better spacing */
+  margin-top: 20px; /* Increased margin for separation */
+}
+
+.receipt-footer h5 {
+  font-size: 18px; /* Increased font size for prominence */
+  font-weight: bold;
+  margin-top: 15px; /* Increased margin for separation */
+}
+
+.served-by {
+  text-align: center;
+  margin-top: 20px; /* Increased margin for separation */
+  font-style: italic;
+}

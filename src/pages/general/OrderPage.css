@@ -1,0 +1,65 @@
+/* Order Page Layout */
+.order-page-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 20px;
+    gap: 20px;
+}
+
+.menu-col {
+    overflow-y: auto;
+}
+
+/* Receipt Panel */
+.floating-receipt-panel {
+    position: fixed;
+    right: 0;
+    top: 20%;
+    width: 350px;
+    height: 90%;
+    overflow-y: auto;
+    z-index: 1000;
+    border-radius: 0 0 10px 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.mobile-receipt-container {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+/* Toggle Button */
+.toggle-receipt-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+      z-index: 1000;
+}
+
+.toggle-receipt-button:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive Design for Mobile */
+@media (max-width: 768px) {
+    .floating-receipt-panel {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        top: unset;
+        width: 100%;
+        height: 50%;
+        border-radius: 10px 10px 0 0;
+    }
+}
