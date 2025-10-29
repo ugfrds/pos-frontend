@@ -1,0 +1,5 @@
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling for mobile devices */
+  }
+  

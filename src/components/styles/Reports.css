@@ -1,0 +1,41 @@
+.container {
+  max-width: 1200px;
+}
+
+.card {
+  border: none;
+  border-radius: 15px;
+}
+
+.card-title {
+  font-weight: bold;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+h2 {
+  font-weight: bold;
+  color: #333;
+}
+
+h1 {
+  font-family: "Arial", sans-serif;
+}
+
+.btn-outline-secondary {
+  border-radius: 30px;
+}
+
+footer {
+  margin-top: 50px;
+  font-size: 0.875rem;
+  color: #888;
+}
+
+.navbar-toggler {
+  border: none;
+}
