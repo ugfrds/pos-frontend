@@ -124,7 +124,7 @@ const AdminDashboard = () => {
                                             </Card.Text>
                                         </div>
                                     </div>
-                                    <Button variant="outline-primary" className="mt-3" href="/sales-report">
+                                    <Button variant="outline-primary" className="mt-3" href="/admin/sales-report">
                                         View Sales Report
                                     </Button>
                                 </Card.Body>

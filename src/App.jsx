@@ -25,6 +25,7 @@ import MenuPage from './pages/general/MenuPage';
 import UserSetupForm from './pages/general/UserSetupForm';
 import UnauthorizedPage from './pages/general/UnauthorizedPage';
 import SuperAdminForm from './pages/superadmin/superadmin';
+import SalesReport from './pages/businessadmin/SalesReport';
 
 // Components
 
@@ -134,7 +135,17 @@ const App = () => {
       </PrivateRoute>
     }
   />
+
+   <Route
+    path="sales-report"
+    element={
+      <PrivateRoute roles={['BusinessAdmin', 'Supervisor']}>
+        <SalesReport />
+      </PrivateRoute>
+    }
+  />
 </Route>
+
 
       {/* Additional protected routes */}
       

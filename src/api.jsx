@@ -470,6 +470,19 @@ const getShift = async( )=> {
 } ;
 
 
+export const getSalesReport = async (params) => {
+    try {
+        const response = await api.get('/sales/report', {
+            params,
+            ...setAuthHeader(),
+        });
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+};
+
+
 
 
 // Export all API calls at the end
@@ -494,6 +507,7 @@ export {
     getAllBusinesses,
     getBusinessById,
     getBusinessDetails,
+    
     //menu 
     createMenuItem,
     updateMenuItem,
@@ -518,5 +532,6 @@ export {
     //shifts
     getShift,
     startShift,
-    endShift
+    endShift,
+    
 };
