@@ -4,7 +4,6 @@ import { getDashboardData } from '../../api';
 import { Link } from 'react-router-dom';
 import { FormatCurrency } from '../../utils/index';
 import { UserBusinessContext } from '../../context/UserBusinessContext';
-import { FaChartBar, FaClipboardList, FaUtensils } from 'react-icons/fa';
 import SalesChart from '../../components/salesChart';
 
 const AdminDashboard = () => {
@@ -113,18 +112,14 @@ const AdminDashboard = () => {
                     <Row>
                         {/* Sales Summary Card */}
                         <Col md={4}>
-                            <Card className="mb-4 shadow">
+                            <Card className="text-center mb-4">
                                 <Card.Body>
-                                    <div className="d-flex align-items-center">
-                                        <FaChartBar size={30} className="me-3 text-primary" />
-                                        <div>
-                                            <Card.Title>Total Sales</Card.Title>
-                                            <Card.Text className="display-6">
-                                                {FormatCurrency(dashboardData.totalSales, currency)}
-                                            </Card.Text>
-                                        </div>
-                                    </div>
-                                    <Button variant="outline-primary" className="mt-3" href="/admin/sales-report">
+                                    <Card.Title>Total Sales</Card.Title>
+                                    <h2 className="text-primary display-6">
+                                        {FormatCurrency(dashboardData.totalSales, currency)}
+                                    </h2>
+                                    <Card.Text className="text-muted">Gross sales amount</Card.Text>
+                                    <Button variant="outline-primary" className="mt-3" as={Link} to="/admin/sales-report">
                                         View Sales Report
                                     </Button>
                                 </Card.Body>
@@ -133,15 +128,11 @@ const AdminDashboard = () => {
 
                         {/* Orders Summary Card */}
                         <Col md={4}>
-                            <Card className="mb-4 shadow">
+                            <Card className="text-center mb-4">
                                 <Card.Body>
-                                    <div className="d-flex align-items-center">
-                                        <FaClipboardList size={30} className="me-3 text-success" />
-                                        <div>
-                                            <Card.Title>Total Orders</Card.Title>
-                                            <Card.Text className="display-6">{dashboardData.totalOrders}</Card.Text>
-                                        </div>
-                                    </div>
+                                    <Card.Title>Total Orders</Card.Title>
+                                    <h2 className="text-success display-6">{dashboardData.totalOrders}</h2>
+                                    <Card.Text className="text-muted">Number of transactions</Card.Text>
                                     <Button variant="outline-success" className="mt-3" as={Link} to="/pending">
                                         Manage Orders
                                     </Button>
@@ -149,17 +140,13 @@ const AdminDashboard = () => {
                             </Card>
                         </Col>
 
-                        {/* Top Menu Item Card */}
+                        {/* Top Item Sold Card */}
                         <Col md={4}>
-                            <Card className="mb-4 shadow">
+                            <Card className="text-center mb-4">
                                 <Card.Body>
-                                    <div className="d-flex align-items-center">
-                                        <FaUtensils size={30} className="me-3 text-warning" />
-                                        <div>
-                                            <Card.Title>Top Menu Item</Card.Title>
-                                            <Card.Text className="display-6">{dashboardData.topMenuItem}</Card.Text>
-                                        </div>
-                                    </div>
+                                    <Card.Title>Top Item Sold</Card.Title>
+                                    <h2 className="text-warning display-6">{dashboardData.topMenuItem || 'N/A'}</h2>
+                                    <Card.Text className="text-muted">Most popular item</Card.Text>
                                     <Button variant="outline-warning" className="mt-3" as={Link} to="/admin/manage-menu">
                                         Manage Menu
                                     </Button>

@@ -24,6 +24,8 @@ const PendingOrders = () => {
   const [tableNumber, setTableNumber] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [totalOrders, setTotalOrders] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [notification, setNotification] = useState({ message: '', variant: '' });
@@ -48,11 +50,14 @@ const PendingOrders = () => {
       const filters = {
         status: 'pending',
         tableNumber,
+        sortBy: 'createdAt',
+        sortOrder: 'desc',
       };
       const response = await getAllOrders(filters, currentPage, ordersPerPage);
-      const sortedOrders = response.orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      setOrders(sortedOrders);
+      setOrders(response.orders);
       setTotalPages(response.totalPages);
+      setTotalAmount(response.totalAmount || 0);
+      setTotalOrders(response.totalOrders || 0);
     } catch (err) {
       console.error('Failed to fetch orders:', err);
       setError('Failed to fetch orders. Please try again.');
@@ -225,8 +230,8 @@ const PendingOrders = () => {
         {/* Summary: pending orders count & total amount */}
         <div className="d-flex justify-content-center mb-3">
           <div>
-            <strong>{orders.length}</strong> pending order{orders.length !== 1 ? 's' : ''} •
-            <span className="ms-2">Total: <strong>{FormatCurrency(orders.reduce((sum, o) => sum + (o.totalAmount || 0), 0), currency)}</strong></span>
+            <strong>{totalOrders}</strong> pending order{totalOrders !== 1 ? 's' : ''} •
+            <span className="ms-2">Total: <strong>{FormatCurrency(totalAmount, currency)}</strong></span>
           </div>
         </div>
         <Notification
