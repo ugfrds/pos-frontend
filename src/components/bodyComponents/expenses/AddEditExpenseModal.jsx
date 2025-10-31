@@ -1,32 +1,13 @@
 import React, { useState, useEffect } from "react";
 import {
   Modal,
-  Box,
-  Typography,
-  TextField,
   Button,
-  Grid,
-  MenuItem,
-  Select,
-  InputLabel,
-  FormControl,
-} from "@mui/material";
-
-const modalStyle = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
-  borderRadius: 2,
-};
+  Form,
+} from "react-bootstrap";
 
 export default function AddEditExpenseModal({
-  open,
-  onClose,
+  show,
+  onHide,
   onSave,
   expense,
   existingCategories,
@@ -39,17 +20,16 @@ export default function AddEditExpenseModal({
     customCategory: "",
   });
 
-  // Sync `formData` with the expense being edited
   useEffect(() => {
-    if (expense && open) {
+    if (expense && show) {
       setFormData({
         date: expense.date || "",
         description: expense.description || "",
         category: expense.category || "",
         amount: expense.amount || "",
-        customCategory: "", // reset customCategory when editing an expense
+        customCategory: "",
       });
-    } else if (!expense && open) {
+    } else if (!expense && show) {
       setFormData({
         date: "",
         description: "",
@@ -58,7 +38,7 @@ export default function AddEditExpenseModal({
         customCategory: "",
       });
     }
-  }, [expense, open]);
+  }, [expense, show]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -67,97 +47,81 @@ export default function AddEditExpenseModal({
 
   const handleSubmit = () => {
     const expenseData = { ...formData, id: expense?.id || null };
-    onSave(expenseData); // Pass expense data to onSave
-    onClose(); // Close modal after saving
+    onSave(expenseData);
+    onHide();
   };
 
   return (
-    <Modal open={open} onClose={onClose}>
-      <Box sx={modalStyle}>
-        <Typography variant="h6" component="h2" mb={2}>
-          {expense ? "Update Expense" : "Add New Expense"}
-        </Typography>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <TextField
-              label="Date"
+    <Modal show={show} onHide={onHide}>
+      <Modal.Header closeButton>
+        <Modal.Title>{expense ? "Update Expense" : "Add New Expense"}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form>
+          <Form.Group className="mb-3">
+            <Form.Label>Date</Form.Label>
+            <Form.Control
               type="date"
-              value={formData.date}
-              onChange={(e) => handleChange(e)}
-              fullWidth
-              margin="normal"
-              InputLabelProps={{ shrink: true }}
               name="date"
+              value={formData.date}
+              onChange={handleChange}
             />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              label="Description"
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Description</Form.Label>
+            <Form.Control
+              type="text"
               name="description"
               value={formData.description}
               onChange={handleChange}
-              fullWidth
-              margin="normal"
             />
-          </Grid>
-
-          <Grid item xs={12}>
-            <FormControl fullWidth margin="normal">
-              <InputLabel>Category</InputLabel>
-              <Select
-                label="Category"
-                value={formData.category || formData.customCategory}
-                onChange={handleChange}
-                name={formData.category ? "category" : "customCategory"}
-              >
-                {existingCategories.map((category, index) => (
-                  <MenuItem key={index} value={category}>
-                    {category}
-                  </MenuItem>
-                ))}
-                {!formData.category && (
-                  <MenuItem value={formData.customCategory}>
-                    {formData.customCategory || "Create New Category"}
-                  </MenuItem>
-                )}
-              </Select>
-            </FormControl>
-          </Grid>
-
-          {formData.category === "" && (
-            <Grid item xs={12}>
-              <TextField
-                label="Custom Category"
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Category</Form.Label>
+            <Form.Select
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+            >
+              <option value="">Select a category</option>
+              {existingCategories.map((category, index) => (
+                <option key={index} value={category}>
+                  {category}
+                </option>
+              ))}
+              <option value="custom">Create New Category</option>
+            </Form.Select>
+          </Form.Group>
+          {formData.category === "custom" && (
+            <Form.Group className="mb-3">
+              <Form.Label>Custom Category</Form.Label>
+              <Form.Control
+                type="text"
                 name="customCategory"
                 value={formData.customCategory}
                 onChange={handleChange}
-                fullWidth
-                margin="normal"
               />
-            </Grid>
+            </Form.Group>
           )}
-
-          <Grid item xs={6}>
-            <TextField
-              label="Amount"
-              name="amount"
+          <Form.Group className="mb-3">
+            <Form.Label>Amount</Form.Label>
+            <Form.Control
               type="number"
+              name="amount"
               value={formData.amount}
               onChange={handleChange}
-              fullWidth
-              margin="normal"
             />
-          </Grid>
-        </Grid>
-        <Box mt={3} display="flex" justifyContent="flex-end" gap={2}>
-          <Button variant="outlined" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button variant="contained" color="primary" onClick={handleSubmit}>
-            {expense ? "Update" : "Create"}
-          </Button>
-        </Box>
-      </Box>
+          </Form.Group>
+        </Form>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={onHide}>
+          Cancel
+        </Button>
+        <Button variant="primary" onClick={handleSubmit}>
+          {expense ? "Update" : "Create"}
+        </Button>
+      </Modal.Footer>
     </Modal>
   );
 }

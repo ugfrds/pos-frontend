@@ -1,37 +1,26 @@
 import React from "react";
-import { Box, Typography, Button, TextField } from "@mui/material";
+import { Row, Col, Button, Form } from "react-bootstrap";
 
-const ExpensesHeader = ({ onAddExpense, onDateChange }) => {
+const ExpensesHeader = ({ onAddExpense, searchQuery, setSearchQuery, amountRange, setAmountRange }) => {
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        mb: 2,
-      }}
-    >
-      <Typography variant="h5" fontWeight="bold">
-        Expenses
-      </Typography>
-      <Box sx={{ display: "flex", gap: 2 }}>
-        <TextField
-          label="From"
-          type="date"
-          InputLabelProps={{ shrink: true }}
-          onChange={(e) => onDateChange("from", e.target.value)}
+    <Row className="align-items-center mb-3">
+      <Col md={4}>
+        <h3>Expenses</h3>
+      </Col>
+      <Col md={8} className="d-flex justify-content-end align-items-center">
+        <Form.Control
+          type="text"
+          placeholder="Search..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="me-2" style={{width: '200px'}}
         />
-        <TextField
-          label="To"
-          type="date"
-          InputLabelProps={{ shrink: true }}
-          onChange={(e) => onDateChange("to", e.target.value)}
-        />
-        <Button variant="contained" color="primary" onClick={onAddExpense}>
+        {/* TODO: Add amount range filter if needed */}
+        <Button variant="primary" onClick={onAddExpense}>
           Add Expense
         </Button>
-      </Box>
-    </Box>
+      </Col>
+    </Row>
   );
 };
 

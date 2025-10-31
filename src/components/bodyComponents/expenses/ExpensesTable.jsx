@@ -1,56 +1,37 @@
-import React from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  IconButton,
-} from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { Table, Button } from "react-bootstrap";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 const ExpensesTable = ({ expenses, onEdit, onDelete }) => {
   return (
-    <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Date</TableCell>
-            <TableCell>Description</TableCell>
-            <TableCell>Category</TableCell>
-            <TableCell>Amount</TableCell>
-            <TableCell>Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {expenses.map((expense) => (
-            <TableRow key={expense.id}>
-              <TableCell>{expense.date}</TableCell>
-              <TableCell>{expense.description}</TableCell>
-              <TableCell>{expense.category}</TableCell>
-              <TableCell>${expense.amount.toFixed(2)}</TableCell>
-              <TableCell>
-                <IconButton
-                  color="primary"
-                  onClick={() => onEdit(expense)}
-                >
-                  <EditIcon />
-                </IconButton>
-                <IconButton
-                  color="error"
-                  onClick={() => onDelete(expense.id)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <Table striped bordered hover responsive>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Description</th>
+          <th>Category</th>
+          <th>Amount</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {expenses.map((expense) => (
+          <tr key={expense.id}>
+            <td>{expense.date}</td>
+            <td>{expense.description}</td>
+            <td>{expense.category}</td>
+            <td>${expense.amount}</td>
+            <td>
+              <Button variant="light" onClick={() => onEdit(expense)} className="me-2">
+                <FaEdit />
+              </Button>
+              <Button variant="light" color="danger" onClick={() => onDelete(expense.id)}>
+                <FaTrash />
+              </Button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </Table>
   );
 };
 

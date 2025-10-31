@@ -329,7 +329,6 @@ const deleteOrder = async (orderId) => {
   };
   
     
-    
 
 /**
  * =======================
@@ -448,6 +447,7 @@ const startShift = async( username)=> {
 
 
 
+
  
 const endShift = async( shiftId, username)=> {
     try {
@@ -482,7 +482,55 @@ export const getSalesReport = async (params) => {
     }
 };
 
-
+// Fetch all expenses
+const fetchExpenses = async (options = {}) => {
+    try {
+      const response = await api.get('/expenses', {...options,...setAuthHeader() });
+      return response.data; // Return the expenses list
+    } catch (error) {
+      handleApiError(error);
+    }
+  };
+  
+  // Create a new expense
+  const createExpense = async (expense) => {
+    try {
+      const response = await api.post('/expenses', expense, setAuthHeader());
+      return response.data; // Return the newly created expense
+    } catch (error) {
+      handleApiError(error);
+    }
+  };
+  
+  // Update an existing expense
+  const updateExpense = async (expenseId, updatedExpense) => {
+    try {
+      const response = await api.put(`/expenses/${expenseId}`, updatedExpense, setAuthHeader());
+      return response.data; // Return the updated expense
+    } catch (error) {
+      handleApiError(error);
+    }
+  };
+  
+  // Delete an expense
+  const deleteExpense = async (expenseId) => {
+    try {
+      const response = await api.delete(`/expenses/${expenseId}`, setAuthHeader());
+      return response.data; // Return the result of the deletion
+    } catch (error) {
+      handleApiError(error);
+    }
+  };
+  
+  // Fetch all unique categories
+  const fetchExpenseCategories = async () => {
+    try {
+      const response = await api.get('/expenses/categories', setAuthHeader());
+      return response.data; // Return the categories
+    } catch (error) {
+      handleApiError(error);
+    }
+  };
 
 
 // Export all API calls at the end
@@ -533,5 +581,12 @@ export {
     getShift,
     startShift,
     endShift,
+
+    //expenses
+    fetchExpenses,
+    createExpense,
+    updateExpense,
+    deleteExpense,
+    fetchExpenseCategories,
     
 };
