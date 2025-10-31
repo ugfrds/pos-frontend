@@ -610,6 +610,67 @@ const fetchExpenses = async (options = {}) => {
     
 /**
  * =======================
+ * Debtors Management APIs
+ * =======================
+ */
+
+// Fetch all debtors with optional filters and pagination
+const fetchDebtors = async (options = {}) => {
+  try {
+    const response = await api.get('/debtors', { ...options, ...setAuthHeader() });
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+
+// Create a new debtor
+const createDebtor = async (debtor) => {
+  try {
+    const response = await api.post('/debtors', debtor, setAuthHeader());
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+
+// Update an existing debtor
+const updateDebtor = async (debtorId, updatedDebtor) => {
+  try {
+    const response = await api.put(`/debtors/${debtorId}`, updatedDebtor, setAuthHeader());
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+
+    // Delete a debtor
+const deleteDebtor = async (debtorId) => {
+  try {
+    const response = await api.delete(`/debtors/${debtorId}`, setAuthHeader());
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+
+const getDebtorsOverview = async (period = 'thisMonth', startDate = null, endDate = null) => {
+  try {
+    const params = { period };
+    if (period === 'custom' && startDate && endDate) {
+      params.startDate = startDate;
+      params.endDate = endDate;
+    }
+    const response = await api.get('/debtors/overview', { params, ...setAuthHeader() });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching debtors overview:', error);
+    throw error;
+  }
+};
+
+/**
+ * =======================
  * Product Management APIs
  * =======================
  */
@@ -760,6 +821,12 @@ export {
     updateInventoryItem,
     deleteInventoryItem,
     getInventoryOverview,
+    //debtors
+    fetchDebtors,
+    createDebtor,
+    updateDebtor,
+    deleteDebtor,
+    getDebtorsOverview,
      createProduct,
     updateProduct,
     fetchProducts,
