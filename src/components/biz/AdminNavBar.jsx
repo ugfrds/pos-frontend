@@ -49,18 +49,11 @@ const NavBar = () => {
                 Manage Staff
               </Nav.Link>
             )}
-            {!isActive('/admin/expenses') && (
-              <Nav.Link as={Link} to="/admin/expenses" className="fs-5">
-                Expenses
+            {!isActive('/admin/reports') && (
+              <Nav.Link as={Link} to="/admin/reports" className="fs-5">
+                Reports
               </Nav.Link>
             )}
-            <Nav.Link 
-              onClick={handleInventoryReportsClick} 
-              className="fs-5" 
-              style={{ cursor: 'pointer' }}
-            >
-              Inventory & Reports
-            </Nav.Link>
           </Nav>
           <div className="d-flex align-items-center">
             <Button as={Link} to="/admin/settings" variant="outline-light" className="me-2">

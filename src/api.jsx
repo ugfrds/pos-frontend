@@ -548,7 +548,144 @@ const fetchExpenses = async (options = {}) => {
         }
       };
     
+    // Inventory Management APIs
+    const fetchInventory = async (options = {}) => {
+      try {
+        const response = await api.get('/inventory', { ...options, ...setAuthHeader() });
+        return response.data;
+      } catch (error) {
+        handleApiError(error);
+      }
+    };
     
+    const createInventoryItem = async (item) => {
+      try {
+        const response = await api.post('/inventory', item, setAuthHeader());
+        return response.data;
+      } catch (error) {
+        handleApiError(error);
+      }
+    };
+    
+    const updateInventoryItem = async (itemId, updatedItem) => {
+      try {
+        const response = await api.put(`/inventory/${itemId}`, updatedItem, setAuthHeader());
+        return response.data;
+      } catch (error) {
+        handleApiError(error);
+      }
+    };
+    
+    const deleteInventoryItem = async (itemId) => {
+      try {
+        const response = await api.delete(`/inventory/${itemId}`, setAuthHeader());
+        return response.data;
+      } catch (error) {
+        handleApiError(error);
+      }
+    };
+
+     const getInventoryOverview = async () => {
+      try {
+        const response = await api.get('/inventory/overview', setAuthHeader());
+        return response.data;
+      } catch (error) {
+        handleApiError(error);
+      }
+    };
+
+  
+    
+    
+/**
+ * =======================
+ * Product Management APIs
+ * =======================
+ */
+
+// Create a new product
+const createProduct = async (product) => {
+    try {
+        const response = await api.post('/menu-items', product, setAuthHeader());
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+};
+
+// Update a product
+const updateProduct = async (id, product) => {
+    try {
+        const response = await api.put(`/menu-items/${id}`, product, setAuthHeader());
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+};
+
+// Fetch all products
+const fetchProducts = async (params) => {
+    try {
+        const response = await api.get('/menu-items', { params, ...setAuthHeader() });
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+};
+
+// Delete a product
+const deleteProduct = async (id) => {
+    try {
+        await api.delete(`/menu-items/${id}`, setAuthHeader());
+    } catch (error) {
+        handleApiError(error);
+    }
+};
+
+/**
+ * Additional APIs for Inventory Management System
+ */
+
+// Fetch product by ID
+const fetchProductById = async (id) => {
+    try {
+        const response = await api.get(`/menu-items/${id}`, setAuthHeader());
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+};
+
+// Fetch products by category
+const fetchProductsByCategory = async (category) => {
+    try {
+        const response = await api.get(`/menu-items?category=${encodeURIComponent(category)}`, setAuthHeader());
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+};
+
+// Adjust stock for a product
+const adjustProductStock = async (id, stockAdjustment) => {
+    try {
+        const response = await api.patch(`/menu-items/${id}/stock`, { stockAdjustment }, setAuthHeader());
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+};
+
+// Fetch low-stock products
+const fetchLowStockProducts = async (threshold) => {
+    try {
+        const response = await api.get(`/menu-items?lowStock=${threshold}`, setAuthHeader());
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+};
+
     // Export all API calls at the end
 export {
     //settings
@@ -606,4 +743,18 @@ export {
     fetchExpenseCategories,
     getExpensesOverview,
     
+    //inventory
+    fetchInventory,
+    createInventoryItem,
+    updateInventoryItem,
+    deleteInventoryItem,
+    getInventoryOverview,
+     createProduct,
+    updateProduct,
+    fetchProducts,
+    deleteProduct,
+    fetchProductById,
+    fetchProductsByCategory,
+    adjustProductStock,
+    fetchLowStockProducts,
 };

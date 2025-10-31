@@ -22,10 +22,10 @@ const ExpensesTable = ({ expenses, onEdit, onDelete, currency }) => {
             <td>{expense.category}</td>
             <td>{FormatCurrency(expense.amount, currency)}</td>
             <td>
-              <Button variant="light" onClick={() => onEdit(expense)} className="me-2">
+              <Button variant="outline-primary" onClick={() => onEdit(expense)} className="me-2">
                 <FaEdit />
               </Button>
-              <Button variant="light" color="danger" onClick={() => onDelete(expense.id)}>
+              <Button variant="outline-danger" onClick={() => onDelete(expense.id)}>
                 <FaTrash />
               </Button>
             </td>

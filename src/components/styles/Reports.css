@@ -1,41 +1,31 @@
-.container {
-  max-width: 1200px;
+.reports-page-container {
+  margin-top: 20px;
 }
 
-.card {
-  border: none;
-  border-radius: 15px;
+.reports-sidebar {
+  background-color: #f8f9fa;
+  padding: 20px 0;
+  border-right: 1px solid #dee2e6;
+  height: 100%;
 }
 
-.card-title {
-  font-weight: bold;
-  font-size: 1.25rem;
+.reports-sidebar .nav-link {
   color: #333;
+  padding: 10px 20px;
+  margin-bottom: 5px;
+  border-radius: 0;
 }
 
-.card-body {
+
+.reports-sidebar .nav-link:hover {
+  background-color: #e9ecef;
+}
+
+.reports-sidebar .nav-link.active {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.reports-content {
   padding: 20px;
-}
-
-h2 {
-  font-weight: bold;
-  color: #333;
-}
-
-h1 {
-  font-family: "Arial", sans-serif;
-}
-
-.btn-outline-secondary {
-  border-radius: 30px;
-}
-
-footer {
-  margin-top: 50px;
-  font-size: 0.875rem;
-  color: #888;
-}
-
-.navbar-toggler {
-  border: none;
 }

@@ -29,6 +29,10 @@ import SalesReport from './pages/businessadmin/SalesReport';
 
 // Components
 
+import ReportsPage from './pages/businessadmin/ReportsPage';
+
+// Components
+
 import PendingOrders from './pages/businessadmin/PendingOrders';
 import OrderHistori from './pages/businessadmin/orderhistori';
 import MenuManagementPage from './pages/businessadmin/MenuManagementPage';
@@ -145,22 +149,18 @@ const App = () => {
       </PrivateRoute>
     }
   />
-   <Route
-    path="expenses"
-    element={
-      <PrivateRoute>
-        <ExpendituresPage />
-      </PrivateRoute>
-    }
-  />
   <Route
-    path="inventory"
+    path="reports/*"
     element={
       <PrivateRoute roles={['BusinessAdmin', 'Supervisor']}>
-        <AdminInventoryPage />
+        <ReportsPage />
       </PrivateRoute>
     }
-  />
+  >
+    <Route path="inventory" element={<AdminInventoryPage />} />
+    <Route path="expenses" element={<ExpendituresPage />} />
+    <Route index element={<AdminInventoryPage />} /> {/* Default to inventory */}
+  </Route>
 </Route>
 
 

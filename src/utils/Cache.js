@@ -1,3 +1,24 @@
+export const invalidateCache = (keyOrPrefix) => {
+    try {
+        if (keyOrPrefix.endsWith("*")) {
+            // Invalidate all keys that start with the prefix
+            const prefix = keyOrPrefix.slice(0, -1);
+            for (let i = 0; i < sessionStorage.length; i++) {
+                const key = sessionStorage.key(i);
+                if (key.startsWith(prefix)) {
+                    sessionStorage.removeItem(key);
+                }
+            }
+        } else {
+            // Invalidate a specific key
+            sessionStorage.removeItem(keyOrPrefix);
+        }
+        console.log(`Cache invalidated for: ${keyOrPrefix}`);
+    } catch (error) {
+        console.error(`Error invalidating cache for key: ${keyOrPrefix}`, error);
+    }
+};
+
 /**
  * Get cached data from sessionStorage or fetch it if not available.
  * @param {string} key - The unique key for the cached data.

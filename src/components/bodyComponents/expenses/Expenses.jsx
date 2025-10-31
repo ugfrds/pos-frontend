@@ -217,25 +217,17 @@ const Expenses = () => {
     setFilteredExpenses(filtered);
   };
 
-  const handlePeriodChange = (event) => {
-    const newPeriod = event.target.value;
+  const handleFilterChange = (newPeriod, newStartDate, newEndDate) => {
     setPeriod(newPeriod);
-    
-    if (newPeriod !== "Custom") {
-      setStartDate("");
-      setEndDate("");
-    }
-    
+    setStartDate(newStartDate);
+    setEndDate(newEndDate);
     setPage(1);
   };
 
-  const handleStartDateChange = (event) => {
-    setStartDate(event.target.value);
-    setPage(1);
-  };
-
-  const handleEndDateChange = (event) => {
-    setEndDate(event.target.value);
+  const handleApplyCustomRange = (newStartDate, newEndDate) => {
+    setPeriod('custom');
+    setStartDate(newStartDate);
+    setEndDate(newEndDate);
     setPage(1);
   };
 
@@ -254,93 +246,90 @@ const Expenses = () => {
     page * rowsPerPage
   );
 
-  return (
-    <Container fluid>
-      <Row className="m-3 p-3">
-        <Col md={9}>
-          <Card className="h-100 p-3">
-            <Card.Body>
-              <ExpensesHeader
-                onAddExpense={handleAddExpense}
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-                amountRange={amountRange}
-                setAmountRange={setAmountRange}
-              />
-              
-              <Tabs
-                activeKey={activeTab}
-                onSelect={(k) => {
-                  setActiveTab(k);
-                  setPage(1);
-                }}
-                className="mb-3"
-              >
-                {categories.map((cat) => (
-                  <Tab key={cat} eventKey={cat} title={cat} />
-                ))}
-              </Tabs>
-
-
-              {loading ? (
-                <p>Loading expenses...</p>
-              ) : (
-                <>
-                  <ExpensesTable
-                    expenses={paginatedExpenses}
-                    onEdit={handleEditExpense}
-                    onDelete={handleDeleteExpense}
-                    currency={business.settings.currency}
-                  />
-                  
-                  <div className="d-flex justify-content-between align-items-center mt-3">
-                    <Form.Select
-                      value={rowsPerPage}
-                      onChange={handleRowsPerPageChange}
-                      style={{ width: "120px" }}
-                    >
-                      {[10, 25, 50].map((size) => (
-                        <option key={size} value={size}>
-                          {size} per page
-                        </option>
-                      ))}
-                    </Form.Select>
-                    
-                    <span>
-                      Showing {paginatedExpenses.length} of {filteredExpenses.length} expenses
-                    </span>
-                    
-                    <Pagination>
-                      <Pagination.First onClick={() => handlePageChange(1)} disabled={page === 1} />
-                      <Pagination.Prev onClick={() => handlePageChange(page - 1)} disabled={page === 1} />
-                      {[...Array(totalFilteredPages).keys()].map(p => (
-                        <Pagination.Item key={p+1} active={p + 1 === page} onClick={() => handlePageChange(p + 1)}>
-                          {p + 1}
-                        </Pagination.Item>
-                      ))}
-                      <Pagination.Next onClick={() => handlePageChange(page + 1)} disabled={page === totalFilteredPages} />
-                      <Pagination.Last onClick={() => handlePageChange(totalFilteredPages)} disabled={page === totalFilteredPages} />
-                    </Pagination>
-                  </div>
-                </>
-              )}
-
-              <AddEditExpenseModal
-                show={isModalOpen}
-                onHide={() => setIsModalOpen(false)}
-                onSave={handleSaveExpense}
-                expense={selectedExpense}
-                existingCategories={categories.filter(cat => cat !== "All")}
-              />
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col md={3}>
-          <ExpensesSidebar />
-        </Col>
-      </Row>
-    </Container>
-  );
-};
-
-export default Expenses;
+      return (
+        <Row className="m-3 p-3">
+                <Col md={8}>
+                  <Card className="h-100 p-3">
+                    <Card.Body>
+                      <ExpensesHeader
+                        onAddExpense={handleAddExpense}
+                        searchQuery={searchQuery}
+                        setSearchQuery={setSearchQuery}
+                        onFilterChange={handleFilterChange}
+                        onApplyCustomRange={handleApplyCustomRange}
+                      />
+                      
+                      <Tabs
+                        activeKey={activeTab}
+                        onSelect={(k) => {
+                          setActiveTab(k);
+                          setPage(1);
+                        }}
+                        className="mb-3"
+                      >
+                        {categories.map((cat) => (
+                          <Tab key={cat} eventKey={cat} title={cat} />
+                        ))}
+                      </Tabs>
+          
+          
+                      {loading ? (
+                        <p>Loading expenses...</p>
+                      ) : (
+                        <>
+                          <ExpensesTable
+                            expenses={paginatedExpenses}
+                            onEdit={handleEditExpense}
+                            onDelete={handleDeleteExpense}
+                            currency={business.settings.currency}
+                          />
+                          
+                          <div className="d-flex justify-content-between align-items-center mt-3">
+                            <Form.Select
+                              value={rowsPerPage}
+                              onChange={handleRowsPerPageChange}
+                              style={{ width: "120px" }}
+                            >
+                              {[10, 25, 50].map((size) => (
+                                <option key={size} value={size}>
+                                  {size} per page
+                                </option>
+                              ))}
+                            </Form.Select>
+                            
+                            <span>
+                              Showing {paginatedExpenses.length} of {filteredExpenses.length} expenses
+                            </span>
+                            
+                            <Pagination>
+                              <Pagination.First onClick={() => handlePageChange(1)} disabled={page === 1} />
+                              <Pagination.Prev onClick={() => handlePageChange(page - 1)} disabled={page === 1} />
+                              {[...Array(totalFilteredPages).keys()].map(p => (
+                                <Pagination.Item key={p+1} active={p + 1 === page} onClick={() => handlePageChange(p + 1)}>
+                                  {p + 1}
+                                </Pagination.Item>
+                              ))}
+                              <Pagination.Next onClick={() => handlePageChange(page + 1)} disabled={page === totalFilteredPages} />
+                              <Pagination.Last onClick={() => handlePageChange(totalFilteredPages)} disabled={page === totalFilteredPages} />
+                            </Pagination>
+                          </div>
+                        </>
+                      )}
+          
+                      <AddEditExpenseModal
+                        show={isModalOpen}
+                        onHide={() => setIsModalOpen(false)}
+                        onSave={handleSaveExpense}
+                        expense={selectedExpense}
+                        existingCategories={categories.filter(cat => cat !== "All")}
+                      />
+                    </Card.Body>
+                  </Card>
+                </Col>
+                <Col md={4}>
+                  <ExpensesSidebar />
+                </Col>        </Row>
+      );
+    };
+    
+    export default Expenses;

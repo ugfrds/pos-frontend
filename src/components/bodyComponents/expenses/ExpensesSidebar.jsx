@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { getExpensesOverview } from '../../../api.jsx';
-import { Card, ListGroup, Spinner, Alert, Dropdown, Form, Button } from 'react-bootstrap';
-import { FaMoneyBillWave, FaTags, FaCalendarDay, FaChartLine, FaExclamationCircle, FaArrowUp, FaArrowDown } from 'react-icons/fa';
-import { Bar } from 'react-chartjs-2';
-
-const StatCard = ({ title, value, icon, trend }) => (
+import { Card, Dropdown, ListGroup, Spinner, Alert, Form, Button } from 'react-bootstrap';
+import { FaArrowUp, FaArrowDown, FaExclamationCircle } from 'react-icons/fa';
+import { getExpensesOverview } from '../../../api';
+const StatCard = ({ title, value, trend }) => (
   <ListGroup.Item className="d-flex justify-content-between align-items-start">
     <div className="ms-2 me-auto">
       <div className="fw-bold">{title}</div>
       {value}
     </div>
     <div className="d-flex flex-column align-items-end">
-        {icon}
         {trend && (
             <small className={`d-flex align-items-center ${trend.direction === 'up' ? 'text-success' : 'text-danger'}`}>
                 {trend.direction === 'up' ? <FaArrowUp /> : <FaArrowDown />} {trend.value}
@@ -70,17 +67,6 @@ const ExpensesSidebar = () => {
     );
   }
 
-  const trendData = {
-    labels: overview.sevenDayTrend.map(d => new Date(d.date).toLocaleDateString()),
-    datasets: [
-      {
-        label: 'Last 7 Days',
-        data: overview.sevenDayTrend.map(d => d.total),
-        backgroundColor: 'rgba(75, 192, 192, 0.6)',
-      },
-    ],
-  };
-
   return (
     <Card>
       <Card.Header className="d-flex justify-content-between align-items-center">
@@ -119,29 +105,35 @@ const ExpensesSidebar = () => {
           <StatCard
             title="Total Expenses"
             value={`${overview.totalExpenses.toFixed(2)}`}
-            icon={<FaMoneyBillWave size={24} />}
             trend={{ direction: overview.changeVsPrevious >= 0 ? 'up' : 'down', value: `${overview.changeVsPrevious.toFixed(2)}%` }}
           />
           <StatCard
             title="Top Category"
             value={overview.topCategory ? `${overview.topCategory.name} (${overview.topCategory.amount.toFixed(2)})` : 'N/A'}
-            icon={<FaTags size={24} />}
           />
           <StatCard
             title="Avg. Daily Spend"
             value={`${overview.avgDailySpend.toFixed(2)}`}
-            icon={<FaCalendarDay size={24} />}
           />
           <StatCard
             title="Largest Expense"
             value={overview.largestExpense ? `${overview.largestExpense.name} (${overview.largestExpense.amount.toFixed(2)})` : 'N/A'}
-            icon={<FaChartLine size={24} />}
           />
         </ListGroup>
-        <div className="mt-4">
-            <h6 className="text-center">7-Day Trend</h6>
-            <Bar data={trendData} />
-        </div>
+
+        {overview.categoryBreakdown && overview.categoryBreakdown.length > 0 && (
+          <div className="mt-4">
+            <h6 className="text-center">Expenses by Category</h6>
+            <ListGroup variant="flush">
+              {overview.categoryBreakdown.map((cat, index) => (
+                <ListGroup.Item key={index} className="d-flex justify-content-between align-items-center">
+                  <span>{cat.name}</span>
+                  <span>{cat.amount.toFixed(2)} ({((cat.amount / overview.totalExpenses) * 100).toFixed(1)}%)</span>
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+          </div>
+        )}
       </Card.Body>
     </Card>
   );

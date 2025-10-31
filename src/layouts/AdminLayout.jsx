@@ -7,7 +7,7 @@ const AdminLayout = () => {
   return (
     <div>
       <AdminNavbar />
-      <div className="container mt-4">
+      <div className="container-fluid mt-2">
         <Outlet /> {/* This is where nested routes will render */}
       </div>
     </div>
