@@ -30,9 +30,9 @@ const AdminDashboard = () => {
                 const data = await getDashboardData(period, params.startDate, params.endDate);
 
                 setDashboardData({
-                    totalSales: data.totalSales,
-                    totalOrders: data.totalOrders,
-                    topMenuItem: data.topMenuItem,
+                    totalSales: data.totalSales ?? 0,
+                    totalOrders: data.totalOrders ?? 0,
+                    topMenuItem: data.topMenuItem ?? '',
                 });
             } catch (err) {
                 console.error('Failed to fetch dashboard data:', err);
@@ -146,7 +146,7 @@ const AdminDashboard = () => {
                             <Card className="text-center mb-4">
                                 <Card.Body>
                                     <Card.Title>Top Item Sold</Card.Title>
-                                    <h2 className="text-warning display-6">{dashboardData.topMenuItem || 'N/A'}</h2>
+                                    <h2 className="text-warning display-6">{dashboardData.topMenuItem?.name || 'N/A'}</h2>
                                     <Card.Text className="text-muted">Most popular item</Card.Text>
                                     <Button variant="outline-warning" className="mt-3" as={Link} to="/admin/manage-menu">
                                         Manage Menu
