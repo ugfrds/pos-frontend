@@ -51,7 +51,7 @@ const NavBar = () => {
             )}
             {!isActive('/admin/reports') && (
               <Nav.Link as={Link} to="/admin/reports" className="fs-5">
-                Reports
+                Reports & Inventory
               </Nav.Link>
             )}
           </Nav>

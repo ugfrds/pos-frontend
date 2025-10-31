@@ -9,7 +9,7 @@ import ExpensesSidebar from '../../components/bodyComponents/expenses/ExpensesSi
 
 const AdminDashboard = () => {
     const [period, setPeriod] = useState('daily');
-    const [startDate, setStartDate] = useState(''); // Custom Start Date
+    const [startDate, setStartDate] = useState(''); // Custom Start Date 
     const [endDate, setEndDate] = useState(''); // Custom End Date
     const [dashboardData, setDashboardData] = useState({
         totalSales: 0,

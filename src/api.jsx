@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getCachedData, invalidateCache } from './utils/Cache';
 
 const api = axios.create({
     baseURL: 'https://pos-backend-m3rs.onrender.com/api', // Your backend API URL
@@ -188,6 +189,7 @@ const getBusinessDetails = async () => {
 const createMenuItem = async (menuItem) => {
     try {
         const response = await api.post('/menu-items', menuItem, setAuthHeader());
+        invalidateCache('menuItems'); // Invalidate cache after creation
         return response.data;
     } catch (error) {
         handleApiError(error);
@@ -198,6 +200,7 @@ const createMenuItem = async (menuItem) => {
 const updateMenuItem = async (id, menuItem) => {
     try {
         const response = await api.put(`/menu-items/${id}`, menuItem, setAuthHeader());
+        invalidateCache('menuItems'); // Invalidate cache after update
         return response.data;
     } catch (error) {
         handleApiError(error);
@@ -207,8 +210,11 @@ const updateMenuItem = async (id, menuItem) => {
 // Fetch all menu items
 const fetchMenuItems = async () => {
     try {
-        const response = await api.get('/menu-items', setAuthHeader());
-        return response.data;
+        const fetchFunction = async () => {
+            const response = await api.get('/menu-items', setAuthHeader());
+            return response.data;
+        };
+        return getCachedData('menuItems', fetchFunction);
     } catch (error) {
         handleApiError(error);
     }
@@ -218,6 +224,7 @@ const fetchMenuItems = async () => {
 const deleteMenuItem = async (id) => {
     try {
         await api.delete(`/menu-items/${id}`, setAuthHeader());
+        invalidateCache('menuItems'); // Invalidate cache after deletion
     } catch (error) {
         handleApiError(error);
     }
@@ -380,9 +387,11 @@ const updateAdmin = async (id, updated) => {
 // Fetch the current settings for the logged-in business
  const getSettings = async () => {
     try {
-        const response = await api.get('/', setAuthHeader() );
-        return response.data.settings;
-        
+        const fetchFunction = async () => {
+            const response = await api.get('/', setAuthHeader() );
+            return response.data.settings;
+        };
+        return getCachedData('businessSettings', fetchFunction);
     } catch (error) {
         console.error('Failed to fetch settings:', error);
         return null;
@@ -394,6 +403,8 @@ const updateAdmin = async (id, updated) => {
     try {
         const response = await api.put('/',settings, setAuthHeader());
         console.log (response.config.data);
+        invalidateCache('businessSettings'); // Invalidate cache after saving settings
+        invalidateCache('businessDetails'); // Invalidate businessDetails cache as well
         return response.status === 200;
         
     } catch (error) {
@@ -424,7 +435,7 @@ export const getDashboardData = async (period, startDate = null, endDate = null)
 
 export const getSalesOverTime = async (period) => {
     try {
-        const response = await api.get(`/sales-over-time?period=${period}`, setAuthHeader());
+        const response = await api.get(`/sales/sales-over-time?period=${period}`, setAuthHeader());
         return response.data;
     } catch (error) {
         console.error('Error fetching sales data:', error);
