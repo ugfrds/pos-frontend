@@ -1,7 +1,8 @@
 import { Table, Button } from "react-bootstrap";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import { FormatCurrency } from "../../../utils";
 
-const ExpensesTable = ({ expenses, onEdit, onDelete }) => {
+const ExpensesTable = ({ expenses, onEdit, onDelete, currency }) => {
   return (
     <Table striped bordered hover responsive>
       <thead>
@@ -19,7 +20,7 @@ const ExpensesTable = ({ expenses, onEdit, onDelete }) => {
             <td>{expense.date}</td>
             <td>{expense.description}</td>
             <td>{expense.category}</td>
-            <td>${expense.amount}</td>
+            <td>{FormatCurrency(expense.amount, currency)}</td>
             <td>
               <Button variant="light" onClick={() => onEdit(expense)} className="me-2">
                 <FaEdit />

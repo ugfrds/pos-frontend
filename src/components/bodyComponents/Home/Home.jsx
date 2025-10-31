@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import  { Component } from "react";
 import { Box, Grid } from "@mui/material";
 
 import {UilReceipt} from "@iconscout/react-unicons";

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Typography, Grid, Paper } from '@mui/material';
+import { Form, Button, Card, Row, Col } from 'react-bootstrap';
 //import api from './api'; // Import centralized API file
 
 const RootPage = () => {
@@ -63,72 +63,77 @@ const RootPage = () => {
   };
 
   return (
-    <Paper elevation={3} style={{ padding: '20px', maxWidth: '600px', margin: '20px auto' }}>
-      <Typography variant="h5" gutterBottom>
-        {isUpdating ? 'Update Product' : 'Create Product'}
-      </Typography>
-      <form >
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Product Name"
-              name="name"
-              value={product.name}
-              onChange={handleChange}
-              required
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Category"
-              name="category"
-              value={product.category}
-              onChange={handleChange}
-              required
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              fullWidth
-              label="Price"
-              name="price"
-              type="number"
-              value={product.price}
-              onChange={handleChange}
-              required
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              fullWidth
-              label="Stock"
-              name="stock"
-              type="number"
-              value={product.stock}
-              onChange={handleChange}
-              required
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Button variant="contained" color="primary" type="submit">
-              {isUpdating ? 'Update' : 'Create'}
-            </Button>
-            {isUpdating && (
-              <Button
-                variant="outlined"
-                color="secondary"
-                style={{ marginLeft: '10px' }}
-                onClick={resetForm}
-              >
-                Cancel
+    <Card style={{ padding: '20px', maxWidth: '600px', margin: '20px auto' }}>
+      <Card.Body>
+        <Card.Title as="h5">{isUpdating ? 'Update Product' : 'Create Product'}</Card.Title>
+        <Form >
+          <Row className="g-2">
+            <Col md={12}>
+              <Form.Group>
+                <Form.Label>Product Name</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="name"
+                  value={product.name}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+            </Col>
+            <Col md={12}>
+              <Form.Group>
+                <Form.Label>Category</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="category"
+                  value={product.category}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+            </Col>
+            <Col md={6}>
+              <Form.Group>
+                <Form.Label>Price</Form.Label>
+                <Form.Control
+                  type="number"
+                  name="price"
+                  value={product.price}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+            </Col>
+            <Col md={6}>
+              <Form.Group>
+                <Form.Label>Stock</Form.Label>
+                <Form.Control
+                  type="number"
+                  name="stock"
+                  value={product.stock}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+            </Col>
+            <Col md={12}>
+              <Button variant="primary" type="submit">
+                {isUpdating ? 'Update' : 'Create'}
               </Button>
-            )}
-          </Grid>
-        </Grid>
-      </form>
-    </Paper>
+              {isUpdating && (
+                <Button
+                  variant="secondary"
+                  style={{ marginLeft: '10px' }}
+                  onClick={resetForm}
+                >
+                  Cancel
+                </Button>
+              )}
+            </Col>
+          </Row>
+        </Form>
+      </Card.Body>
+    </Card>
   );
 };
 

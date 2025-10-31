@@ -1,19 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Container, Row, Col, Card, Tabs, Tab, Form, Pagination } from "react-bootstrap";
 import ExpensesHeader from "./ExpensesHeader";
 import ExpensesTable from "./ExpensesTable";
 import AddEditExpenseModal from "./AddEditExpenseModal";
 
+import ExpensesSidebar from "./ExpensesSidebar";
 import { createExpense, fetchExpenses, fetchExpenseCategories, deleteExpense, updateExpense } from "../../../api";
+import { UserBusinessContext } from "../../../context/UserBusinessContext";
 
 const Expenses = () => {
+  const { business } = useContext(UserBusinessContext);
   const [expenses, setExpenses] = useState([]);
   const [categories, setCategories] = useState([]);
   const [filteredExpenses, setFilteredExpenses] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedExpense, setSelectedExpense] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [amountRange, setAmountRange] = useState([0, 10000]);
+  const [amountRange, setAmountRange] = useState([0, null]);
   const [activeTab, setActiveTab] = useState("All");
   const [period, setPeriod] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -202,9 +205,13 @@ const Expenses = () => {
     }
 
     if (amountRange && amountRange.length === 2) {
-      filtered = filtered.filter(
-        (exp) => exp.amount >= amountRange[0] && exp.amount <= amountRange[1]
-      );
+      const [min, max] = amountRange;
+      filtered = filtered.filter((exp) => {
+        const amount = exp.amount;
+        const minCondition = min === null || amount >= min;
+        const maxCondition = max === null || amount <= max;
+        return minCondition && maxCondition;
+      });
     }
 
     setFilteredExpenses(filtered);
@@ -250,7 +257,7 @@ const Expenses = () => {
   return (
     <Container fluid>
       <Row className="m-3 p-3">
-        <Col md={12}>
+        <Col md={9}>
           <Card className="h-100 p-3">
             <Card.Body>
               <ExpensesHeader
@@ -273,36 +280,7 @@ const Expenses = () => {
                   <Tab key={cat} eventKey={cat} title={cat} />
                 ))}
               </Tabs>
-              
-              <div className="mb-3">
-                <h5>Date Filter:</h5>
-                <Form.Select
-                  value={period}
-                  onChange={handlePeriodChange}
-                  style={{ width: "200px", marginRight: "1rem", display: "inline-block" }}
-                >
-                  <option value="">All Time</option>
-                  <option value="today">Today</option>
-                  <option value="thisWeek">This Week</option>
-                  <option value="custom">Custom Range</option>
-                </Form.Select>
-                {period === "custom" && (
-                  <div style={{ marginTop: "0.5rem" }}>
-                    <Form.Control
-                      type="date"
-                      value={startDate}
-                      onChange={handleStartDateChange}
-                      style={{ marginRight: "8px", padding: "4px", display: "inline-block", width: "auto" }}
-                    />
-                    <Form.Control
-                      type="date"
-                      value={endDate}
-                      onChange={handleEndDateChange}
-                      style={{ padding: "4px", display: "inline-block", width: "auto" }}
-                    />
-                  </div>
-                )}
-              </div>
+
 
               {loading ? (
                 <p>Loading expenses...</p>
@@ -312,6 +290,7 @@ const Expenses = () => {
                     expenses={paginatedExpenses}
                     onEdit={handleEditExpense}
                     onDelete={handleDeleteExpense}
+                    currency={business.settings.currency}
                   />
                   
                   <div className="d-flex justify-content-between align-items-center mt-3">
@@ -356,8 +335,9 @@ const Expenses = () => {
             </Card.Body>
           </Card>
         </Col>
-        
-        
+        <Col md={3}>
+          <ExpensesSidebar />
+        </Col>
       </Row>
     </Container>
   );

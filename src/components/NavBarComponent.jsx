@@ -1,185 +1,86 @@
 import {
-  Box,
-  Grid,
-  AppBar,
+  Navbar,
   Container,
-  Typography,
-  Paper,
-  IconButton,
-  Avatar,
-  Badge,
-  Menu,
-  MenuItem,
-  Divider,
-  ListItemIcon,
-  Tooltip,
-  Drawer,
-  List,
-  ListItem,
-  ListItemText,
-} from "@mui/material";
+  Nav,
+  NavDropdown,
+  Image,
+  Button,
+  Offcanvas,
+} from "react-bootstrap";
 import {
-  NotificationsOutlined,
-  Settings,
-  Logout,
-  AccountCircleOutlined,
-  Menu as MenuIcon,
-} from "@mui/icons-material";
+  FaBell,
+  FaCog,
+  FaSignOutAlt,
+  FaUserCircle,
+  FaBars,
+} from "react-icons/fa";
 import { useState } from "react";
 
 export default function NavBarComponent() {
-  const [notificationAnchorEl, setNotificationAnchorEl] = useState(null);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const open = Boolean(anchorEl);
-  const notificationOpen = Boolean(notificationAnchorEl);
+  const [showOffcanvas, setShowOffcanvas] = useState(false);
 
-  const handleAvatarClicked = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleNotificationClicked = (event) => {
-    setNotificationAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const notificationHandleClose = () => {
-    setNotificationAnchorEl(null);
-  };
-
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
-  };
+  const handleOffcanvasToggle = () => setShowOffcanvas(!showOffcanvas);
+  const handleOffcanvasClose = () => setShowOffcanvas(false);
 
   return (
-    <Grid container>
-      <Grid item md={12}>
-        <Paper elevation={4}>
-          <AppBar sx={{ padding: 2 }} position="static">
-            <Container maxWidth="xxl">
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
+    <>
+      <Navbar bg="light" expand="lg" className="mb-3 shadow-sm">
+        <Container fluid>
+          <Navbar.Brand href="/" className="fw-bold fs-4">
+            ADIMS
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={handleOffcanvasToggle}>
+            <FaBars />
+          </Navbar.Toggle>
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="me-auto">
+              <Nav.Link href="/manage-inventory">Manage Inventory</Nav.Link>
+            </Nav>
+            <Nav>
+              <Nav.Link href="#notifications">
+                <div className="position-relative">
+                  <FaBell size={24} />
+                  <span className="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                    <span className="visually-hidden">New alerts</span>
+                  </span>
+                </div>
+              </Nav.Link>
+              <NavDropdown
+                title={<Image src="" roundedCircle width={32} height={32} />}
+                id="basic-nav-dropdown"
+                align="end"
               >
-                <Typography
-                  variant="h6"
-                  component="a"
-                  href="/"
-                  sx={{
-                    mx: 2,
-                    display: { xs: "none", md: "flex" },
-                    fontWeight: 700,
-                    letterSpacing: ".2rem",
-                    color: "inherit",
-                    textDecoration: "none",
-                  }}
-                >
-                  ADIMS
-                </Typography>
+                <NavDropdown.Item href="#profile">
+                  <FaUserCircle className="me-2" /> Profile
+                </NavDropdown.Item>
+                <NavDropdown.Item href="#settings">
+                  <FaCog className="me-2" /> Settings
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="#logout">
+                  <FaSignOutAlt className="me-2" /> Logout
+                </NavDropdown.Item>
+              </NavDropdown>
+              <Navbar.Text className="ms-2">ADMI ZAKARYAE</Navbar.Text>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
 
-                {/* Desktop: Manage Inventory Button */}
-                <Box sx={{ display: { xs: "none", md: "flex" } }}>
-                  <IconButton color="inherit" href="/manage-inventory">
-                    <Typography sx={{ marginRight: 2 }}>Manage Inventory</Typography>
-                  </IconButton>
-                </Box>
-
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "right",
-                    alignItems: "center",
-                  }}
-                >
-                  <IconButton color="inherit">
-                    <Badge variant="dot" color="error" invisible={false}>
-                      <NotificationsOutlined
-                        sx={{ width: 32, height: 32 }}
-                        onClick={handleNotificationClicked}
-                      />
-                    </Badge>
-                  </IconButton>
-                  <Menu
-                    open={notificationOpen}
-                    anchorEl={notificationAnchorEl}
-                    onClick={notificationHandleClose}
-                    onClose={notificationHandleClose}
-                  >
-                    <MenuItem>Notification number 1</MenuItem>
-                    <Divider />
-                    <MenuItem>Notification number 2</MenuItem>
-                    <MenuItem>Notification number 3</MenuItem>
-                  </Menu>
-
-                  {/* Avatar for Desktop */}
-                  <IconButton
-                    onClick={handleAvatarClicked}
-                    size="small"
-                    sx={{ mx: 2 }}
-                    aria-haspopup="true"
-                  >
-                    <Tooltip title="account settings">
-                      <Avatar sx={{ width: 32, height: 32 }}>Z</Avatar>
-                    </Tooltip>
-                  </IconButton>
-                  <Typography fontFamily={"Inter"}>ADMI ZAKARYAE</Typography>
-
-                  {/* Hamburger Menu for Mobile */}
-                  <IconButton
-                    color="inherit"
-                    onClick={toggleMobileMenu}
-                    sx={{ display: { xs: "block", md: "none" } }}
-                  >
-                    <MenuIcon />
-                  </IconButton>
-                </Box>
-              </Box>
-            </Container>
-          </AppBar>
-        </Paper>
-      </Grid>
-
-      {/* Drawer for Mobile Menu */}
-      <Drawer
-        anchor="left"
-        open={mobileMenuOpen}
-        onClose={toggleMobileMenu}
-      >
-        <List sx={{ width: 250 }}>
-          {/* Manage Inventory Button in Drawer */}
-          <ListItem button onClick={toggleMobileMenu} href="/manage-inventory">
-            <ListItemText primary="Manage Inventory" />
-          </ListItem>
-          <Divider />
-          {/* Avatar and Settings Options */}
-          <ListItem button onClick={toggleMobileMenu}>
-            <ListItemIcon>
-              <AccountCircleOutlined fontSize="small" />
-            </ListItemIcon>
-            <ListItemText primary="Profile" />
-          </ListItem>
-          <Divider />
-          <ListItem button onClick={toggleMobileMenu}>
-            <ListItemIcon>
-              <Settings fontSize="small" />
-            </ListItemIcon>
-            <ListItemText primary="Settings" />
-          </ListItem>
-          <ListItem button onClick={toggleMobileMenu}>
-            <ListItemIcon>
-              <Logout fontSize="small" />
-            </ListItemIcon>
-            <ListItemText primary="Logout" />
-          </ListItem>
-        </List>
-      </Drawer>
-    </Grid>
+      <Offcanvas show={showOffcanvas} onHide={handleOffcanvasClose} responsive="lg">
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title>Menu</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+          <Nav className="flex-column">
+            <Nav.Link href="/manage-inventory" onClick={handleOffcanvasClose}>Manage Inventory</Nav.Link>
+            <Nav.Link href="#profile" onClick={handleOffcanvasClose}><FaUserCircle className="me-2" />Profile</Nav.Link>
+            <Nav.Link href="#settings" onClick={handleOffcanvasClose}><FaCog className="me-2" />Settings</Nav.Link>
+            <Nav.Link href="#logout" onClick={handleOffcanvasClose}><FaSignOutAlt className="me-2" />Logout</Nav.Link>
+          </Nav>
+        </Offcanvas.Body>
+      </Offcanvas>
+    </>
   );
 }
 

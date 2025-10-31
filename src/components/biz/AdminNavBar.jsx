@@ -49,6 +49,11 @@ const NavBar = () => {
                 Manage Staff
               </Nav.Link>
             )}
+            {!isActive('/admin/expenses') && (
+              <Nav.Link as={Link} to="/admin/expenses" className="fs-5">
+                Expenses
+              </Nav.Link>
+            )}
             <Nav.Link 
               onClick={handleInventoryReportsClick} 
               className="fs-5" 

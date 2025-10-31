@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { FormatCurrency } from '../../utils/index';
 import { UserBusinessContext } from '../../context/UserBusinessContext';
 import SalesChart from '../../components/salesChart';
+import ExpensesSidebar from '../../components/bodyComponents/expenses/ExpensesSidebar';
 
 const AdminDashboard = () => {
     const [period, setPeriod] = useState('daily');
@@ -157,13 +158,16 @@ const AdminDashboard = () => {
 
                     {/* Sales Chart Placeholder */}
                     <Row>
-                        <Col md={12}>
+                        <Col md={8}>
                             <Card className="mb-4 shadow">
                                 <Card.Body>
                                     <Card.Title>Sales Over Time</Card.Title>
-                                    <SalesChart  />
+                                    <SalesChart />
                                 </Card.Body>
                             </Card>
+                        </Col>
+                        <Col md={4}>
+                            <ExpensesSidebar />
                         </Col>
                     </Row>
                 </>

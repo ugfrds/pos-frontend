@@ -529,11 +529,27 @@ const fetchExpenses = async (options = {}) => {
       return response.data; // Return the categories
     } catch (error) {
       handleApiError(error);
-    }
-  };
-
-
-// Export all API calls at the end
+        }
+      };
+    
+    
+      const getExpensesOverview = async (period = 'thisMonth', startDate = null, endDate = null) => {
+        try {
+          const params = { period };
+          if (period === 'custom' && startDate && endDate) {
+            params.startDate = startDate;
+            params.endDate = endDate;
+          }
+          const response = await api.get('/expenses/overview', { params, ...setAuthHeader() });
+          return response.data;
+        } catch (error) {
+          console.error('Error fetching expenses overview:', error);
+          throw error;
+        }
+      };
+    
+    
+    // Export all API calls at the end
 export {
     //settings
     getSettings,
@@ -588,5 +604,6 @@ export {
     updateExpense,
     deleteExpense,
     fetchExpenseCategories,
+    getExpensesOverview,
     
 };

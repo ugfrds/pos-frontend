@@ -37,6 +37,7 @@ import AddStaff from './pages/businessadmin/AddStaff';
 import SettingPage from './components/Settings/SettingPage';
 //import ExpensesPage from './components/expenses/ExpensesPage';
 import ExpendituresPage from './pages/businessadmin/expendituresPage';
+import AdminInventoryPage from './pages/businessadmin/AdminInventoryPage';
 
 
 // Layouts
@@ -44,7 +45,7 @@ import SuperadminLayout from './layouts/SuperadminLayout';
 import AdminLayout from './layouts/AdminLayout';
 
 //
-import Expenses from './components/bodyComponents/expenses/Expenses'
+//import Expenses from './components/bodyComponents/expenses/Expenses'
 import Inventory from './components/bodyComponents/inventory/Inventory';
 import RootComponent from './components/RootComponent';
 
@@ -144,6 +145,22 @@ const App = () => {
       </PrivateRoute>
     }
   />
+   <Route
+    path="expenses"
+    element={
+      <PrivateRoute>
+        <ExpendituresPage />
+      </PrivateRoute>
+    }
+  />
+  <Route
+    path="inventory"
+    element={
+      <PrivateRoute roles={['BusinessAdmin', 'Supervisor']}>
+        <AdminInventoryPage />
+      </PrivateRoute>
+    }
+  />
 </Route>
 
 
@@ -190,11 +207,8 @@ const App = () => {
   <Route path="*" element={<NotFound />} />
   <Route path="/unauthorized" element={<UnauthorizedPage />} />
 
-      <Route path="/expenses" element={<ExpendituresPage />} />
-
       <Route  element={<RootComponent />}>
         <Route path="/inventory" element={<Inventory />}></Route>
-        <Route path="/expenses" element={<Expenses />}></Route>
         {/* <Route index element={<Home />} />  */}
         {/* <Route path="/home" element={<Home />}></Route> */}
         
