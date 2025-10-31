@@ -174,7 +174,9 @@ const Expenses = () => {
         setExpenses((prev) => [normalizedResult, ...prev]);
         setPage(1);
       }
-      getCategories();
+      if (expenseData.category && !categories.includes(expenseData.category)) {
+        setCategories(prev => [...prev, expenseData.category]);
+      }
     } catch (error) {
       console.error("Failed to save expense", error);
       alert("Failed to save expense. Please try again.");

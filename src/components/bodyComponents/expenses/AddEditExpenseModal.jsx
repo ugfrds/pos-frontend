@@ -45,11 +45,20 @@ export default function AddEditExpenseModal({
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = () => {
-    const expenseData = { ...formData, id: expense?.id || null };
-    onSave(expenseData);
-    onHide();
+const handleSubmit = () => {
+  const finalCategory =
+    formData.category === "custom" ? formData.customCategory.trim() : formData.category;
+
+  const expenseData = {
+    ...formData,
+    category: finalCategory || "Uncategorized",
+    id: expense?.id || null,
   };
+
+  onSave(expenseData);
+  onHide();
+};
+
 
   return (
     <Modal show={show} onHide={onHide}>
