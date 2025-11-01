@@ -24,6 +24,7 @@ const MenuPage = () => {
                 setError(null);
                 const data = await getCachedData('menuItems', fetchMenuItems); // Fetch menu items using cache
                 setMenuItems(data);
+                console.log("Fetched menu items:", data); // Debug log
             } catch (error) {
                 setError('Failed to fetch menu items');
             } finally {
@@ -34,13 +35,24 @@ const MenuPage = () => {
         getMenuItems();
     }, []);
 
-    const categories = useMemo(() => [...new Set(menuItems.map(item => item.category))], [menuItems]);
+    const popularItems = useMemo(() => {
+        const filtered = menuItems.filter(item => item.is_popular);
+        console.log("Popular items:", filtered); // Debug log
+        return filtered;
+    }, [menuItems]);
+
+    const categories = useMemo(() => {
+        const uniqueCategories = [...new Set(menuItems.map(item => item.category))];
+        return popularItems.length > 0 ? ['Popular', ...uniqueCategories] : uniqueCategories;
+    }, [menuItems, popularItems]);
 
     // Filtered items based on category and search term
     const filteredItems = useMemo(() => {
         let filtered = menuItems;
 
-        if (selectedCategory) {
+        if (selectedCategory === 'Popular') {
+            filtered = popularItems;
+        } else if (selectedCategory) {
             filtered = filtered.filter(item => item.category === selectedCategory);
         }
 
