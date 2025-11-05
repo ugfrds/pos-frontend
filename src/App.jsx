@@ -1,4 +1,6 @@
-import { Routes, Route } from 'react-router-dom';
+
+import Debtors from './components/bodyComponents/debtors/Debtors';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { LoadingProvider } from './context/LoadingContext';
 import GlobalLoader from './components/GlobalLoader';
 import PrivateRoute from './components/PrivateRoute';
@@ -159,7 +161,8 @@ const App = () => {
   >
     <Route path="inventory" element={<AdminInventoryPage />} />
     <Route path="expenses" element={<ExpendituresPage />} />
-    <Route index element={<AdminInventoryPage />} /> {/* Default to inventory */}
+    <Route path="debtors" element={<Debtors />} />
+    <Route index element={<Navigate to="/admin/reports/inventory" />} />
   </Route>
 </Route>
 

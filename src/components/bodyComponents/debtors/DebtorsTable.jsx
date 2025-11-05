@@ -1,5 +1,6 @@
 import React from "react";
 import { Table, Button } from "react-bootstrap";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import { format } from "date-fns";
 
 const DebtorsTable = ({ debtors, onEdit, onDelete, currency }) => {
@@ -27,11 +28,11 @@ const DebtorsTable = ({ debtors, onEdit, onDelete, currency }) => {
               <td>{currency} {parseFloat(debtor.amount).toFixed(2)}</td>
               <td>{debtor.status}</td>
               <td>
-                <Button variant="info" size="sm" className="me-2" onClick={() => onEdit(debtor)}>
-                  Edit
+                <Button variant="outline-primary" size="sm" className="me-2" onClick={() => onEdit(debtor)}>
+                  <FaEdit />
                 </Button>
-                <Button variant="danger" size="sm" onClick={() => onDelete(debtor.id)}>
-                  Delete
+                <Button variant="outline-danger" size="sm" onClick={() => onDelete(debtor.id)}>
+                  <FaTrash />
                 </Button>
               </td>
             </tr>
