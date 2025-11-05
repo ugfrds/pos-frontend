@@ -1,0 +1,133 @@
+/* ReceiptPanel.css */
+.receipt-panel {
+    background-color: #f8f9fa; /* Light gray background for contrast */
+    border: 1px solid #ddd; /* Subtle border to define the panel */
+    border-radius: 8px; /* Rounded corners for a modern look */
+    padding: 20px;
+    margin: 10px 0;
+    max-width: 400px; /* Restrict width to keep it compact */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+}
+
+.receipt-header {  
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.receipt-header h4 {
+    margin: 0;
+    font-size: 1.25em; /* Slightly larger header text */
+    font-weight: 600;
+    color: #333; /* Dark gray for text contrast */
+}
+
+.receipt-header .table-number {
+    font-size: 0.9em;
+    color: #555; /* Medium gray for secondary text */
+    margin-top: 5px;
+}
+
+.receipt-list {
+    max-height: 300px; /* Constrain height with scrollable overflow */
+    overflow-y: auto;
+    margin-bottom: 15px;
+}
+
+.receipt-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee; /* Subtle separator between items */
+}
+
+.item-info .item-name {
+    font-weight: 500;
+    color: #333;
+}
+
+.item-info .item-quantity {
+    font-size: 0.9em;
+    color: #777;
+}
+
+.item-actions {
+    display: flex;
+    align-items: center;
+}
+
+.item-price {
+    font-weight: 600;
+    color: #28a745; /* Green color for prices */
+}
+
+.item-notes {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.85em;
+    color: #999; /* Lighter gray for notes */
+}
+
+.receipt-summary {
+    padding: 10px 0;
+    border-top: 1px solid #ddd;
+}
+
+.receipt-summary p {
+    margin: 0;
+    font-size: 1em;
+    color: #333;
+}
+
+.receipt-summary h5 {
+    margin-top: 10px;
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #28a745; /* Consistent green for totals */
+}
+
+.receipt-footer {
+    margin-top: 15px;
+}
+
+.receipt-footer .served-by {
+    font-size: 0.9em;
+    color: #555;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.receipt-actions .btn {
+    font-size: 1em;
+    font-weight: 600;
+}
+
+.receipt-actions .btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.receipt-actions .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+/* Responsive Design */
+@media (max-width: 576px) {
+    .receipt-panel {
+        max-width: 100%; /* Make the panel full-width on small screens */
+        padding: 15px;
+    }
+
+    .receipt-header h4 {
+        font-size: 1.1em;
+    }
+
+    .item-price {
+        font-size: 0.9em;
+    }
+
+    .receipt-summary h5 {
+        font-size: 1.1em;
+    }
+}

@@ -1,0 +1,199 @@
+.receipt-modal {
+  font-family: Arial, sans-serif;
+  color: #333;
+  padding: 15px;
+  max-width: 400px; /* Restrict width for readability */
+  margin: 0 auto; /* Center content */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.receipt-modal .receipt-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.receipt-modal .business-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.receipt-modal .receipt-header p {
+  margin: 2px 0;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.receipt-modal .receipt-items {
+  margin-top: 15px;
+}
+
+.receipt-modal .receipt-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px dashed #ccc;
+  font-size: 0.9rem;
+}
+
+.receipt-modal .receipt-item .item-name {
+  flex: 2; /* Allocates more space to the name */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.receipt-modal .receipt-item .quantity {
+  flex: 1;
+  text-align: center;
+}
+
+.receipt-modal .receipt-item .item-total {
+  flex: 1;
+  text-align: right;
+}
+
+.receipt-modal .receipt-footer {
+  margin-top: 20px;
+  border-top: 1px solid #ccc;
+  padding-top: 10px;
+}
+
+.receipt-modal .receipt-footer .item-details {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.receipt-modal .receipt-footer .item-name {
+  font-weight: bold;
+}
+
+.receipt-modal .receipt-footer .item-total {
+  text-align: right;
+}
+
+.receipt-modal .served-by {
+  margin-top: 15px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.receipt-modal .receipt-notes {
+  margin-top: 10px;
+  font-style: italic;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.receipt-modal .barcode-container {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.receipt-modal .barcode-container svg {
+  width: 75%; /* Makes the barcode thinner */
+  height: auto;
+}
+/* Modal Container */
+.receipt-modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5); /* Add background overlay */
+  z-index: 1000;
+  overflow-y: auto; /* Handle long receipts */
+}
+
+/* Modal Content */
+.receipt-modal {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 400px; /* Limit modal width */
+  width: 90%; /* Make it flexible for smaller screens */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin: 20px; /* Space for smaller screens */
+}
+
+/* Adjust Item Details for Mobile */
+.receipt-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+  flex-wrap: wrap; /* Wrap items on smaller screens */
+}
+
+.receipt-item span {
+  margin-bottom: 5px;
+}
+
+/* Fix Footer Alignment */
+.receipt-footer .item-details {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+
+/* Center Barcode */
+.barcode-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Responsive Design for Smaller Screens */
+@media screen and (max-width: 768px) {
+  .receipt-modal {
+    max-width: 100%; /* Full width for mobile */
+  }
+
+  .receipt-item {
+    flex-direction: column; /* Stack items */
+    align-items: flex-start;
+  }
+
+  .receipt-item span {
+    text-align: left;
+    width: 100%; /* Make spans take full width */
+  }
+
+  .receipt-footer .item-details {
+    flex-direction: column; /* Stack footer items */
+    align-items: flex-start;
+  }
+}
+
+/* Print-specific adjustments */
+@media print {
+  .receipt-modal {
+    font-size: 12px;
+    line-height: 1.2;
+    border: none; /* Removes border for printing */
+  }
+
+  .receipt-modal .barcode-container {
+    display: block;
+  }
+
+  .receipt-modal .receipt-notes {
+    margin-top: 5px;
+  }
+}
+
+/* Screen-specific adjustments */
+@media screen {
+  .receipt-modal .barcode-container {
+    display: none;
+  }
+} 

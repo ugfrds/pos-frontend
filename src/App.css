@@ -1,0 +1,49 @@
+/* src/App.css */
+.table-card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    position: relative;
+}
+
+.table-card.active {
+    background-color: #e9f5e9;
+    border: 2px solid #28a745;
+}
+
+.active-orders {
+    background-color: #dc3545;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 14px;
+}
+/* src/App.css or equivalent */
+
+.receipt-panel {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.receipt-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.receipt-summary {
+    margin-top: 20px;
+}
+
+.checkout-button {
+    width: 100%;
+    margin-top: 10px;
+}

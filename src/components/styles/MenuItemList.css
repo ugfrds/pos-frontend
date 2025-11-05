@@ -1,0 +1,27 @@
+/* src/components/MenuItemList.css */
+
+.MenuItem {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+.MenuItem:hover {
+    transform: scale(1.02);
+}
+/*
+@media (max-width: 768px) {
+    .MenuItem {
+         Adjust padding or font sizes for smaller screens 
+    }
+}
+
+@media (max-width: 576px) {
+    .MenuItem {
+        Further adjustments for very small screens 
+    }
+}
+*/

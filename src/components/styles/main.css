@@ -1,0 +1,40 @@
+.app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  .container {
+    display: flex;
+    flex: 1;
+  }
+  
+  .main-content {
+    flex: 1;
+    padding: 20px;
+    background-color: #f4f4f4;
+  }
+  
+  .sidebar {
+    width: 250px;
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+  }
+  
+  .receipt-panel {
+    width: 300px;
+    background-color: #fff;
+    padding: 20px;
+    border-left: 1px solid #ddd;
+  }
+  
+  .header {
+    background-color: #333;
+    color: #fff;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  

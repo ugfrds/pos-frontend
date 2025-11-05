@@ -1,0 +1,31 @@
+.reports-page-container {
+  margin-top: 20px;
+}
+
+.reports-sidebar {
+  background-color: #f8f9fa;
+  padding: 20px 0;
+  border-right: 1px solid #dee2e6;
+  height: 100%;
+}
+
+.reports-sidebar .nav-link {
+  color: #333;
+  padding: 10px 20px;
+  margin-bottom: 5px;
+  border-radius: 0;
+}
+
+
+.reports-sidebar .nav-link:hover {
+  background-color: #e9ecef;
+}
+
+.reports-sidebar .nav-link.active {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.reports-content {
+  padding: 20px;
+}
