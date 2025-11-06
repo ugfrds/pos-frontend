@@ -19,7 +19,7 @@ const AddEditDebtorModal = ({ show, onHide, onSave, debtor }) => {
         dueDate: debtor.dueDate || "",
         status: debtor.status || "Unpaid",
         description: debtor.description || "",
-        id: debtor.id, // Keep the ID for updates
+        id: debtor.id,
       });
     } else {
       setDebtorData({
@@ -35,22 +35,18 @@ const AddEditDebtorModal = ({ show, onHide, onSave, debtor }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setDebtorData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setDebtorData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async () => {
     if (!debtorData.name || !debtorData.amount || !debtorData.dueDate) {
-      setError("Please fill in all required fields (Name, Amount, Due Date).");
+      setError("Please fill in all required fields.");
       return;
     }
     if (isNaN(parseFloat(debtorData.amount)) || parseFloat(debtorData.amount) <= 0) {
       setError("Amount must be a positive number.");
       return;
     }
-
     try {
       await onSave(debtorData);
       onHide();
@@ -69,43 +65,19 @@ const AddEditDebtorModal = ({ show, onHide, onSave, debtor }) => {
         <Form>
           <Form.Group className="mb-3">
             <Form.Label>Debtor Name</Form.Label>
-            <Form.Control
-              type="text"
-              name="name"
-              value={debtorData.name}
-              onChange={handleChange}
-              placeholder="Enter debtor name"
-              required
-            />
+            <Form.Control type="text" name="name" value={debtorData.name} onChange={handleChange} required/>
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Amount</Form.Label>
-            <Form.Control
-              type="number"
-              name="amount"
-              value={debtorData.amount}
-              onChange={handleChange}
-              placeholder="Enter amount owed"
-              required
-            />
+            <Form.Control type="number" name="amount" value={debtorData.amount} onChange={handleChange} required/>
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Due Date</Form.Label>
-            <Form.Control
-              type="date"
-              name="dueDate"
-              value={debtorData.dueDate}
-              onChange={handleChange}
-              required
-            />
+            <Form.Control type="date" name="dueDate" value={debtorData.dueDate} onChange={handleChange} required/>
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Status</Form.Label>
-            <Form.Select
-              name="status"
-              value={debtorData.status}
-              onChange={handleChange}
-            >
+            <Form.Select name="status" value={debtorData.status} onChange={handleChange}>
               <option value="Unpaid">Unpaid</option>
               <option value="Paid">Paid</option>
               <option value="Overdue">Overdue</option>
@@ -113,24 +85,13 @@ const AddEditDebtorModal = ({ show, onHide, onSave, debtor }) => {
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Description</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={3}
-              name="description"
-              value={debtorData.description}
-              onChange={handleChange}
-              placeholder="Add a description (e.g., invoice number, reason for debt)"
-            />
+            <Form.Control as="textarea" rows={3} name="description" value={debtorData.description} onChange={handleChange}/>
           </Form.Group>
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={onHide}>
-          Close
-        </Button>
-        <Button variant="primary" onClick={handleSubmit}>
-          Save Changes
-        </Button>
+        <Button variant="secondary" onClick={onHide}>Close</Button>
+        <Button variant="primary" onClick={handleSubmit}>Save Changes</Button>
       </Modal.Footer>
     </Modal>
   );

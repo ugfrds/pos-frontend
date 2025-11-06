@@ -1,12 +1,18 @@
 import React from "react";
-import { Button } from "react-bootstrap";
+import { Button, Row, Col } from "react-bootstrap";
 
-const DebtorsHeader = ({ onAddDebtor}) => {
+const DebtorsHeader = ({ onAddDebtor }) => {
   return (
-    <div className="d-flex justify-content-between align-items-center mb-4">
-      <h1>Debtors</h1>
-      <Button onClick={onAddDebtor}>Add Debtor</Button>
-    </div>
+    <Row className="align-items-center mb-3">
+      <Col>
+        <h3>Debtors</h3>
+      </Col>
+      <Col className="d-flex justify-content-end">
+        <Button variant="primary" onClick={onAddDebtor}>
+          Add Debtor
+        </Button>
+      </Col>
+    </Row>
   );
 };
 

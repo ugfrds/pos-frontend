@@ -1,68 +1,88 @@
-import React, { useEffect, useState } from "react";
-import { Card, Spinner, Alert } from "react-bootstrap";
+import React, { useEffect, useState, useContext } from "react";
+import { Card, Spinner, Alert, OverlayTrigger, Tooltip, Button, ListGroup, Dropdown } from "react-bootstrap";
 import { getDebtorsOverview } from "../../../api";
+import { FaExclamationCircle, FaSyncAlt } from "react-icons/fa";
+import { UserBusinessContext } from "../../../context/UserBusinessContext";
+import { FormatCurrency } from "../../../utils";
+
+const StatCard = ({ title, value }) => (
+  <ListGroup.Item className="d-flex justify-content-between align-items-start py-3">
+    <div className="ms-2 me-auto">
+      <div className="fw-bold">{title}</div>
+      {value}
+    </div>
+  </ListGroup.Item>
+);
 
 const DebtorsSidebar = () => {
+  const { business } = useContext(UserBusinessContext);
+  const currency = business?.settings?.currency || 'USD';
   const [overview, setOverview] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [period, setPeriod] = useState('thisMonth');
+
+  const fetchOverview = async () => {
+    try {
+      setLoading(true);
+      const data = await getDebtorsOverview(period);
+      setOverview(data);
+      setError(null);
+    } catch (err) {
+      setError("Failed to fetch debtors overview.");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchOverview = async () => {
-      try {
-        setLoading(true);
-        const data = await getDebtorsOverview();
-        setOverview(data);
-      } catch (err) {
-        setError("Failed to fetch debtors overview.");
-        console.error("Error fetching debtors overview:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchOverview();
-  }, []);
+  }, [period]);
 
-  if (loading) {
-    return (
-      <Card className="h-100 p-3 d-flex align-items-center justify-content-center">
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
-      </Card>
-    );
-  }
+  if (loading) return <div className="text-center p-4"><Spinner animation="border" /></div>;
+  if (error) return <Alert variant="danger"><FaExclamationCircle className="me-2"/> {error}</Alert>;
 
-  if (error) {
-    return (
-      <Card className="h-100 p-3">
-        <Alert variant="danger">{error}</Alert>
-      </Card>
-    );
-  }
+  const hasData = overview && (overview.totalUnpaid > 0 || overview.totalOverdue > 0 || overview.numberOfDebtors > 0);
 
-  // Check if overview data is empty or all values are zero/null
-  const hasData = overview && 
-                  (overview.totalUnpaid > 0 || 
-                   overview.totalOverdue > 0 || 
-                   overview.numberOfDebtors > 0);
+  const periodLabels = {
+    today: 'Today',
+    thisWeek: 'This Week',
+    thisMonth: 'This Month',
+  };
 
   return (
-    <Card className="h-100 p-3">
+    <Card className="shadow-sm rounded modern-card">
+      <Card.Header className="d-flex justify-content-between align-items-center bg-dark text-white">
+        <Card.Title as="h5" className="mb-0">Debtors Summary</Card.Title>
+        <div className="d-flex align-items-center">
+          <Dropdown onSelect={(p) => setPeriod(p)} className="me-2">
+            <Dropdown.Toggle variant="outline-light" size="sm">
+              {periodLabels[period] || 'Select Period'}
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item eventKey="today">Today</Dropdown.Item>
+              <Dropdown.Item eventKey="thisWeek">This Week</Dropdown.Item>
+              <Dropdown.Item eventKey="thisMonth">This Month</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+          <OverlayTrigger placement="top" overlay={<Tooltip>Refresh</Tooltip>}>
+            <Button size="sm" variant="outline-light" onClick={fetchOverview}>
+              <FaSyncAlt />
+            </Button>
+          </OverlayTrigger>
+        </div>
+      </Card.Header>
       <Card.Body>
-        <Card.Title>Debtors Summary</Card.Title>
-        <Card.Text>
-          {hasData ? (
-            <>
-              <p><strong>Total Unpaid:</strong> ${overview.totalUnpaid?.toFixed(2) || '0.00'}</p>
-              <p><strong>Total Overdue:</strong> ${overview.totalOverdue?.toFixed(2) || '0.00'}</p>
-              <p><strong>Number of Debtors:</strong> {overview.numberOfDebtors}</p>
-            </>
-          ) : (
-            <p>No debtors data available for the selected period.</p>
-          )}
-        </Card.Text>
+        {hasData ? (
+          <ListGroup variant="flush">
+            <StatCard title="Total Unpaid" value={FormatCurrency(overview.totalUnpaid, currency)} />
+            <StatCard title="Total Overdue" value={FormatCurrency(overview.totalOverdue, currency)} />
+            <StatCard title="Number of Debtors" value={overview.numberOfDebtors} />
+          </ListGroup>
+        ) : (
+          <p className="text-center">No debtors data available.</p>
+        )}
       </Card.Body>
     </Card>
   );

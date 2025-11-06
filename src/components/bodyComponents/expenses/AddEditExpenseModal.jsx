@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from "react";
-import {
-  Modal,
-  Button,
-  Form,
-} from "react-bootstrap";
+import { Modal, Button, Form } from "react-bootstrap";
 
-export default function AddEditExpenseModal({
+const AddEditExpenseModal = ({
   show,
   onHide,
   onSave,
   expense,
   existingCategories,
-}) {
+}) => {
   const [formData, setFormData] = useState({
     date: "",
     description: "",
@@ -21,7 +17,7 @@ export default function AddEditExpenseModal({
   });
 
   useEffect(() => {
-    if (expense && show) {
+    if (expense) {
       setFormData({
         date: expense.date || "",
         description: expense.description || "",
@@ -29,7 +25,7 @@ export default function AddEditExpenseModal({
         amount: expense.amount || "",
         customCategory: "",
       });
-    } else if (!expense && show) {
+    } else {
       const today = new Date().toISOString().slice(0, 10);
       setFormData({
         date: today,
@@ -46,25 +42,26 @@ export default function AddEditExpenseModal({
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-const handleSubmit = () => {
-  const finalCategory =
-    formData.category === "custom" ? formData.customCategory.trim() : formData.category;
+  const handleSubmit = () => {
+    const finalCategory =
+      formData.category === "custom"
+        ? formData.customCategory.trim()
+        : formData.category;
 
-  const expenseData = {
-    ...formData,
-    category: finalCategory || "Uncategorized",
-    id: expense?.id || null,
+    onSave({
+      ...formData,
+      category: finalCategory || "Uncategorized",
+      id: expense?.id || null,
+    });
+    onHide();
   };
 
-  onSave(expenseData);
-  onHide();
-};
-
-
   return (
-    <Modal show={show} onHide={onHide}>
-      <Modal.Header closeButton>
-        <Modal.Title>{expense ? "Update Expense" : "Add New Expense"}</Modal.Title>
+    <Modal show={show} onHide={onHide} centered>
+      <Modal.Header closeButton className="bg-dark text-white">
+        <Modal.Title>
+          {expense ? "Update Expense" : "Add New Expense"}
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
@@ -77,15 +74,18 @@ const handleSubmit = () => {
               onChange={handleChange}
             />
           </Form.Group>
+
           <Form.Group className="mb-3">
             <Form.Label>Description</Form.Label>
             <Form.Control
               type="text"
               name="description"
+              placeholder="Enter description"
               value={formData.description}
               onChange={handleChange}
             />
           </Form.Group>
+
           <Form.Group className="mb-3">
             <Form.Label>Category</Form.Label>
             <Form.Select
@@ -94,25 +94,28 @@ const handleSubmit = () => {
               onChange={handleChange}
             >
               <option value="">Select a category</option>
-              {existingCategories.map((category, index) => (
-                <option key={index} value={category}>
-                  {category}
+              {existingCategories.map((c, i) => (
+                <option key={i} value={c}>
+                  {c}
                 </option>
               ))}
-              <option value="custom">Create New Category</option>
+              <option value="custom">+ Create new</option>
             </Form.Select>
           </Form.Group>
+
           {formData.category === "custom" && (
             <Form.Group className="mb-3">
-              <Form.Label>Custom Category</Form.Label>
+              <Form.Label>New Category</Form.Label>
               <Form.Control
                 type="text"
                 name="customCategory"
                 value={formData.customCategory}
                 onChange={handleChange}
+                placeholder="Enter new category name"
               />
             </Form.Group>
           )}
+
           <Form.Group className="mb-3">
             <Form.Label>Amount</Form.Label>
             <Form.Control
@@ -120,6 +123,7 @@ const handleSubmit = () => {
               name="amount"
               value={formData.amount}
               onChange={handleChange}
+              placeholder="Enter amount"
             />
           </Form.Group>
         </Form>
@@ -134,4 +138,6 @@ const handleSubmit = () => {
       </Modal.Footer>
     </Modal>
   );
-}
+};
+
+export default AddEditExpenseModal;

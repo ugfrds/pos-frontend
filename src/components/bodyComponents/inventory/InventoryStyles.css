@@ -1,0 +1,45 @@
+/* Shared styles */
+.modern-card {
+  border: none;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.modern-table thead th {
+  background-color: #343a40;
+  color: white;
+  font-weight: 600;
+  border-bottom: 0;
+}
+
+.modern-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.icon-btn {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+/* Table container */
+.inventory-table-container {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Category filter */
+.category-filter .btn {
+  border-radius: 20px;
+  min-width: 90px;
+  transition: all 0.2s ease;
+}
+
+.category-filter .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(7, 234, 255, 0.3);
+}
