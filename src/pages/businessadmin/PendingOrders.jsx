@@ -10,8 +10,7 @@ import NavBar from '../../components/Dashboard/Navbar';
 import SplitBill from '../../components/SplitBill';
 import { ReceiptContent } from "../../components/ReceiptContent";
 import { useReactToPrint } from 'react-to-print';
-import './pendingOrders.css';
-
+import { invalidateCache } from "../../utils/Cache";
 
 const PendingOrders = () => {
   const navigate = useNavigate();
@@ -24,8 +23,8 @@ const PendingOrders = () => {
   const [tableNumber, setTableNumber] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [totalAmount, setTotalAmount] = useState(0);
-  const [totalOrders, setTotalOrders] = useState(0);
+  const [totalPendingAmount, setTotalPendingAmount] = useState(0);
+  const [totalPendingOrders, setTotalPendingOrders] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [notification, setNotification] = useState({ message: '', variant: '' });
@@ -38,9 +37,8 @@ const PendingOrders = () => {
   const currency = business.settings.currency;
   const receiptNotes = business.settings.receiptNotes;
   const contact = business.settings.phoneNumber;
-  const type =business.settings.businessType;
+  const type = business.settings.businessType;
   const location = business.settings.location;
-
 
   const fetchOrders = useCallback(async () => {
     setLoading(true);
@@ -56,8 +54,8 @@ const PendingOrders = () => {
       const response = await getAllOrders(filters, currentPage, ordersPerPage);
       setOrders(response.orders);
       setTotalPages(response.totalPages);
-      setTotalAmount(response.totalAmount || 0);
-      setTotalOrders(response.totalOrders || 0);
+      setTotalPendingAmount(response.totalPendingAmount || 0);
+      setTotalPendingOrders(response.totalPendingOrders || 0);
     } catch (err) {
       console.error('Failed to fetch orders:', err);
       setError('Failed to fetch orders. Please try again.');
@@ -91,16 +89,13 @@ const PendingOrders = () => {
 
   const handleCloseModal = () => setShowModal(false);
 
-  // Assuming `receiptRef` is the ref pointing to the receipt content component
   const handlePrintReceipt = useReactToPrint({
     content: () => receiptRef.current,
     documentTitle: `Receipt_${selectedOrder?.receiptNumber}`,
     onAfterPrint: async () => {
       try {
-        // Update the order status to mark it as printed on the server
         await updateOrderPrintStatus(selectedOrder.id, true);
 
-        // Ensure local orders state reflects the printed status
         setOrders((prevOrders) =>
           prevOrders.map((order) =>
             order.id === selectedOrder.id ? { ...order, isPrinted: true } : order
@@ -113,7 +108,6 @@ const PendingOrders = () => {
         });
       } catch (err) {
         console.error('Failed to update print status:', err);
-        // Revert optimistic UI
         setOrders((prevOrders) =>
           prevOrders.map((order) =>
             order.id === selectedOrder.id ? { ...order, isPrinted: false } : order
@@ -121,49 +115,45 @@ const PendingOrders = () => {
         );
         setNotification({ message: 'Failed to update print status', variant: 'danger' });
       } finally {
-        // remove from printingIds
         setPrintingIds((prev) => prev.filter((id) => id !== selectedOrder.id));
         if (stopLoading) stopLoading();
       }
     },
   });
 
-  // Trigger print with optimistic UI
   const triggerPrint = (order) => {
     if (!order) return;
-    // mark printing in-flight
     setPrintingIds((prev) => [...prev, order.id]);
-    // optimistic mark printed locally so UI updates immediately
     setOrders((prev) => prev.map((o) => (o.id === order.id ? { ...o, isPrinted: true } : o)));
-    // set selected order so receipt content is available
     setSelectedOrder(order);
-    // call the print handler
     try {
       if (startLoading) startLoading();
       handlePrintReceipt();
     } catch (err) {
       console.error('Print trigger failed', err);
-      // revert optimistic state
       setOrders((prev) => prev.map((o) => (o.id === order.id ? { ...o, isPrinted: false } : o)));
       setPrintingIds((prev) => prev.filter((id) => id !== order.id));
       if (stopLoading) stopLoading();
       setNotification({ message: 'Failed to start print', variant: 'danger' });
     }
   };
-  
 
   const handleEditOrder = (order) => {
-    // Navigate to OrderPage and pass the order in navigation state (no localStorage)
     navigate(`/order/${order.tableNumber}`, { state: { editOrder: order } });
   };
 
   const handleCloseOrder = async (order) => {
-    // mark as closing to show an in-flight state
     setClosingIds((prev) => [...prev, order.id]);
     if (startLoading) startLoading();
     try {
       await updateOrderStatus(order.id, 'Completed');
+      invalidateCache('inventory-*');
+      
+      // Update both orders list and totals
       setOrders((prev) => prev.filter((o) => o.id !== order.id));
+      setTotalPendingOrders((prev) => prev - 1);
+      setTotalPendingAmount((prev) => prev - order.totalAmount);
+      
       setNotification({ message: `Order Closed successfully.`, variant: 'success' });
     } catch (err) {
       console.error('Failed to close order:', err);
@@ -180,58 +170,43 @@ const PendingOrders = () => {
     if (splitType === "equal") {
       const splitAmount = (totalAmount / numPersons).toFixed(2);
   
-      // Generate equal splits
       const splits = Array.from({ length: numPersons }, () => ({
         amount: parseFloat(splitAmount),
-        method: null, // Payment method to be selected
+        method: null,
       }));
   
-      // Send splits for processing
       processPayments(splits);
     } else if (splitType === "custom") {
       const totalSplitAmount = customSplits.reduce((sum, split) => sum + parseFloat(split.amount || 0), 0);
   
-      // Validate custom splits
       if (totalSplitAmount !== totalAmount) {
         alert("The total split amount does not match the order total.");
         return;
       }
   
-      // Send custom splits for processing
       processPayments(customSplits);
     }
   };
   
   const processPayments = (splits) => {
-    // Example: Store payment details in a database or state
     splits.forEach((split, index) => {
       console.log(`Processing payment for Person ${index + 1}: ${split.amount}, Method: ${split.method || "Not selected yet"}`);
-      
-      // Add API call or state update logic here
-      // Example:
-      // savePayment({
-      //   orderId: selectedOrder.id,
-      //   amount: split.amount,
-      //   paymentMethod: split.method,
-      // });
     });
   
     alert("Split payments processed successfully!");
-    // Optionally close modal after processing
     handleCloseModal();
   };
-  
 
   return (
     <>
       <NavBar />
       <Container className="mt-4">
         <h1 className="mb-4 text-center">Tickets</h1>
-        {/* Summary: pending orders count & total amount */}
+        {/* Updated summary with correct variable names */}
         <div className="d-flex justify-content-center mb-3">
           <div>
-            <strong>{totalOrders}</strong> pending order{totalOrders !== 1 ? 's' : ''} •
-            <span className="ms-2">Total: <strong>{FormatCurrency(totalAmount, currency)}</strong></span>
+            <strong>{totalPendingOrders}</strong> pending order{totalPendingOrders !== 1 ? 's' : ''} •
+            <span className="ms-2">Total: <strong>{FormatCurrency(totalPendingAmount, currency)}</strong></span>
           </div>
         </div>
         <Notification
@@ -277,9 +252,7 @@ const PendingOrders = () => {
               <thead>
                 <tr>
                   <th>Receipt Number</th>
-                   {/* Conditionally render Table Number */}
                   {type === "Bar" || type === "Restaurant" ? <th>Table Number</th> : null}
-         
                   <th>Amount</th>
                   <th>Served By</th>
                   <th>Order Time</th>
@@ -301,28 +274,28 @@ const PendingOrders = () => {
                         Review
                       </Button>
                     </td>
-                          <td>
-                            <Button
-                              variant="success"
-                              onClick={() => triggerPrint(order)}
-                              disabled={printingIds.includes(order.id)}
-                            >
-                              {printingIds.includes(order.id) ? (
-                                <Spinner animation="border" size="sm" />
-                              ) : (
-                                'Print Receipt'
-                              )}
-                            </Button>
-                          </td>
-                          <td>
-                            <Button
-                              disabled={!['BusinessAdmin', 'Supervisor', 'Cashier'].includes(userRole) || closingIds.includes(order.id)}
-                              variant="danger"
-                              onClick={() => handleCloseOrder(order)}
-                            >
-                              {closingIds.includes(order.id) ? <Spinner animation="border" size="sm" /> : 'Close Order'}
-                            </Button>
-                          </td>
+                    <td>
+                      <Button
+                        variant="success"
+                        onClick={() => triggerPrint(order)}
+                        disabled={printingIds.includes(order.id)}
+                      >
+                        {printingIds.includes(order.id) ? (
+                          <Spinner animation="border" size="sm" />
+                        ) : (
+                          'Print Receipt'
+                        )}
+                      </Button>
+                    </td>
+                    <td>
+                      <Button
+                        disabled={!['BusinessAdmin', 'Supervisor', 'Cashier'].includes(userRole) || closingIds.includes(order.id)}
+                        variant="danger"
+                        onClick={() => handleCloseOrder(order)}
+                      >
+                        {closingIds.includes(order.id) ? <Spinner animation="border" size="sm" /> : 'Close Order'}
+                      </Button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -358,14 +331,12 @@ const PendingOrders = () => {
         )}
 
         {selectedOrder && ( 
-          
           <Modal className="receipt-modal" show={showModal} onHide={handleCloseModal} size="md" centered>
             <Modal.Header className="no-print" closeButton>
               <Modal.Title>Order Review</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Tabs defaultActiveKey="receipt" id="receipt-tabs" className="mb-3">
-                {/* Tab for Receipt Info */}
                 <Tab eventKey="receipt" title="Receipt Info">
                   <ReceiptContent
                     ref={receiptRef}
@@ -378,7 +349,6 @@ const PendingOrders = () => {
                   />
                 </Tab>
           
-                {/* Tab for Split Bill */}
                 <Tab eventKey="splitBill" title="Split Bill">
                   <SplitBill
                     selectedOrder={selectedOrder}
@@ -415,8 +385,7 @@ const PendingOrders = () => {
               </Button>
             </Modal.Footer>
           </Modal>
-          
-  )}
+        )}
       </Container>
     </>
   );

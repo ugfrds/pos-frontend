@@ -30,8 +30,9 @@ export default function AddEditExpenseModal({
         customCategory: "",
       });
     } else if (!expense && show) {
+      const today = new Date().toISOString().slice(0, 10);
       setFormData({
-        date: "",
+        date: today,
         description: "",
         category: "",
         amount: "",
