@@ -1,4 +1,5 @@
-import { ListGroup, Button } from 'react-bootstrap';
+import { ListGroup, Button, Spinner } from 'react-bootstrap';
+import { X, Plus, Minus } from 'lucide-react';
 import './ReceiptPanel.css'; // Import the CSS file for additional styling
 import { FormatCurrency } from '../../utils/index';
 import { useContext } from 'react';
@@ -25,8 +26,8 @@ const ReceiptPanel = ({
         <div className="receipt-panel">
             <header className="receipt-header">
                 <h4>Order Summary</h4>
-                {/* Uncomment when restaurant name is available */}
-                {/* <p className="restaurant-name">{restaurantName}</p> */}
+                
+                <p className="restaurant-name">{restaurantName}</p> 
                 <p className="table-number">Table: {tableNumber}</p>
             </header>
 
@@ -35,37 +36,31 @@ const ReceiptPanel = ({
                     <ListGroup.Item key={index} className="receipt-item">
                         <div className="d-flex justify-content-between align-items-center">
                             <div className="item-info d-flex align-items-center">
-                                <Button 
-                                    variant="outline-secondary" 
-                                    size="sm" 
+                                <span 
+                                    className="receipt-panel-quantity-btn receipt-panel-decrease-btn me-2"
                                     onClick={() => onDecreaseQuantity(index)}
                                     disabled={item.quantity <= 1}
-                                    className="me-2"
                                 >
-                                    -
-                                </Button>
-                                <span className="item-name me-2">{item.name}</span>
-                                <span className="item-quantity">x {item.quantity}</span>
-                            </div>
+                                    <Minus size={16} />
+                                </span>
+                                     <span className="item-name me-2">{item.name}</span>
+                                     <span className="item-quantity quantity-badge">{item.quantity}</span>                            </div>
                             <div className="item-actions d-flex align-items-center">
                                 <span className="item-price me-2">
                                     {FormatCurrency(item.price, currency)}
                                 </span>
-                                <Button 
-                                    variant="outline-secondary" 
-                                    size="sm" 
+                                <span 
+                                    className="receipt-panel-quantity-btn receipt-panel-increase-btn"
                                     onClick={() => onIncreaseQuantity(index)}
                                 >
-                                    +
-                                </Button>
-                                <Button 
-                                    variant="outline-danger" 
-                                    size="sm" 
-                                    className="ms-2" 
+                                    <Plus size={16} />
+                                </span>
+                                <span 
+                                    className="receipt-panel-remove-item-btn ms-2" 
                                     onClick={() => onRemoveItem(index)}
                                 >
-                                    x
-                                </Button>
+                                    <X size={16} />
+                                </span>
                             </div>
                         </div>
                         {item.notes && <small className="text-muted item-notes">({item.notes})</small>}
@@ -94,7 +89,7 @@ const ReceiptPanel = ({
                         variant="success" 
                         className="w-100 mb-2" 
                         onClick={handlePlaceOrder}
-                        disabled={receiptItems.length === 0} // Disable if no items are in the order
+                        disabled={receiptItems.length === 0} 
                     >
                         Place Order
                     </Button>

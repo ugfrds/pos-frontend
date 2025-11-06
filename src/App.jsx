@@ -10,6 +10,9 @@ import FirstVisitBanner from "./components/firstvisitBanner";
 
 // Pages
 import LoginPage from './pages/general/loginPage';
+import NewUser from './pages/general/NewUser';
+import SelfRegister from './pages/general/SelfRegister';
+import ForgotPassword from './pages/general/ForgotPassword';
 
 import AdminDashboard from './pages/superadmin/AdminDashboard';
 import BusinessDashboard from './pages/businessadmin/BusinessDashboard';
@@ -24,7 +27,6 @@ import Dashboard from './pages/general/Dashboard';
 import TablesPage from './pages/general/TablesPage';
 import OrderPage from './pages/general/OrderPage';
 import MenuPage from './pages/general/MenuPage';
-import UserSetupForm from './pages/general/UserSetupForm';
 import UnauthorizedPage from './pages/general/UnauthorizedPage';
 import SuperAdminForm from './pages/superadmin/superadmin';
 import SalesReport from './pages/businessadmin/SalesReport';
@@ -67,7 +69,10 @@ const App = () => {
         <GlobalLoader />
         <Routes>
       <Route path="/" element={<LoginPage />} />
-      <Route path="/newuser" element={<UserSetupForm />} />
+      <Route path="/self-register" element={<SelfRegister />} />
+      <Route path="/newuser" element={<NewUser />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+
 
       {/* Protected routes for superadmin */}
       <Route

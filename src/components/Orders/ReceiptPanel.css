@@ -21,6 +21,10 @@
     color: #333; /* Darker color for better contrast */
 }
 
+.restaurant-name {
+    font-weight: 600; /* Semi-bold for restaurant name */
+}
+
 .receipt-list {
     margin-bottom: 20px; /* Space before the summary */
 }
@@ -52,9 +56,59 @@
     font-weight:medium; /* Make the quantity bold */
 }
 
+.quantity-badge {
+    display: inline-flex; /* Use inline-flex to center content */
+    align-items: center;
+    justify-content: center;
+    background-color: #007bff; /* Bootstrap primary blue */
+    color: white;
+    border-radius: 50%; /* Make it circular */
+    width: 24px; /* Fixed width */
+    height: 24px; /* Fixed height */
+    font-size: 0.75rem; /* Smaller font size */
+    font-weight: bold;
+    margin-left: 8px; /* Space from the item name */
+    flex-shrink: 0; /* Prevent shrinking */
+}
+
 .item-actions {
     display: flex;
     align-items: center;
+}
+
+.receipt-panel-quantity-btn,
+.receipt-panel-remove-item-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px; /* Smaller size */
+    height: 28px; /* Smaller size */
+    border-radius: 50%; /* Circular shape */
+    border: 1px solid #ced4da; /* Light border */
+    background-color: #fff; /* White background */
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    color: #495057; /* Darker icon color */
+}
+
+.receipt-panel-quantity-btn:hover {
+    background-color: #e2e6ea;
+    border-color: #dae0e5;
+}
+
+.receipt-panel-quantity-btn[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.receipt-panel-remove-item-btn {
+    border-color: #dc3545; /* Red border for remove */
+    color: #dc3545; /* Red icon color */
+}
+
+.receipt-panel-remove-item-btn:hover {
+    background-color: #dc3545;
+    color: #fff;
 }
 
 .item-price {
