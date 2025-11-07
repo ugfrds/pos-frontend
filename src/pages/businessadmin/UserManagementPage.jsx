@@ -287,7 +287,7 @@ const UserManagementPage = () => {
                             variant="outline-secondary"
                             size="sm"
                             onClick={() => navigate('/admin/staff/view-profile', { state: { userId: user.id } })}
-                            title="View Profile (No ID in URL)"
+                            title="View Profile"
                           >
                             <Eye size={16} />
                           </Button>
