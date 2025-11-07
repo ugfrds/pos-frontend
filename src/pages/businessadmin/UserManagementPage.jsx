@@ -430,7 +430,7 @@ const UserManagementPage = () => {
       <footer className="text-center mt-5 py-4">
         <p className="text-muted">
           <Shield size={16} className="me-1" />
-          © 2024 Wisecorp Technologies. All rights reserved.
+          © {new Date().getFullYear()} Wisecorp Technologies. All rights reserved.
         </p>
       </footer>
     </Container>
