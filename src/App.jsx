@@ -30,6 +30,7 @@ import MenuPage from './pages/general/MenuPage';
 import UnauthorizedPage from './pages/general/UnauthorizedPage';
 import SuperAdminForm from './pages/superadmin/superadmin';
 import SalesReport from './pages/businessadmin/SalesReport';
+import Reports from './pages/superadmin/reports';
 
 // Components
 
@@ -89,6 +90,7 @@ const App = () => {
         <Route path="manage-users" element={<ManageUsers />} />
         <Route path="add-user" element={<AddUser />} />
         <Route path="settings" element={<Settings />} />
+        <Route path="reports" element={<Reports />} />
       </Route>
 
       {/* Protected routes for admin */}
