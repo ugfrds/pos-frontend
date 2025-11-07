@@ -125,7 +125,10 @@ const StaffProfileView = () => {
             <Col md={6}>
               <p><strong>ID Type:</strong> {profileData.idType || "-"}</p>
               <p><strong>ID Number:</strong> {profileData.idNumber || "-"}</p>
-
+            </Col>
+          </Row>
+          <Row className="mt-3">
+            <Col xs={6}>
               {profileData.idFrontImage && (
                 <div className="mb-3">
                   <p className="fw-semibold mb-1">Front Image</p>
@@ -133,6 +136,13 @@ const StaffProfileView = () => {
                     src={profileData.idFrontImage}
                     thumbnail
                     className="rounded-3 mb-2"
+                     style={{
+    width: "100%",         // responsive
+    maxWidth: "250px",     // limit preview width
+    height: "180px",       // fixed height for consistency
+    objectFit: "cover",    // crop nicely instead of stretching
+    objectPosition: "center",
+  }}
                   />
                   <div>
                     <a
@@ -147,7 +157,7 @@ const StaffProfileView = () => {
               )}
             </Col>
 
-            <Col md={6}>
+            <Col xs={6}>
               {profileData.idBackImage && (
                 <div className="mb-3">
                   <p className="fw-semibold mb-1">Back Image</p>
@@ -155,6 +165,13 @@ const StaffProfileView = () => {
                     src={profileData.idBackImage}
                     thumbnail
                     className="rounded-3 mb-2"
+                     style={{
+    width: "100%",         // responsive
+    maxWidth: "250px",     // limit preview width
+    height: "180px",       // fixed height for consistency
+    objectFit: "cover",    // crop nicely instead of stretching
+    objectPosition: "center",
+  }}
                   />
                   <div>
                     <a
