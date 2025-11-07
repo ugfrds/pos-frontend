@@ -107,7 +107,32 @@ const fetchUsers = async () => {
 // Get user by ID
 const getUserById = async (id) => {
     try {
-        const response = await api.get(`/businessadmin/user/${id}`, setAuthHeader());
+        const response = await api.get(`/staff/${id}/profile`, setAuthHeader());
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+};
+
+// Update user profile
+const updateUserProfile = async (id, profileData) => {
+    try {
+        const response = await api.put(`/staff/${id}/profile`, profileData, setAuthHeader());
+        return response.data;
+    } catch (error) {
+        handleApiError(error);
+    }
+};
+
+// Upload document
+const uploadDocument = async (userId, formData) => {
+    try {
+        const response = await api.post(`/staff/${userId}/upload-document`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: `Bearer ${getAuthToken()}`,
+            },
+        });
         return response.data;
     } catch (error) {
         handleApiError(error);
@@ -773,6 +798,8 @@ export {
     unlockUser,
     fetchUsers,
     getUserById,
+    updateUserProfile,
+    uploadDocument,
     //business
     createBusiness,
     updateBusinessInfo,

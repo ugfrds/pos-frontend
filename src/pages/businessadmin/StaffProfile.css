@@ -1,0 +1,39 @@
+.staff-profile-container {
+  max-width: 1100px;
+}
+
+.modern-tabs .nav-link {
+  font-weight: 500;
+  color: #6c757d;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.modern-tabs .nav-link.active {
+  color: #0d6efd;
+  background-color: #e9f2ff;
+  border-radius: 0.75rem;
+}
+
+.form-label {
+  font-weight: 600;
+  color: #495057;
+}
+
+input,
+textarea,
+select {
+  border-radius: 0.5rem !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #0d6efd !important;
+  box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.25) !important;
+}
+
+.card {
+  border-radius: 1rem !important;
+}
