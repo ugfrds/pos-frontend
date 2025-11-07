@@ -173,11 +173,11 @@ const UserManagementPage = () => {
           <ArrowLeft size={20} className="me-2" />
           Back
         </Button>
-        <div className="text-center">
+        {/* <div className="text-center">
           <h1 className="text-danger mb-0">wisePOS</h1>
           <small className="text-muted">User Management System</small>
-        </div>
-        <div style={{ width: '100px' }}></div>
+        </div> */}
+        {/* <div style={{ width: '100px' }}></div> */}
       </div>
 
       {/* Management Card */}
