@@ -1,7 +1,8 @@
 
 import { ListGroup, Button } from 'react-bootstrap';
+import { Eye } from 'lucide-react';
 
-const UserCard = ({ user, onEdit, onDelete }) => {
+const UserCard = ({ user, onEdit, onDelete, onView }) => {
     return (
         <ListGroup.Item className="d-flex justify-content-between align-items-center">
             <div>
@@ -11,6 +12,9 @@ const UserCard = ({ user, onEdit, onDelete }) => {
                 <p className="text-muted">Status: {user.isLocked ? 'Locked' : 'Active'}</p>
             </div>
             <div>
+                <Button variant="info" onClick={onView} className="me-2">
+                    <Eye size={16} />
+                </Button>
                 <Button variant="warning" onClick={onEdit} className="me-2">
                     Edit
                 </Button>

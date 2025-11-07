@@ -283,6 +283,14 @@ const UserManagementPage = () => {
                           >
                             <UserCheck size={16} />
                           </Button>
+                          <Button
+                            variant="outline-secondary"
+                            size="sm"
+                            onClick={() => navigate('/admin/staff/view-profile', { state: { userId: user.id } })}
+                            title="View Profile (No ID in URL)"
+                          >
+                            <Eye size={16} />
+                          </Button>
                           
                           <Button
                             disabled={!canModifyUser(user)}

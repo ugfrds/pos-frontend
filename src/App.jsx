@@ -49,6 +49,7 @@ import ExpendituresPage from './pages/businessadmin/expendituresPage';
 import AdminInventoryPage from './pages/businessadmin/AdminInventoryPage';
 import StaffProfile from './pages/businessadmin/StaffProfile';
 import StaffProfileListPage from './pages/businessadmin/StaffProfileListPage';
+import StaffProfileView from './pages/businessadmin/StaffProfileView';
 
 
 // Layouts
@@ -159,15 +160,22 @@ const App = () => {
       </PrivateRoute>
     }
   />
-  <Route
-    path="staff-list"
-    element={
-      <PrivateRoute roles={['BusinessAdmin', 'Supervisor']}>
-        <StaffProfileListPage />
-      </PrivateRoute>
-    }
-  />
-
+     <Route
+      path="staff-list"
+      element={
+        <PrivateRoute roles={['BusinessAdmin', 'Supervisor']}>
+          <StaffProfileListPage />
+        </PrivateRoute>
+      }
+    />
+    <Route
+      path="staff/view-profile"
+      element={
+        <PrivateRoute roles={['BusinessAdmin', 'Supervisor']}>
+          <StaffProfileView />
+        </PrivateRoute>
+      }
+    />
    <Route
     path="sales-report"
     element={
