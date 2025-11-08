@@ -1,3 +1,4 @@
+// SelfRegister.jsx - Updated with real API integration
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import {
@@ -17,8 +18,10 @@ import {
   Globe,
   Briefcase,
   User,
+  AlertCircle,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { selfRegister, validateBusinessData } from '../../services/api';
 import './SelfRegister.css';
 
 const SelfRegister = () => {
@@ -39,17 +42,53 @@ const SelfRegister = () => {
   const [showConfirmAdminPassword, setShowConfirmAdminPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [registrationResult, setRegistrationResult] = useState(null);
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+  };
+
+  const validateStep1 = () => {
+    const stepErrors = {};
+    
+    if (!formData.businessName.trim()) {
+      stepErrors.businessName = 'Business name is required';
+    }
+    
+    if (!formData.businessEmail.trim()) {
+      stepErrors.businessEmail = 'Business email is required';
+    } else if (!/\S+@\S+\.\S+/.test(formData.businessEmail)) {
+      stepErrors.businessEmail = 'Please enter a valid email address';
+    }
+    
+    if (!formData.businessPhone.trim()) {
+      stepErrors.businessPhone = 'Business phone is required';
+    }
+    
+    if (!formData.businessAddress.trim()) {
+      stepErrors.businessAddress = 'Business address is required';
+    }
+    
+    if (!formData.businessType) {
+      stepErrors.businessType = 'Please select a business type';
+    }
+
+    setErrors(stepErrors);
+    return Object.keys(stepErrors).length === 0;
   };
 
   const nextStep = () => {
-    // Basic validation for current step before proceeding
     if (step === 1) {
-      if (!formData.businessName || !formData.businessEmail || !formData.businessPhone || !formData.businessAddress || !formData.businessType) {
-        toast.error('Please fill in all required business details.');
+      if (!validateStep1()) {
+        toast.error('Please fix the errors before proceeding');
         return;
       }
     }
@@ -58,29 +97,66 @@ const SelfRegister = () => {
 
   const prevStep = () => {
     setStep(step - 1);
+    setErrors({});
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData.adminPassword !== formData.confirmAdminPassword) {
-      toast.error('Passwords do not match');
-      return;
-    }
-
-    if (formData.adminPassword.length < 6) {
-      toast.error('Password must be at least 6 characters long');
+    // Validate step 2
+    const validationErrors = validateBusinessData(formData);
+    if (validationErrors.length > 0) {
+      validationErrors.forEach(error => toast.error(error));
       return;
     }
 
     setIsLoading(true);
+    setErrors({});
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Prepare data for API
+      const registrationData = {
+        businessName: formData.businessName,
+        ownerName: formData.adminName,
+        email: formData.adminEmail,
+        phone: formData.businessPhone,
+        password: formData.adminPassword,
+        businessType: formData.businessType,
+        businessAddress: formData.businessAddress,
+        businessWebsite: formData.businessWebsite,
+        contactEmail: formData.businessEmail,
+        contactPhone: formData.businessPhone
+      };
+
+      const result = await selfRegister(registrationData);
+      
+      setRegistrationResult(result);
       setShowSuccess(true);
-      toast.success('Business and Admin profile created successfully! You can now log in.');
+      
+      toast.success(result.message || 'Business registered successfully! Please check your email for verification.');
+
     } catch (error) {
-      toast.error('Failed to register. Please try again.');
+      console.error('Registration error:', error);
+      
+      // Handle specific error cases
+      if (error.missingFields) {
+        toast.error(`Missing fields: ${error.missingFields.join(', ')}`);
+      } else if (error.details) {
+        toast.error(error.details);
+      } else {
+        toast.error(error.message || 'Registration failed. Please try again.');
+      }
+
+      // Set field-specific errors if provided by API
+      if (error.details && Array.isArray(error.details)) {
+        const fieldErrors = {};
+        error.details.forEach(detail => {
+          if (detail.field) {
+            fieldErrors[detail.field] = detail.message;
+          }
+        });
+        setErrors(fieldErrors);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -114,13 +190,19 @@ const SelfRegister = () => {
                   id="businessName"
                   type="text"
                   name="businessName"
-                  className="form-input"
+                  className={`form-input ${errors.businessName ? 'error' : ''}`}
                   placeholder="e.g., My Awesome Restaurant"
                   value={formData.businessName}
                   onChange={handleInputChange}
                   disabled={isLoading}
                   required
                 />
+                {errors.businessName && (
+                  <div className="error-message">
+                    <AlertCircle size={14} />
+                    {errors.businessName}
+                  </div>
+                )}
               </div>
 
               <div className="input-group">
@@ -132,13 +214,19 @@ const SelfRegister = () => {
                   id="businessEmail"
                   type="email"
                   name="businessEmail"
-                  className="form-input"
+                  className={`form-input ${errors.businessEmail ? 'error' : ''}`}
                   placeholder="contact@mybusiness.com"
                   value={formData.businessEmail}
                   onChange={handleInputChange}
                   disabled={isLoading}
                   required
                 />
+                {errors.businessEmail && (
+                  <div className="error-message">
+                    <AlertCircle size={14} />
+                    {errors.businessEmail}
+                  </div>
+                )}
               </div>
 
               <div className="input-group">
@@ -150,13 +238,19 @@ const SelfRegister = () => {
                   id="businessPhone"
                   type="tel"
                   name="businessPhone"
-                  className="form-input"
+                  className={`form-input ${errors.businessPhone ? 'error' : ''}`}
                   placeholder="+1 234 567 8900"
                   value={formData.businessPhone}
                   onChange={handleInputChange}
                   disabled={isLoading}
                   required
                 />
+                {errors.businessPhone && (
+                  <div className="error-message">
+                    <AlertCircle size={14} />
+                    {errors.businessPhone}
+                  </div>
+                )}
               </div>
 
               <div className="input-group">
@@ -168,13 +262,19 @@ const SelfRegister = () => {
                   id="businessAddress"
                   type="text"
                   name="businessAddress"
-                  className="form-input"
+                  className={`form-input ${errors.businessAddress ? 'error' : ''}`}
                   placeholder="123 Business St, City, Country"
                   value={formData.businessAddress}
                   onChange={handleInputChange}
                   disabled={isLoading}
                   required
                 />
+                {errors.businessAddress && (
+                  <div className="error-message">
+                    <AlertCircle size={14} />
+                    {errors.businessAddress}
+                  </div>
+                )}
               </div>
 
               <div className="input-group">
@@ -202,7 +302,7 @@ const SelfRegister = () => {
                 <select
                   id="businessType"
                   name="businessType"
-                  className="form-input"
+                  className={`form-input ${errors.businessType ? 'error' : ''}`}
                   value={formData.businessType}
                   onChange={handleInputChange}
                   disabled={isLoading}
@@ -213,8 +313,15 @@ const SelfRegister = () => {
                   <option value="retail">Retail</option>
                   <option value="cafe">Cafe</option>
                   <option value="bar">Bar</option>
+                  <option value="hotel">Hotel</option>
                   <option value="other">Other</option>
                 </select>
+                {errors.businessType && (
+                  <div className="error-message">
+                    <AlertCircle size={14} />
+                    {errors.businessType}
+                  </div>
+                )}
               </div>
 
               <button type="button" onClick={nextStep} className="next-step-button" disabled={isLoading}>
@@ -245,13 +352,19 @@ const SelfRegister = () => {
                   id="adminName"
                   type="text"
                   name="adminName"
-                  className="form-input"
+                  className={`form-input ${errors.adminName ? 'error' : ''}`}
                   placeholder="Your Full Name"
                   value={formData.adminName}
                   onChange={handleInputChange}
                   disabled={isLoading}
                   required
                 />
+                {errors.adminName && (
+                  <div className="error-message">
+                    <AlertCircle size={14} />
+                    {errors.adminName}
+                  </div>
+                )}
               </div>
 
               <div className="input-group">
@@ -263,13 +376,19 @@ const SelfRegister = () => {
                   id="adminEmail"
                   type="email"
                   name="adminEmail"
-                  className="form-input"
+                  className={`form-input ${errors.adminEmail ? 'error' : ''}`}
                   placeholder="admin@mybusiness.com"
                   value={formData.adminEmail}
                   onChange={handleInputChange}
                   disabled={isLoading}
                   required
                 />
+                {errors.adminEmail && (
+                  <div className="error-message">
+                    <AlertCircle size={14} />
+                    {errors.adminEmail}
+                  </div>
+                )}
                 <p className="input-help">
                   This will be the primary email for your admin account
                 </p>
@@ -285,7 +404,7 @@ const SelfRegister = () => {
                     id="adminPassword"
                     type={showAdminPassword ? "text" : "password"}
                     name="adminPassword"
-                    className="form-input"
+                    className={`form-input ${errors.adminPassword ? 'error' : ''}`}
                     placeholder="Create a strong password"
                     value={formData.adminPassword}
                     onChange={handleInputChange}
@@ -301,6 +420,12 @@ const SelfRegister = () => {
                     {showAdminPassword ? <EyeOff className="toggle-icon" /> : <Eye className="toggle-icon" />}
                   </button>
                 </div>
+                {errors.adminPassword && (
+                  <div className="error-message">
+                    <AlertCircle size={14} />
+                    {errors.adminPassword}
+                  </div>
+                )}
                 <p className="input-help">
                   Minimum 6 characters with letters and numbers
                 </p>
@@ -315,7 +440,7 @@ const SelfRegister = () => {
                     id="confirmAdminPassword"
                     type={showConfirmAdminPassword ? "text" : "password"}
                     name="confirmAdminPassword"
-                    className="form-input"
+                    className={`form-input ${errors.confirmAdminPassword ? 'error' : ''}`}
                     placeholder="Confirm your password"
                     value={formData.confirmAdminPassword}
                     onChange={handleInputChange}
@@ -331,6 +456,12 @@ const SelfRegister = () => {
                     {showConfirmAdminPassword ? <EyeOff className="toggle-icon" /> : <Eye className="toggle-icon" />}
                   </button>
                 </div>
+                {errors.confirmAdminPassword && (
+                  <div className="error-message">
+                    <AlertCircle size={14} />
+                    {errors.confirmAdminPassword}
+                  </div>
+                )}
               </div>
 
               <button
@@ -441,6 +572,12 @@ const SelfRegister = () => {
 
             <div className="self-register-footer">
               <p className="footer-text">
+                Already have an account?{' '}
+                <Link to="/login" className="login-link">
+                  Sign in here
+                </Link>
+              </p>
+              <p className="footer-text">
                 &copy; {new Date().getFullYear()} Wisecorp Technologies Ltd. All rights reserved.
               </p>
               <p className="developer-credit">
@@ -466,8 +603,12 @@ const SelfRegister = () => {
             <div className="modal-content">
               <CheckCircle className="success-icon" />
               <h3>Registration Complete!</h3>
-              <p>Your business and admin profile have been created successfully.</p>
-              <p>You will now be redirected to the login page.</p>
+              <p>{registrationResult?.message || 'Your business has been registered successfully.'}</p>
+              {registrationResult?.data?.verification?.emailSent && (
+                <div className="verification-notice">
+                  <p>Please check your email to verify your account and complete the setup process.</p>
+                </div>
+              )}
               <button onClick={handleSuccessClose} className="modal-button">
                 Continue to Login
               </button>
