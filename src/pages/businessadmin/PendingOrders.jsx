@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useContext, useCallback } from 'rea
 import { getAllOrders, updateOrderStatus, updateOrderPrintStatus } from '../../api';
 import { FormatCurrency } from '../../utils';
 import { invalidateCache } from '../../utils/Cache';
-import { Container, Row, Form, Button, Table, Pagination, Spinner, Alert } from 'react-bootstrap';
+import { Container, Row, Form, Button, Table, Pagination, Spinner, Alert ,Modal,Tabs, Tab} from 'react-bootstrap';
 import { LoadingContext } from '../../context/LoadingContext';
 import Notification from '../../components/Notification';
 import NavBar from '../../components/Dashboard/Navbar';
@@ -89,6 +89,8 @@ const PendingOrders = () => {
     const formattedDate = date.toLocaleDateString('en-GB');
     return `${time} ${formattedDate}`;
   };
+
+  const handleCloseModal = () => setShowModal(false);
 
   /** Select/Deselect orders */
   const handleSelectAll = (e) => {
@@ -184,6 +186,34 @@ const PendingOrders = () => {
   /** Edit order */
   const handleEditOrder = (order) => {
     navigate(`/order/${order.tableNumber}`, { state: { editOrder: order } });
+  };
+
+    const handleSplitPayment = (splitType, numPersons, customSplits) => {
+    const totalAmount = selectedOrder.totalAmount;
+  
+    if (splitType === "equal") {
+      const splitAmount = (totalAmount / numPersons).toFixed(2);
+  
+      // Generate equal splits
+      const splits = Array.from({ length: numPersons }, () => ({
+        amount: parseFloat(splitAmount),
+        method: null, // Payment method to be selected
+      }));
+  
+      // Send splits for processing
+      processPayments(splits);
+    } else if (splitType === "custom") {
+      const totalSplitAmount = customSplits.reduce((sum, split) => sum + parseFloat(split.amount || 0), 0);
+  
+      // Validate custom splits
+      if (totalSplitAmount !== totalAmount) {
+        alert("The total split amount does not match the order total.");
+        return;
+      }
+  
+      // Send custom splits for processing
+      processPayments(customSplits);
+    }
   };
 
   return (
@@ -315,21 +345,62 @@ const PendingOrders = () => {
           <p className="text-center">No Pending Orders</p>
         )}
 
-        {selectedOrder && (
-          <Modal show={showModal} onHide={() => setShowModal(false)} size="md" centered>
-            <Modal.Header closeButton>
+        {selectedOrder && ( 
+          
+          <Modal className="receipt-modal" show={showModal} onHide={handleCloseModal} size="md" centered>
+            <Modal.Header className="no-print" closeButton>
               <Modal.Title>Order Review</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <SplitBill selectedOrder={selectedOrder} handleSplitPayment={() => {}} currency={currency} />
-              <ReceiptContent ref={receiptRef} businessName={businessName} selectedOrder={selectedOrder} currency={currency} contact={contact} receiptNotes={receiptNotes} location={location} />
+              <Tabs defaultActiveKey="receipt" id="receipt-tabs" className="mb-3">
+                {/* Tab for Receipt Info */}
+                <Tab eventKey="receipt" title="Receipt Info">
+                  <ReceiptContent
+                    ref={receiptRef}
+                    businessName={businessName}
+                    selectedOrder={selectedOrder}
+                    currency={currency}
+                    contact={contact}
+                    receiptNotes={receiptNotes}
+                    location={location}
+                  />
+                </Tab>
+          
+                {/* Tab for Split Bill */}
+                <Tab eventKey="splitBill" title="Split Bill">
+                  <SplitBill
+                    selectedOrder={selectedOrder}
+                    handleSplitPayment={handleSplitPayment}
+                    currency={currency}
+                    receiptRef={receiptRef}
+                    handlePrintReceipt={handlePrintReceipt}
+                  />
+                </Tab>
+              </Tabs>
             </Modal.Body>
-            <Modal.Footer>
-              {!selectedOrder.isPrinted && <Button variant="warning" onClick={() => handleEditOrder(selectedOrder)}>Edit</Button>}
-              <Button variant="success" onClick={() => triggerPrint(selectedOrder)} disabled={printingIds.includes(selectedOrder.id)}>
-                {printingIds.includes(selectedOrder.id) ? <Spinner animation="border" size="sm" /> : 'Print'}
+            <Modal.Footer className="no-print">
+              {!selectedOrder.isPrinted && (
+                <Button variant="warning" onClick={() => handleEditOrder(selectedOrder)}>
+                  Edit
+                </Button>
+              )}
+              <Button
+                variant="success"
+                onClick={() => triggerPrint(selectedOrder)}
+                disabled={!selectedOrder || printingIds.includes(selectedOrder?.id)}
+              >
+                {printingIds.includes(selectedOrder?.id) ? (
+                  <Spinner animation="border" size="sm" />
+                ) : (
+                  'Print'
+                )}
               </Button>
-              <Button variant="danger" onClick={() => setShowModal(false)}>Close</Button>
+              <Button variant="primary" onClick={() => {/* handlePrintKOT logic */}}>
+                Print KOT
+              </Button>
+              <Button variant="danger" onClick={handleCloseModal}>
+                Close
+              </Button>
             </Modal.Footer>
           </Modal>
         )}

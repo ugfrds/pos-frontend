@@ -41,54 +41,48 @@ const OrderPage = () => {
         setTableNumber(null);
         setOrderItems([]);
         setPreviousOrderId(null);
+        setHasProcessedNewItem(false); // Reset the new item processing flag
     }, [setTableNumber, setOrderItems, setPreviousOrderId]);
 
     // Initialize and clean up order data
-    useEffect(() => {
-        // Ensure we start with a clean order state immediately on mount
-        try { resetOrder(); } catch (err) { /* ignore */ }
+useEffect(() => {
+    // Ensure we start with a clean order state immediately on mount
+    const retrieveOrderData = () => {
+        console.log("Retrieving order data, current state:", {
+            locationState: location.state,
+            orderItems: orderItems
+        });
+        
+        const navState = location.state?.editOrder ?? null;
+        const hasNewItem = location.state?.newItem ?? null;
 
-        const retrieveOrderData = () => {
-            // Debug: log sources to help diagnose stale prepopulation
-            try {
-                console.debug('OrderPage init - location.state:', location.state);
-                console.debug('OrderPage init - localStorage editOrderData:', localStorage.getItem('editOrderData'));
-                console.debug('OrderPage init - current orderItems from context:', orderItems);
-            } catch (err) {
-                /* ignore */
+        if (navState) {
+            const orderData = navState;
+            setTableNumber(orderData.tableNumber);
+
+            const itemsFromNav = orderData.OrderItems.map((item) => ({
+                id: item.MenuItem.id,
+                name: item.MenuItem.name,
+                price: item.price,
+                quantity: item.quantity,
+            }));
+
+            // Only set items if we don't already have items (prevents wiping out new items)
+            if (orderItems.length === 0 || !hasNewItem) {
+                setOrderItems(itemsFromNav);
+                console.log("Set items from nav:", itemsFromNav);
             }
-            // Prefer navigation state (clean) over localStorage.
-            const navState = location.state && location.state.editOrder ? location.state.editOrder : null;
 
-            if (navState) {
-                const orderData = navState;
-                if (orderData.tableNumber !== tableNumber) {
-                    setTableNumber(orderData.tableNumber);
-                }
+            setPreviousOrderId(orderData.id);
 
-                const items = orderData.OrderItems.map((item) => ({
-                    id: item.MenuItem.id,
-                    name: item.MenuItem.name,
-                    price: item.price,
-                    quantity: item.quantity,
-                }));
+            // Cleanup
+            localStorage.removeItem('editOrderData');
+            localStorage.removeItem('editOrderFlag');
+            window.history.replaceState({}, document.title);
+            return;
+        }
 
-                if (JSON.stringify(items) !== JSON.stringify(orderItems)) {
-                    setOrderItems(items);
-                }
 
-                setPreviousOrderId(orderData.id);
-                // remove any leftover localStorage markers to be safe
-                try {
-                    localStorage.removeItem('editOrderData');
-                    localStorage.removeItem('editOrderFlag');
-                } catch (err) {
-                    /* ignore */
-                }
-                // Clear navigation state so refresh won't reapply it
-                try { window.history.replaceState({}, document.title); } catch (err) { /* ignore */ }
-                return;
-            }
 
             // If no navigation state supplied, proactively clear any stale localStorage entries
             try {
@@ -116,21 +110,57 @@ const OrderPage = () => {
         setInitialized(true);
 
         return () => {
-            console.log("Cleanup: Resetting order state only if no tableNumber");
-            if (!tableNumber) {
-                console.log("Resetting order state");
-                resetOrder(); // Reset only when absolutely necessary
+            // Only reset if we're actually navigating away from the order
+            if (!location.state?.editOrder && !location.state?.newItem) {
+                console.log("Cleanup: Resetting order state - no active order");
+                resetOrder();
             }
         };
     }, [paramTableNumber,  resetOrder, navigate,setOrderItems,setTableNumber]);
 
+    const [hasProcessedNewItem, setHasProcessedNewItem] = useState(false);
+
     useEffect(() => {
-        if (location.state && location.state.newItem) {
-            addOrderItem(location.state.newItem);
-            // Clear the state to prevent re-adding on refresh
-            window.history.replaceState({}, document.title);
+        if (!initialized || hasProcessedNewItem) return;
+
+        console.log("New item effect running:", {
+            locationState: location.state,
+            initialized
+        });
+
+        if (location.state?.newItem) {
+            const newItem = location.state.newItem;
+            
+            setOrderItems(prevItems => {
+                console.log("Adding new item, current items:", prevItems);
+                
+                // Always preserve existing items and add new one
+                const existingItems = [...prevItems];
+                const existingIndex = existingItems.findIndex(i => i.id === newItem.id);
+                
+                if (existingIndex !== -1) {
+                    existingItems[existingIndex] = {
+                        ...existingItems[existingIndex],
+                        quantity: existingItems[existingIndex].quantity + 1
+                    };
+                } else {
+                    existingItems.push({ ...newItem, quantity: 1 });
+                }
+                
+                console.log("Updated items:", existingItems);
+                return existingItems;
+            });
+
+            // Mark that we've processed this new item
+            setHasProcessedNewItem(true);
+
+            // Clear the navigation state after processing
+            window.history.replaceState(
+                { editOrder: location.state.editOrder }, // Preserve edit order state
+                document.title
+            );
         }
-    }, [location.state, addOrderItem]);
+    }, [location.state, initialized, hasProcessedNewItem]);
 
     
     
