@@ -8,7 +8,8 @@ import {
   Form, 
   Spinner, 
   Alert,
-  Badge
+  Badge, 
+  ButtonGroup
 } from 'react-bootstrap';
 import { 
   TrendingUp, 
@@ -39,6 +40,7 @@ const AdminDashboard = () => {
         totalSales: 0,
         totalOrders: 0,
         topMenuItem: '',
+        growthRate: 0,
     });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -56,6 +58,7 @@ const AdminDashboard = () => {
                 totalSales: data.totalSales ?? 0,
                 totalOrders: data.totalOrders ?? 0,
                 topMenuItem: data.topMenuItem ?? '',
+                growthRate: data.growthRate ?? 0,
             });
         } catch (err) {
             console.error('Failed to fetch dashboard data:', err);
@@ -127,17 +130,17 @@ const AdminDashboard = () => {
                                     <Calendar className="me-2" size={18} />
                                     <strong>Time Period</strong>
                                 </Form.Label>
-                                <Form.Select
-                                    value={period}
-                                    onChange={(e) => setPeriod(e.target.value)}
-                                    className="modern-select"
-                                >
-                                    <option value="daily">Today</option>
-                                    <option value="weekly">This Week</option>
-                                    <option value="monthly">This Month</option>
-                                    <option value="all">All Time</option>
-                                    <option value="custom">Custom Range</option>
-                                </Form.Select>
+                                <ButtonGroup className="w-100">
+                                  {['daily', 'weekly', 'monthly', 'all', 'custom'].map((p) => (
+                                    <Button
+                                      key={p}
+                                      variant={period === p ? 'primary' : 'outline-primary'}
+                                      onClick={() => setPeriod(p)}
+                                    >
+                                      {p.charAt(0).toUpperCase() + p.slice(1)}
+                                    </Button>
+                                  ))}
+                                </ButtonGroup>
                             </Form.Group>
                         </Col>
 
@@ -306,7 +309,9 @@ const AdminDashboard = () => {
                                             <TrendingUp className="icon" />
                                         </div>
                                         <div>
-                                            <Card.Title className="mb-0 h4">+12.5%</Card.Title>
+                                            <Card.Title className="mb-0 h4">
+                                                {dashboardData.growthRate > 0 ? '+' : ''}{dashboardData.growthRate.toFixed(1)}%
+                                            </Card.Title>
                                             <Card.Text className="text-muted mb-0">Growth Rate</Card.Text>
                                         </div>
                                     </div>
@@ -331,18 +336,7 @@ const AdminDashboard = () => {
                         <Col lg={8}>
                             <Card className="h-100">
                                 <Card.Body>
-                                    <div className="d-flex justify-content-between align-items-center mb-3">
-                                        <Card.Title className="mb-0">
-                                            <BarChart3 className="me-2" size={20} />
-                                            Sales Performance
-                                        </Card.Title>
-                                        <div>
-                                            <Button variant="outline-primary" size="sm" className="me-2 active">Daily</Button>
-                                            <Button variant="outline-primary" size="sm" className="me-2">Weekly</Button>
-                                            <Button variant="outline-primary" size="sm">Monthly</Button>
-                                        </div>
-                                    </div>
-                                    <SalesChart />
+                                    <SalesChart onGrowthCalculated={(growth) => setDashboardData(prev => ({ ...prev, growthRate: growth }))} />
                                 </Card.Body>
                             </Card>
                         </Col>
