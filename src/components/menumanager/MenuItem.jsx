@@ -24,13 +24,16 @@ const MenuItem = ({ item }) => {
         if (type !== 'Bar' && type !== 'Restaurant') {
             // If business type is not bar or restaurant, use a default table number
             const defaultTableNumber = '1'; 
-            setTableNumber(defaultTableNumber); // Set default table number in context
-            navigate(`/order/${defaultTableNumber}`, { state: { newItem: item } }); // Navigate to the order page with the item
+            setTableNumber(defaultTableNumber);
+            addOrderItem(item);
+            if (!tableNumber) {
+                navigate(`/order/${defaultTableNumber}`);
+            }
         } else if (!tableNumber) {
             // If no table is selected, navigate to tables page
             navigate('/tables');
         } else {
-            // Otherwise, add item to the order
+            // Otherwise, just add item to the order without navigation
             addOrderItem(item);
         }
     };

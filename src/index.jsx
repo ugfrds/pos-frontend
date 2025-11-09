@@ -9,6 +9,7 @@ import { UserBusinessProvider } from './context/UserBusinessContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import App from './App';
+import { BusinessSetupProvider } from './context/BusinessSetupContext.jsx';
 
 // Get the root element from the DOM
 const container = document.getElementById('root');
@@ -19,6 +20,7 @@ const root = createRoot(container);
 // Render the app
 root.render(
   <UserBusinessProvider>
+    <BusinessSetupProvider>
     <OrderProvider>
       <AuthProvider>
         <BrowserRouter>
@@ -26,5 +28,6 @@ root.render(
         </BrowserRouter>
       </AuthProvider>
     </OrderProvider>
+    </BusinessSetupProvider>
   </UserBusinessProvider>
 );

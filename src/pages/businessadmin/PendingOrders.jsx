@@ -3,7 +3,6 @@ import { getAllOrders, updateOrderStatus, updateOrderPrintStatus } from '../../a
 import { FormatCurrency } from '../../utils';
 import { invalidateCache } from '../../utils/Cache';
 import { Container, Row, Form, Button, Table, Pagination, Spinner, Alert ,Modal,Tabs, Tab} from 'react-bootstrap';
-import { LoadingContext } from '../../context/LoadingContext';
 import Notification from '../../components/Notification';
 import NavBar from '../../components/Dashboard/Navbar';
 import { useReactToPrint } from 'react-to-print';
@@ -14,7 +13,6 @@ import { useNavigate } from 'react-router-dom';
 
 const PendingOrders = () => {
   const navigate = useNavigate();
-  const { startLoading, stopLoading } = useContext(LoadingContext);
   const { business } = useContext(UserBusinessContext);
   const receiptRef = useRef();
 
@@ -45,7 +43,6 @@ const PendingOrders = () => {
   const fetchOrders = useCallback(async () => {
     setLoading(true);
     setError(null);
-    if (startLoading) startLoading();
 
     try {
       const filters = {
@@ -67,9 +64,8 @@ const PendingOrders = () => {
     } finally {
       setLoading(false);
       setPageLoading(false);
-      if (stopLoading) stopLoading();
     }
-  }, [tableNumber, currentPage, ordersPerPage, startLoading, stopLoading]);
+  }, [tableNumber, currentPage, ordersPerPage]);
 
   useEffect(() => {
     fetchOrders();
@@ -110,34 +106,29 @@ const PendingOrders = () => {
   };
 
   /** Bulk close */
- const handleBulkClose = async () => {
-    if (!selectedIds.length) return;
+const handleBulkClose = async () => {
+  if (!selectedIds.length) return;
 
-    setClosingIds(selectedIds);
-    if (startLoading) startLoading();
+  setClosingIds(selectedIds);
 
-    try {
-        const response = await updateOrderStatus({ orderId: selectedIds, status: 'Completed' });
-        
-        // Remove closed orders from UI
-        setOrders((prev) => prev.filter((o) => !selectedIds.includes(o.id)));
-        setSelectedIds([]);
-        setNotification({ message: 'Selected orders closed successfully.', variant: 'success' });
-
-    } catch (err) {
-        console.error('Failed to close orders:', err);
-        setNotification({ message: 'Failed to close selected orders', variant: 'danger' });
-    } finally {
-        setClosingIds([]);
-        if (stopLoading) stopLoading();
-    }
+  try {
+    const response = await updateOrderStatus(selectedIds, 'Completed');
+    setOrders((prev) => prev.filter((o) => !selectedIds.includes(o.id)));
+    setSelectedIds([]);
+    setNotification({ message: 'Selected orders closed successfully.', variant: 'success' });
+  } catch (err) {
+    console.error('Failed to close orders:', err);
+    setNotification({ message: 'Failed to close selected orders', variant: 'danger' });
+  } finally {
+    setClosingIds([]);
+  }
 };
+
 
 
   /** Close single order */
   const handleCloseOrder = async (order) => {
     setClosingIds((prev) => [...prev, order.id]);
-    if (startLoading) startLoading();
 
     try {
       await updateOrderStatus(order.id, 'Completed');
@@ -149,7 +140,6 @@ const PendingOrders = () => {
       setNotification({ message: 'Failed to close order', variant: 'danger' });
     } finally {
       setClosingIds((prev) => prev.filter((id) => id !== order.id));
-      if (stopLoading) stopLoading();
     }
   };
 

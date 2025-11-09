@@ -48,18 +48,25 @@ export const OrderProvider = ({ children }) => {
     // Function to add an item to the order
     const addOrderItem = useCallback((item) => {
         setOrderItems((prevItems) => {
+            // Make a copy of the current items
+            const updatedItems = [...prevItems];
+            
             // Check if the item is already in the order
-            const existingItemIndex = prevItems.findIndex(prevItem => prevItem.name === item.name);
+            const existingItemIndex = updatedItems.findIndex(prevItem => prevItem.id === item.id);
     
             if (existingItemIndex !== -1) {
                 // If the item exists, increase its quantity
-                const updatedItems = [...prevItems];
-                updatedItems[existingItemIndex].quantity += 1;
-                return updatedItems;
+                updatedItems[existingItemIndex] = {
+                    ...updatedItems[existingItemIndex],
+                    quantity: updatedItems[existingItemIndex].quantity + 1
+                };
             } else {
                 // If the item does not exist, add it with a quantity of 1
-                return [...prevItems, { ...item, quantity: 1 }];
+                updatedItems.push({ ...item, quantity: 1 });
             }
+            
+            console.log('Updated order items:', updatedItems);
+            return updatedItems;
         });
     }, []);
 

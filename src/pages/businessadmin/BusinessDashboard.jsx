@@ -32,10 +32,15 @@ import SalesChart from '../../components/salesChart';
 import ExpensesSidebar from '../../components/bodyComponents/expenses/ExpensesSidebar';
 //import './AdminDashboard.css';
 
+import { useBusinessSetup } from '../../context/BusinessSetupContext';
+import SetupWizard from '../../components/setup/SetupWizard';
+
+
 const AdminDashboard = () => {
     const [period, setPeriod] = useState('daily');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
+    const { setupState, reopenWizard } = useBusinessSetup();
     const [dashboardData, setDashboardData] = useState({
         totalSales: 0,
         totalOrders: 0,
@@ -88,9 +93,27 @@ const AdminDashboard = () => {
         }
     };
 
+    if (setupState.isNewBusiness && setupState.showWizard) {
+        return <SetupWizard />;
+    }
+
     return (
         <Container fluid className="admin-dashboard">
-            {/* Header Section */}
+            {setupState.isNewBusiness && !setupState.showWizard && (
+                <Alert variant="info" className="mb-4">
+                    <div className="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 className="mb-1">Complete Your Business Setup</h5>
+                            <p className="mb-0">
+                                You still have some setup steps pending. Complete them to get the most out of your POS system.
+                            </p>
+                        </div>
+                        <Button variant="primary" onClick={reopenWizard}>
+                            Continue Setup
+                        </Button>
+                    </div>
+                </Alert>
+            )}
             <Card className="dashboard-header mb-4">
                 <Card.Body className="p-4">
                     <Row className="align-items-center">

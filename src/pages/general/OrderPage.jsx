@@ -67,18 +67,15 @@ useEffect(() => {
                 quantity: item.quantity,
             }));
 
-            // Only set items if we don't already have items (prevents wiping out new items)
-            if (orderItems.length === 0 || !hasNewItem) {
-                setOrderItems(itemsFromNav);
-                console.log("Set items from nav:", itemsFromNav);
-            }
-
+            // When editing an order, always set the items from navigation
+            setOrderItems(itemsFromNav);
+            console.log("Set items from nav:", itemsFromNav);
+            
             setPreviousOrderId(orderData.id);
 
-            // Cleanup
+            // Cleanup localStorage but preserve navigation state
             localStorage.removeItem('editOrderData');
             localStorage.removeItem('editOrderFlag');
-            window.history.replaceState({}, document.title);
             return;
         }
 
@@ -121,46 +118,25 @@ useEffect(() => {
     const [hasProcessedNewItem, setHasProcessedNewItem] = useState(false);
 
     useEffect(() => {
-        if (!initialized || hasProcessedNewItem) return;
+        if (!initialized) return;
 
-        console.log("New item effect running:", {
-            locationState: location.state,
-            initialized
-        });
-
-        if (location.state?.newItem) {
+        if (location.state?.newItem && !hasProcessedNewItem) {
+            console.log("Processing new item:", location.state.newItem);
             const newItem = location.state.newItem;
             
-            setOrderItems(prevItems => {
-                console.log("Adding new item, current items:", prevItems);
-                
-                // Always preserve existing items and add new one
-                const existingItems = [...prevItems];
-                const existingIndex = existingItems.findIndex(i => i.id === newItem.id);
-                
-                if (existingIndex !== -1) {
-                    existingItems[existingIndex] = {
-                        ...existingItems[existingIndex],
-                        quantity: existingItems[existingIndex].quantity + 1
-                    };
-                } else {
-                    existingItems.push({ ...newItem, quantity: 1 });
-                }
-                
-                console.log("Updated items:", existingItems);
-                return existingItems;
-            });
+            // Use a timeout to ensure this runs after the order data is initialized
+            setTimeout(() => {
+                addOrderItem(newItem);
+                setHasProcessedNewItem(true);
+            }, 0);
 
-            // Mark that we've processed this new item
-            setHasProcessedNewItem(true);
-
-            // Clear the navigation state after processing
+            // Preserve edit order state while clearing newItem
             window.history.replaceState(
-                { editOrder: location.state.editOrder }, // Preserve edit order state
+                { editOrder: location.state.editOrder },
                 document.title
             );
         }
-    }, [location.state, initialized, hasProcessedNewItem]);
+    }, [location.state, initialized, hasProcessedNewItem, addOrderItem]);
 
     
     
